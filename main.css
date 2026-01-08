@@ -482,7 +482,7 @@ section {
   .cta:after {
     position: absolute;
     content: "";
-    background-image: url(/assets/img/apple.png);
+    background-image: url(assets/img/apple.png);
     right: 0.5rem;
     top: 20%;
     display: block;
