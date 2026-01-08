@@ -204,12 +204,10 @@ section {
   position: relative; }
   .section--summary:after {
     content: "";
-    background: url(assets/img/lines.svg) repeat-x;
-    height: 406px;
-    width: 200vw;
     position: absolute;
-    bottom: 0;
-    left: 0;
+    inset: 0;
+    background: url(assets/img/lines.svg) repeat-x;
+    background-size: auto 406px;
     z-index: -10;
     animation: infiniteStats 120s linear infinite; }
   .section--summary .summary__lists > * {
