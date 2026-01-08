@@ -204,13 +204,12 @@ section {
   position: relative; }
   .section--summary:after {
     content: "";
-    left: -1440px;
     background: url(assets/img/lines.svg) repeat-x;
     height: 406px;
-    width: 2vw;
+    width: 200vw;
     position: absolute;
     bottom: 0;
-    right: 0;
+    left: 0;
     z-index: -10;
     animation: infiniteStats 120s linear infinite; }
   .section--summary .summary__lists > * {
@@ -534,10 +533,11 @@ section {
     opacity: 1;
     transform: translate3d(0, 0, 0); } }
 @keyframes infiniteStats {
-  0% {
-    transform: translate3d(-1440px, 0, 0); }
-  100% {
-    transform: translate3d(0, 0, 0); } }
+    0% {
+        transform: translateX(0); }
+    100% {
+        transform: translateX(-100vw); } }
+
 @media only screen and (max-width: 960px) {
   .stats__block {
     width: 80%;
@@ -554,13 +554,12 @@ section {
 
   .section--hero:after {
   content: "";
-  left: 0;
   background: url(assets/img/lines.svg) repeat-x;
   height: 406px;
   width: 200vw;
   position: absolute;
+  left: 0;
   bottom: 0;
-  right: 0;
   z-index: -10;
   animation: infiniteStats 120s linear infinite; }
   
