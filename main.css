@@ -554,10 +554,10 @@ section {
 
   .section--hero:after {
   content: "";
-  left: -1440px;
+  left: 0;
   background: url(assets/img/lines.svg) repeat-x;
   height: 406px;
-  width: 2vw;
+  width: 200vw;
   position: absolute;
   bottom: 0;
   right: 0;
