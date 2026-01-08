@@ -121,7 +121,7 @@ nav {
 
 .nav--icon.rotate {
   transform: translateX(-50%) rotate(360deg);
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out; }
   
 .mobile-list {
   display: none;
