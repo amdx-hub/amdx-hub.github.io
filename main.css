@@ -531,10 +531,10 @@ section {
     opacity: 1;
     transform: translate3d(0, 0, 0); } }
 @keyframes infiniteStats {
-    0% {
-        transform: translateX(0); }
-    100% {
-        transform: translateX(-100vw); } }
+    from {
+        background-position: 0% 0; }
+    to {
+        background-position: -100% 0; } }
 
 @media only screen and (max-width: 960px) {
   .stats__block {
