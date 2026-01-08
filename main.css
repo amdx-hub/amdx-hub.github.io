@@ -205,7 +205,7 @@ section {
   .section--summary:after {
     content: "";
     left: -1440px;
-    background: url(images/lines.svg) repeat-x;
+    background: url(assets/img/lines.svg) repeat-x;
     height: 406px;
     width: calc(1440px * 3);
     position: absolute;
@@ -282,7 +282,7 @@ section {
     background-size: cover; }
   .section--snippets:after {
     position: absolute;
-    background: url(images/info.png) no-repeat;
+    background: url(assets/img/info.png) no-repeat;
     content: "";
     top: 100px;
     right: 30px;
@@ -378,7 +378,7 @@ section {
     margin-bottom: 2rem; }
 
 .section--contact {
-  background: url("images/contact-bg.png") repeat;
+  background: url("assets/img/contact-bg.png") repeat;
   padding: 8rem 3rem;
   margin: 0;
   max-width: none;
@@ -482,7 +482,7 @@ section {
   .cta:after {
     position: absolute;
     content: "";
-    background-image: url(/images/apple.png);
+    background-image: url(/assets/img/apple.png);
     right: 0.5rem;
     top: 20%;
     display: block;
