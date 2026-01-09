@@ -3,9 +3,9 @@ const chartsConfig = [
   {
     id: "stats-0",
     type: "line",
-    labels: getWeeksArray(30, 3),
+    labels: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
     datasets: [{
-      label: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
+      label: "Sales",
       borderColor: "rgba(174,155,255,0.67)",
       pointBackgroundColor: "#C0B2FC",
       pointBorderColor: "#AE9BFF",
@@ -30,7 +30,6 @@ const chartsConfig = [
     }],
   }
   
-
 ]; 
 // Basisoptionen (Chart.js 4.5)
 const baseOptions = {
