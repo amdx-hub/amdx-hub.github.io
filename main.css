@@ -541,7 +541,7 @@ section {
   from { 
     background-position: 0 0; }
   to {
-    background-position: calc(-1 * var(--tile)) 0; }
+    background-position: calc(-1 * var(--tile)) 0; } }
 
 @media only screen and (max-width: 960px) {
   .stats__block {
