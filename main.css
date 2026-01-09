@@ -1,3 +1,5 @@
+:root { --speed: 120px; --tile: 1440px; }
+
 h1,
 h2,
 h3,
@@ -212,7 +214,9 @@ section {
     transform: translateX(-50%);
     background: url(assets/img/lines.svg) repeat-x;
     z-index: -10;
-    animation: infiniteStats 120s linear infinite; }
+    --duration: calc(var(--tile) / var(--speed) * 1s);
+    animation: infiniteStats var(--duration) linear infinite;
+
   .section--summary .summary__lists > * {
     flex: 1; }
   .section--summary .summary__list img {
@@ -534,10 +538,10 @@ section {
     opacity: 1;
     transform: translate3d(0, 0, 0); } }
 @keyframes infiniteStats {
-    from {
-        background-position: 0% 0; }
-    to {
-        background-position: -100% 0; } }
+  from { 
+    background-position: 0 0; }
+  to {
+    background-position: calc(-1 * var(--tile)) 0; }
 
 @media only screen and (max-width: 960px) {
   .stats__block {
@@ -563,7 +567,8 @@ section {
     transform: translateX(-50%);
     background: url(assets/img/lines.svg) repeat-x;
     z-index: -10;
-    animation: infiniteStats 120s linear infinite; }
+    --duration: calc(var(--tile) / var(--speed) * 1s);
+    animation: infiniteStats var(--duration) linear infinite;
   
   .section--snippets {
     margin: 8rem auto;
