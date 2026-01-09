@@ -15,7 +15,6 @@
         datasets: [{
           label: "Visits",
           borderColor: "rgba(174,155,255,0.67)",
-          backgroundColor: "rgba(174,155,255,0.20)",
           pointBackgroundColor: "#C0B2FC",
           pointBorderColor: "#AE9BFF",
           data: [
