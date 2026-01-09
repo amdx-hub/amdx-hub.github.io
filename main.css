@@ -371,7 +371,7 @@ section {
   margin: 0;
   padding: 5rem 0;
   background-color: #f6f2fe;
-  max-width: 100%; }
+  max-width: none; }
   .section--customers .flex--horizontal {
     width: 90%;
     margin: auto;
@@ -389,7 +389,7 @@ section {
   background: url("assets/img/contact-bg.png") repeat;
   padding: 8rem 3rem;
   margin: 0;
-  max-width: 100%;
+  max-width: none;
   border-top: 0.5rem solid #6146d7; }
   .section--contact .section__title {
     width: auto; }
