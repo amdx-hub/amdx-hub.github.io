@@ -1,11 +1,13 @@
+// Hilfsfunktionen aus deinem Code (leicht angepasst)
 function getWeeksArray(count = 30, month = 3) {
   const labels = [];
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i &amp;lt; count; i++) {
     labels.push(`${month}/${i}`);
   }
   return labels;
 }
 
+// Feste, definierte Daten &amp;amp; Labels für jeden Chart:
 const chartsConfig = [
   {
     id: "stats-0",
@@ -14,7 +16,6 @@ const chartsConfig = [
     datasets: [{
       label: "Visits",
       borderColor: "rgba(174,155,255,0.67)",
-      backgroundColor: "rgba(174,155,255,0.2)",
       pointBackgroundColor: "#C0B2FC",
       pointBorderColor: "#AE9BFF",
       data: [
@@ -24,9 +25,10 @@ const chartsConfig = [
       ],
       pointRadius: 4,
       borderWidth: 1,
-      fill: true
-    }]
+      fill: true,
+    }],
   },
+
   {
     id: "stats-1",
     type: "bar",
@@ -35,31 +37,28 @@ const chartsConfig = [
       label: "Sales",
       backgroundColor: "rgba(174,155,255,0.67)",
       data: [35, 52, 48, 60, 75, 90, 40]
-    }]
-  }
+    }],
+    options: { title: { display: true, text: "Sales pro Wochentag" } }
+  },
 ];
 
+// Gemeinsame Optionen (wie in deinem Code)
 const baseOptions = {
   responsive: true,
   maintainAspectRatio: false,
   elements: { line: { tension: 0 } },
-  plugins: {
-    legend: { display: false },
-    title: { display: true, text: "Chart" }
-  },
-  scales: {
-    x: { ticks: { color: "#444363", font: { size: 12 } } },
-    y: { ticks: { color: "#444363", font: { size: 12 } } }
-  }
+  plugins: { legend: { display: false }, title: { display: true, text: "..." } },
+  scales: { x: { ticks: { color: "#444363", font: { size: 12 } } }, y: { ticks: { color: "#444363", font: { size: 12 } } } }
 };
 
-chartsConfig.forEach(cfg => {
+// Charts erzeugen
+chartsConfig.forEach(cfg =&amp;gt; {
   const ctx = document.getElementById(cfg.id)?.getContext("2d");
   if (!ctx) return;
 
   new Chart(ctx, {
     type: cfg.type,
     data: { labels: cfg.labels, datasets: cfg.datasets },
-    options: baseOptions
+    options: { ...baseOptions, ...(cfg.options || {}) }
   });
 });
