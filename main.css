@@ -554,15 +554,16 @@ section {
       display: none; }
 
   .section--hero:after {
-  content: "";
-  background: url(assets/img/lines.svg) repeat-x;
-  height: 406px;
-  width: 200vw;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  z-index: -10;
-  animation: infiniteStats 120s linear infinite; }
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 100vw;
+    height: 406px;
+    transform: translateX(-50%);
+    background: url(assets/img/lines.svg) repeat-x;
+    z-index: -10;
+    animation: infiniteStats 120s linear infinite; }
   
   .section--snippets {
     margin: 8rem auto;
