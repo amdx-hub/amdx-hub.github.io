@@ -1,64 +1,71 @@
-// Hilfsfunktionen aus deinem Code (leicht angepasst)
-function getWeeksArray(count = 30, month = 3) {
-  const labels = [];
-  for (let i = 0; i &amp;lt; count; i++) {
-    labels.push(`${month}/${i}`);
-  }
-  return labels;
-}
 
-// Feste, definierte Daten &amp;amp; Labels für jeden Chart:
-const chartsConfig = [
-  {
-    id: "stats-0",
-    type: "line",
-    labels: getWeeksArray(30, 3),
-    datasets: [{
-      label: "Visits",
-      borderColor: "rgba(174,155,255,0.67)",
-      pointBackgroundColor: "#C0B2FC",
-      pointBorderColor: "#AE9BFF",
-      data: [
-        120, 140, 160, 180, 200, 220, 210, 230, 250, 270,
-        260, 280, 300, 320, 310, 330, 350, 370, 360, 380,
-        400, 420, 410, 430, 450, 470, 460, 480, 500, 520
-      ],
-      pointRadius: 4,
-      borderWidth: 1,
-      fill: true,
-    }],
-  },
+    // Hilfsfunktion
+    function getWeeksArray(count = 30, month = 3) {
+      const labels = [];
+      for (let i = 0; i < count; i++) labels.push(`${month}/${i}`);
+      return labels;
+    }
 
-  {
-    id: "stats-1",
-    type: "bar",
-    labels: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
-    datasets: [{
-      label: "Sales",
-      backgroundColor: "rgba(174,155,255,0.67)",
-      data: [35, 52, 48, 60, 75, 90, 40]
-    }],
-    options: { title: { display: true, text: "Sales pro Wochentag" } }
-  },
-];
+    // Daten/Configs
+    const chartsConfig = [
+      {
+        id: "stats-0",
+        type: "line",
+        labels: getWeeksArray(30, 3),
+        datasets: [{
+          label: "Visits",
+          borderColor: "rgba(174,155,255,0.67)",
+          backgroundColor: "rgba(174,155,255,0.20)",
+          pointBackgroundColor: "#C0B2FC",
+          pointBorderColor: "#AE9BFF",
+          data: [
+            120, 140, 160, 180, 200, 220, 210, 230, 250, 270,
+            260, 280, 300, 320, 310, 330, 350, 370, 360, 380,
+            400, 420, 410, 430, 450, 470, 460, 480, 500, 520
+          ],
+          pointRadius: 3,
+          borderWidth: 2,
+          fill: true,
+        }],
+      },
+      {
+        id: "stats-1",
+        type: "bar",
+        labels: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
+        datasets: [{
+          label: "Sales",
+          backgroundColor: "rgba(174,155,255,0.67)",
+          data: [35, 52, 48, 60, 75, 90, 40]
+        }],
+      },
+    ];
 
-// Gemeinsame Optionen (wie in deinem Code)
-const baseOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  elements: { line: { tension: 0 } },
-  plugins: { legend: { display: false }, title: { display: true, text: "..." } },
-  scales: { x: { ticks: { color: "#444363", font: { size: 12 } } }, y: { ticks: { color: "#444363", font: { size: 12 } } } }
-};
+    // Basisoptionen (Chart.js 4.5)
+    const baseOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      elements: { line: { tension: 0 } },
+      plugins: {
+        legend: { display: false },
+        title: { display: true, text: "Chart" }
+      },
+      scales: {
+        x: { ticks: { color: "#bebed8", font: { size: 12 } }, grid: { color: "rgba(255,255,255,0.05)" } },
+        y: { ticks: { color: "#bebed8", font: { size: 12 } }, grid: { color: "rgba(255,255,255,0.08)" } }
+      }
+    };
 
-// Charts erzeugen
-chartsConfig.forEach(cfg =&amp;gt; {
-  const ctx = document.getElementById(cfg.id)?.getContext("2d");
-  if (!ctx) return;
+    // Charts erzeugen (nachdem DOM geladen ist)
+    document.addEventListener('DOMContentLoaded', () => {
+      chartsConfig.forEach(cfg => {
+        const canvas = document.getElementById(cfg.id);
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
 
-  new Chart(ctx, {
-    type: cfg.type,
-    data: { labels: cfg.labels, datasets: cfg.datasets },
-    options: { ...baseOptions, ...(cfg.options || {}) }
-  });
-});
+        new Chart(ctx, {
+          type: cfg.type,
+          data: { labels: cfg.labels, datasets: cfg.datasets },
+          options: baseOptions
+        });
+      });
+    });
