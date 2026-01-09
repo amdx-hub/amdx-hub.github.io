@@ -27,7 +27,7 @@ const chartsConfig = [
       ],
       pointRadius: 4,
       borderWidth: 1,
-      fill: false,
+      fill: true,
     }],
     options: { title: { display: true, text: "Visits (März)" } }
   },
