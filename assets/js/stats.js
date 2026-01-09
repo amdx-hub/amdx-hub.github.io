@@ -49,8 +49,8 @@
         title: { display: false, text: "Chart" }
       },
       scales: {
-        x: { ticks: { color: "#444363", font: { size: 12 } }, grid: { color: "rgba(255,255,255,0.05)" } },
-        y: { ticks: { color: "#444363", font: { size: 12 } }, grid: { color: "rgba(255,255,255,0.08)" } }
+        x: { ticks: { color: "#444363", font: { size: 12 } }, grid: { color: "rgba(0, 0, 0, 0.1)" } },
+        y: { ticks: { color: "#444363", font: { size: 12 } }, grid: { color: "rgba(0, 0, 0, 0.1)" } }
       }
     };
 
