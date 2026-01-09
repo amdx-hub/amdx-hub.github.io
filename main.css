@@ -215,7 +215,7 @@ section {
     background: url(assets/img/lines.svg) repeat-x;
     z-index: -10;
     --duration: calc(var(--tile) / var(--speed) * 1s);
-    animation: infiniteStats var(--duration) linear infinite;
+    animation: infiniteStats var(--duration) linear infinite; }
 
   .section--summary .summary__lists > * {
     flex: 1; }
@@ -568,7 +568,7 @@ section {
     background: url(assets/img/lines.svg) repeat-x;
     z-index: -10;
     --duration: calc(var(--tile) / var(--speed) * 1s);
-    animation: infiniteStats var(--duration) linear infinite;
+    animation: infiniteStats var(--duration) linear infinite; }
   
   .section--snippets {
     margin: 8rem auto;
