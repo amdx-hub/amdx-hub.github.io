@@ -48,11 +48,8 @@ const baseOptions = {
   responsive: true,
   maintainAspectRatio: false,
   elements: { line: { tension: 0 } },
-  legend: { display: false },
-  scales: {
-    yAxes: [{ ticks: { fontColor: "#444363", fontSize: 12 } }],
-    xAxes: [{ ticks: { fontColor: "#444363", fontSize: 12 } }],
-  }
+  plugins: { legend: { display: false }, title: { display: true, text: "..." } },
+  scales: { x: { ticks: { color: "#444363", font: { size: 12 } } }, y: { ticks: { color: "#444363", font: { size: 12 } } } }
 };
 
 // Charts erzeugen
