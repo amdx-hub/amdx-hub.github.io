@@ -17,6 +17,7 @@ const chartsConfig = [
     datasets: [{
       label: "Visits",
       borderColor: "rgba(174,155,255,0.67)",
+      pointColor: "#AE9BFF",
       pointBackgroundColor: "#C0B2FC",
       pointBorderColor: "#AE9BFF",
       data: [
