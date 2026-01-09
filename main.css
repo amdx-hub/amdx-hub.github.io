@@ -205,9 +205,12 @@ section {
   .section--summary:after {
     content: "";
     position: absolute;
-    inset: 0;
+    left: 50%;
+    bottom: 0;
+    width: 100vw;
+    height: 406px;
+    transform: translateX(-50%);
     background: url(assets/img/lines.svg) repeat-x;
-    background-size: auto 406px;
     z-index: -10;
     animation: infiniteStats 120s linear infinite; }
   .section--summary .summary__lists > * {
