@@ -1,4 +1,3 @@
-
 // Hilfsfunktionen aus deinem Code (leicht angepasst)
 function getWeeksArray(count = 30, month = 3) {
   const labels = [];
@@ -28,6 +27,10 @@ const chartsConfig = [
       borderWidth: 1,
       fill: true,
     }],
+    // optional: chart-spezifische Optionen
+    options: { 
+      plugins: { title: { display: true, text: "Visits pro Tag" } } 
+    }
   },
 
   {
@@ -39,7 +42,9 @@ const chartsConfig = [
       backgroundColor: "rgba(174,155,255,0.67)",
       data: [35, 52, 48, 60, 75, 90, 40]
     }],
-    options: { title: { display: true, text: "Sales pro Wochentag" } }
+    options: { 
+      plugins: { title: { display: true, text: "Sales pro Wochentag" } } 
+    }
   },
 ];
 
@@ -49,18 +54,35 @@ const baseOptions = {
   maintainAspectRatio: false,
   elements: { line: { tension: 0 } },
   plugins: { legend: { display: false }, title: { display: true, text: "..." } },
-  scales: { x: { ticks: { color: "#444363", font: { size: 12 } } }, y: { ticks: { color: "#444363", font: { size: 12 } } } }
+  scales: { 
+    x: { ticks: { color: "#444363", font: { size: 12 } } }, 
+    y: { ticks: { color: "#444363", font: { size: 12 } } } 
+  }
 };
+
+// Deep-Merge, damit verschachtelte Optionen (plugins, scales, …) nicht überschrieben werden
+function deepMerge(target, source) {
+  const isObj = (v) => v && typeof v === 'object' && !Array.isArray(v);
+  const out = { ...(target || {}) };
+  for (const [k, v] of Object.entries(source || {})) {
+    if (isObj(v) && isObj(out[k])) {
+      out[k] = deepMerge(out[k], v);
+    } else {
+      out[k] = v;
+    }
+  }
+  return out;
+}
 
 // Charts erzeugen
 chartsConfig.forEach(cfg => {
   const ctx = document.getElementById(cfg.id)?.getContext("2d");
   if (!ctx) return;
 
+  const mergedOptions = deepMerge(baseOptions, cfg.options || {});
   new Chart(ctx, {
     type: cfg.type,
     data: { labels: cfg.labels, datasets: cfg.datasets },
-    options: { ...baseOptions, ...(cfg.options || {}) }
+    options: mergedOptions
   });
 });
-``
