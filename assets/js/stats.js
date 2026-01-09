@@ -33,7 +33,7 @@ const chartsConfig = [
 {
   id: "stats-2",
   type: "line",
-  labels: getWeeksArray(30, 3),
+  labels: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
   datasets: [
     {
       label: "Visits",
