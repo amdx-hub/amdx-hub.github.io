@@ -30,9 +30,8 @@ const chartsConfig = [
       data: randomArray(30, 1000),
       pointRadius: 4,
       borderWidth: 1,
-      fill: false,
+      fill: true,
     }],
-    options: { title: { display: true, text: "Visits (März, 30 Tage)" } }
   },
 
   // 1: Bar, andere Datenlänge
