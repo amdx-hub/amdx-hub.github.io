@@ -118,4 +118,3 @@ chartsConfig.forEach(cfg => {
     options: { ...baseOptions, ...(cfg.options || {}) }
   });
 });
-``
