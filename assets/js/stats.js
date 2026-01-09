@@ -29,7 +29,6 @@ const chartsConfig = [
       borderWidth: 1,
       fill: true,
     }],
-    options: { title: { display: true, text: "Visits (März)" } }
   },
 
   {
