@@ -1,4 +1,4 @@
-:root { --speed: 30px; --tile: 1440px; }
+:root { --speed: 20px; --tile: 1440px; }
 
 h1,
 h2,
@@ -541,7 +541,7 @@ section {
   from { 
     background-position: 0 0; }
   to {
-    background-position: calc(1 * var(--tile)) 0; }
+    background-position: calc(-1 * var(--tile)) 0; }
 
 @media only screen and (max-width: 960px) {
   .stats__block {
