@@ -6,3 +6,13 @@
   font-style: normal;
   font-display: swap;
 }
+
+@font-face {
+  font-family: "Open Sans";
+  src:
+    url("../font/OpenSans-VariableFont_wdth,wght.ttf") format("truetype");
+  font-weight: 300 800;
+  font-style: normal;
+  font-display: swap;
+}
+
