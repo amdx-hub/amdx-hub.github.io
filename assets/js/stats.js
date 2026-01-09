@@ -1,4 +1,3 @@
-// Hilfsfunktionen aus deinem Code (leicht angepasst)
 function getWeeksArray(count = 30, month = 3) {
   const labels = [];
   for (let i = 0; i < count; i++) {
@@ -7,7 +6,6 @@ function getWeeksArray(count = 30, month = 3) {
   return labels;
 }
 
-// Feste, definierte Daten & Labels für jeden Chart:
 const chartsConfig = [
   {
     id: "stats-0",
@@ -16,6 +14,7 @@ const chartsConfig = [
     datasets: [{
       label: "Visits",
       borderColor: "rgba(174,155,255,0.67)",
+      backgroundColor: "rgba(174,155,255,0.2)",
       pointBackgroundColor: "#C0B2FC",
       pointBorderColor: "#AE9BFF",
       data: [
@@ -25,14 +24,9 @@ const chartsConfig = [
       ],
       pointRadius: 4,
       borderWidth: 1,
-      fill: true,
-    }],
-    // optional: chart-spezifische Optionen
-    options: { 
-      plugins: { title: { display: true, text: "Visits pro Tag" } } 
-    }
+      fill: true
+    }]
   },
-
   {
     id: "stats-1",
     type: "bar",
@@ -41,48 +35,31 @@ const chartsConfig = [
       label: "Sales",
       backgroundColor: "rgba(174,155,255,0.67)",
       data: [35, 52, 48, 60, 75, 90, 40]
-    }],
-    options: { 
-      plugins: { title: { display: true, text: "Sales pro Wochentag" } } 
-    }
-  },
+    }]
+  }
 ];
 
-// Gemeinsame Optionen (wie in deinem Code)
 const baseOptions = {
   responsive: true,
   maintainAspectRatio: false,
   elements: { line: { tension: 0 } },
-  plugins: { legend: { display: false }, title: { display: true, text: "..." } },
-  scales: { 
-    x: { ticks: { color: "#444363", font: { size: 12 } } }, 
-    y: { ticks: { color: "#444363", font: { size: 12 } } } 
+  plugins: {
+    legend: { display: false },
+    title: { display: true, text: "Chart" }
+  },
+  scales: {
+    x: { ticks: { color: "#444363", font: { size: 12 } } },
+    y: { ticks: { color: "#444363", font: { size: 12 } } }
   }
 };
 
-// Deep-Merge, damit verschachtelte Optionen (plugins, scales, …) nicht überschrieben werden
-function deepMerge(target, source) {
-  const isObj = (v) => v && typeof v === 'object' && !Array.isArray(v);
-  const out = { ...(target || {}) };
-  for (const [k, v] of Object.entries(source || {})) {
-    if (isObj(v) && isObj(out[k])) {
-      out[k] = deepMerge(out[k], v);
-    } else {
-      out[k] = v;
-    }
-  }
-  return out;
-}
-
-// Charts erzeugen
 chartsConfig.forEach(cfg => {
   const ctx = document.getElementById(cfg.id)?.getContext("2d");
   if (!ctx) return;
 
-  const mergedOptions = deepMerge(baseOptions, cfg.options || {});
   new Chart(ctx, {
     type: cfg.type,
     data: { labels: cfg.labels, datasets: cfg.datasets },
-    options: mergedOptions
+    options: baseOptions
   });
 });
