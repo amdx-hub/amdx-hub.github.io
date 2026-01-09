@@ -1,5 +1,4 @@
-
-    // Daten/Configs
+// Daten/Configs
 const chartsConfig = [
   {
     id: "stats-0",
