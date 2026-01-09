@@ -28,7 +28,7 @@ const chartsConfig = [
       backgroundColor: "rgba(174,155,255,0.67)",
       data: [35, 52, 48, 60, 75, 90, 40]
     }],
-  },
+  }
   
 
 ]; 
