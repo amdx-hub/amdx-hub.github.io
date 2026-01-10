@@ -72,8 +72,8 @@ const baseOptions = {
   maintainAspectRatio: false,
   elements: { line: { tension: 0 } },
   plugins: {
-    legend: { display: false },
-    title: { display: false, text: "Chart" }
+    legend: { display: true },
+    title: { display: false, text: "" }
   },
   scales: {
     x: { ticks: { color: "#444363", font: { size: 12 } }, grid: { color: "rgba(0, 0, 0, 0.1)" } },
