@@ -45,8 +45,8 @@ const chartsConfig = [
         400, 420, 410, 430, 450, 470, 460, 480, 500, 520
       ],
       pointRadius: 4,
-      borderWidth: 2,
-      fill: false
+      borderWidth: 1,
+      fill: true
     },
     {
       label: "Conversions",
@@ -58,8 +58,8 @@ const chartsConfig = [
         290, 300, 310, 320, 330, 340, 350, 360, 370, 380
       ],
       pointRadius: 4,
-      borderWidth: 2,
-      fill: false
+      borderWidth: 1,
+      fill: true
     }
   ]
 }
