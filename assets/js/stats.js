@@ -33,11 +33,13 @@ const chartsConfig = [
 {
   id: "stats-2",
   type: "line",
-  labels: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
+  labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026"],
   datasets: [
     {
       label: "Visits",
       borderColor: "rgba(174,155,255,0.67)",
+      pointBackgroundColor: "#C0B2FC",
+      pointBorderColor: "#AE9BFF",
       data: [
         120, 140, 160, 180, 200, 220, 210, 230, 250, 270,
         260, 280, 300, 320, 310, 330, 350, 370, 360, 380,
