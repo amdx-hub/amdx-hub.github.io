@@ -56,6 +56,8 @@ html {
   scroll-behavior: smooth;
 }
 
+*, *::before, *::after { box-sizing: inherit; }
+
 body {
   margin: 0;
   padding: 0;
@@ -101,7 +103,7 @@ nav {
       @media only screen and (max-width: 770px) {
         nav a:not(:last-child) {
           margin-right: 0; } }
-          
+
     nav a:before {
       transition: 0.5s all ease;
       position: absolute;
@@ -524,54 +526,32 @@ section {
     background-size: contain;
     background-repeat: no-repeat; }
 
-.fadeIn {
-  animation: fadeIn 1s ease-in-out;
-  animation-fill-mode: forwards; }
+/* --- 7. ANIMATIONEN --- */
+.fadeIn, .fadeInUp, .fadeInRight, .fadeInLeft { animation-duration: 1s; animation-fill-mode: forwards; animation-timing-function: ease-in-out; }
+.fadeIn { animation-name: fadeIn; }
+.fadeInUp { animation-name: fadeInUp; }
+.fadeInRight { animation-name: fadeInRight; }
+.fadeInLeft { animation-name: fadeInLeft; }
 
-.fadeInUp {
-  animation: fadeInUp 1s ease-in-out;
-  animation-fill-mode: forwards; }
-
-.fadeInRight {
-  animation: fadeInRight 1s ease-in-out;
-  animation-fill-mode: forwards; }
-
-.fadeInLeft {
-  animation: fadeInLeft 1s ease-in-out;
-  animation-fill-mode: forwards; }
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0; }
-  100% {
-    opacity: 1; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 50px, 0); }
-  100% {
-    opacity: 1;
-    transform: translate3d(0, 0, 0); } }
+  from { opacity: 0; transform: translate3d(0, 50px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
 @keyframes fadeInRight {
-  0% {
-    opacity: 0;
-    transform: translate3d(100px, 0, 0); }
-  100% {
-    opacity: 1;
-    transform: translate3d(0, 0, 0); } }
+  from { opacity: 0; transform: translate3d(100px, 0, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
 @keyframes fadeInLeft {
-  0% {
-    opacity: 0;
-    transform: translate3d(-100px, 0, 0); }
-  100% {
-    opacity: 1;
-    transform: translate3d(0, 0, 0); } }
+  from { opacity: 0; transform: translate3d(-100px, 0, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
 @keyframes infiniteStats {
-  from { 
-    background-position: 0 0; }
-  to {
-    background-position: calc(-1 * var(--tile)) 0; } }
+  from { background-position: 0 0; }
+  to { background-position: calc(-1 * var(--tile)) 0; }
+}
 
+/* --- 8. MEDIA QUERIES --- */
 @media only screen and (max-width: 960px) {
   .stats__block {
     width: 80%;
@@ -594,11 +574,10 @@ section {
     width: calc(100vw - (100vw - 100%));
     height: 406px;
     transform: translateX(-50%);
-    background: url(assets/img/lines.svg) repeat-x;
+    background: url(./assets/img/lines.svg) repeat-x;
     z-index: -10;
-    --duration: calc(var(--tile) / var(--speed) * 1s);
     animation: infiniteStats var(--duration) linear infinite; }
-  
+
   .section--snippets {
     margin: 8rem auto;
     text-align: center; }
@@ -757,6 +736,10 @@ section {
 
   .section--contact {
     padding: 5rem 1rem; }
+
+  .form-group {
+    max-width: none;
+    width: auto; } }
 
   .form-group {
     max-width: none;
