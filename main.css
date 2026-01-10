@@ -56,8 +56,6 @@ html {
   scroll-behavior: smooth;
 }
 
-*, *::before, *::after { box-sizing: inherit; }
-
 body {
   margin: 0;
   padding: 0;
@@ -736,10 +734,6 @@ section {
 
   .section--contact {
     padding: 5rem 1rem; }
-
-  .form-group {
-    max-width: none;
-    width: auto; } }
 
   .form-group {
     max-width: none;
