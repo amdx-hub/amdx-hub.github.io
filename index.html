@@ -135,37 +135,33 @@ section-contact:
   </div>
 </nav>
 <section class="section--hero">
-  <div class="container">
-    <div class="flex--horizontal">
-      <div class="flex_child--horizontal aligner">
-        <h1 class="font-fjalla">{{ page.section-hero.title }}</h1>
-        <p class="">{{ page.section-hero.description }}</p>
-        <a href="" class="cta">
-          <strong>Download From</strong><br>
-          <small>App Store</small>
-        </a>
-      </div>
+  <div class="flex--horizontal">
+    <div class="flex_child--horizontal aligner">
+      <h1 class="font-fjalla">{{ page.section-hero.title }}</h1>
+      <p class="">{{ page.section-hero.description }}</p>
+      <a href="" class="cta">
+        <strong>Download From</strong><br>
+        <small>App Store</small>
+      </a>
     </div>
-    <div class="flex_child--horizontal fadeInUp">
-      <img src="{{ page.section-hero.image }}"  alt="">
-    </div>
+  </div>
+  <div class="flex_child--horizontal fadeInUp">
+    <img src="{{ page.section-hero.image }}"  alt="">
   </div>
 </section>
 <section class="section--summary">
-  <div class="container">
-    <div class="flex--vertical">
-      <div class="flex_child--vertical flex--horizontal summary__lists">
-        {% for list in page.section-summary.list %}
-          <div class="summary__list flex--horizontal fadeIn">
-            <img src="{{ list.img }}" alt="">
-            <p>{{ list.text }}</p>
-          </div>
-        {% endfor %}
-      </div>
-      <div class="flex_child--vertical flex--horizontal aligner fadeIn">
-        <p>{{ page.section-summary.text }}</p>
-        <h2 class="font-fjalla aligner_item--bottom">{{ page.section-summary.title }}</h2>
-      </div>
+  <div class="flex--vertical">
+    <div class="flex_child--vertical flex--horizontal summary__lists">
+      {% for list in page.section-summary.list %}
+        <div class="summary__list flex--horizontal fadeIn">
+          <img src="{{ list.img }}" alt="">
+          <p>{{ list.text }}</p>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="flex_child--vertical flex--horizontal aligner fadeIn">
+      <p>{{ page.section-summary.text }}</p>
+      <h2 class="font-fjalla aligner_item--bottom">{{ page.section-summary.title }}</h2>
     </div>
   </div>
 </section>
