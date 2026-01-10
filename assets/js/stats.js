@@ -38,7 +38,6 @@ const chartsConfig = [
     {
       label: "Visits",
       borderColor: "rgba(174,155,255,0.67)",
-      backgroundColor: "rgba(174,155,255,0.2)",
       data: [
         120, 140, 160, 180, 200, 220, 210, 230, 250, 270,
         260, 280, 300, 320, 310, 330, 350, 370, 360, 380,
@@ -51,7 +50,6 @@ const chartsConfig = [
     {
       label: "Conversions",
       borderColor: "rgba(255,99,132,0.8)",
-      backgroundColor: "rgba(255,99,132,0.2)",
       data: [
         80, 90, 100, 120, 130, 140, 150, 160, 170, 180,
         190, 200, 210, 220, 230, 240, 250, 260, 270, 280,
