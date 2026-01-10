@@ -209,7 +209,7 @@ section {
 
 .section--hero {
   max-width: 760px;
-  position: static;
+  position: relative;
   margin-top: 4rem; }
   .section--hero .cta {
     margin-top: 1rem; }
@@ -232,7 +232,7 @@ section {
   color: #575757;
   box-shadow: 0 2px 11px 0 rgba(0, 0, 0, 0.15);
   border-radius: 3px; 
-  position: static; }
+  position: relative; }
   .section--summary:after {
     content: "";
     position: absolute;
