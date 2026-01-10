@@ -76,7 +76,7 @@ const baseOptions = {
     title: { display: false, text: "" }
   },
   scales: {
-    x: { ticks: { color: "#444363", font: { size: 12 } }, grid: { color: "rgba(0, 0, 0, 0.1)" } },
+    x: { ticks: { color: "#444363", font: { size: 12 } }, grid: { color: "rgba(0, 0, 0, 0.1)" }, offset: true },
     y: { ticks: { color: "#444363", font: { size: 12 } }, grid: { color: "rgba(0, 0, 0, 0.1)" } }
   }
 }; 
