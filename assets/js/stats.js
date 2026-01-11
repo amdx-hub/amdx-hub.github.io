@@ -48,6 +48,11 @@ document.querySelectorAll('canvas.chart').forEach(canvas => {
     options: {
       responsive: true,
       maintainAspectRatio: false, // passt sich der Parent-Höhe an
+      plugins: {
+        legend: {
+          display: false   // ✅ Legende ausblenden
+        }
+      },
       scales: {
         x: {
           offset: hasBar // nur bei Bar-Charts nötig
