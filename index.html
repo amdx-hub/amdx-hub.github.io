@@ -217,7 +217,7 @@ section-contact:
         <h4 class="font-fjalla stats__result">{{ stats.number }}</h4>
       </div>
       <div class="stats">
-        <canvas id="{{ stats.id }}" ></canvas>
+        <canvas class="chart" data-chart='{{ chart[1] | jsonify }}'></canvas>
       </div>
     </div>
   {% endfor %}
