@@ -1,6 +1,6 @@
 const CHART_COLORS = {
   borderColor: "rgba(174,155,255,0.67)",
-  backgroundColor: "rgba(174,155,255,0.2)", // helle Balken
+  backgroundColor: "rgba(174,155,255,0.67)", // helle Balken
   pointBackgroundColor: "#C0B2FC",
   pointBorderColor: "#AE9BFF"
 };
