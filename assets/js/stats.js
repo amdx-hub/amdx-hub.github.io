@@ -32,6 +32,8 @@ document.querySelectorAll('canvas.chart').forEach(canvas => {
         pointBackgroundColor: CHART_COLORS.pointBackgroundColor,
         pointBorderColor: CHART_COLORS.pointBorderColor,
         tension: 0.3,
+        pointRadius: 4,
+        borderWidth: 1,
         fill: true
       })
     };
