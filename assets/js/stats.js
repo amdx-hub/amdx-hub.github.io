@@ -4,7 +4,7 @@
 const CHART_COLORS = {
   primary: {
     border: "rgba(174,155,255,0.67)",
-    bg: "rgba(174,155,255,0.2)",
+    bg: "rgba(174,155,255,0.67)",
     pointBg: "#C0B2FC",
     pointBorder: "#AE9BFF"
   },
