@@ -71,32 +71,29 @@ section-stats:
   title: Stats on Oasis
   description: These long path length considerations are exacerbated when communicating with space probes and other long-range targets beyond Earth's atmosphere.
   stats-list:
-    mixed:
-      labels: ["Q1", "Q2", "Q3", "Q4"]
-      datasets:
-        - type: bar
-          label: Gewinn
-          data: [30, 45, 20, 50]
-          color: "#f59e0b"
-        - type: line
-          label: Ziel
-          data: [40, 40, 40, 40]
-          color: "#ef4444"
-section-integrations:
-  title: Trusted by
-  logos:
-    - img: assets/img/logos/1.svg
-      name: airbnb
-    - img: assets/img/logos/2.svg
-      name: twitter
-    - img: assets/img/logos/3.svg
-      name: eventbrite
-    - img: assets/img/logos/4.svg
-      name: netflix
-    - img: assets/img/logos/5.svg
-      name: google
-    - img: assets/img/logos/6.svg
-      name: spotify
+    - name: Gewinn
+      number: "+25%"
+      chart:
+        labels: ["Q1", "Q2", "Q3", "Q4"]
+        datasets:
+          - type: bar
+            label: Gewinn
+            data: [30, 45, 20, 50]
+            color: "#f59e0b"
+          - type: line
+            label: Ziel
+            data: [40, 40, 40, 40]
+            color: "#ef4444"
+
+    - name: Nutzer
+      number: "1.240"
+      chart:
+        labels: ["Jan", "Feb", "Mär"]
+        datasets:
+          - type: line
+            label: Users
+            data: [120, 140, 160]
+            color: "#22c55e"
 section-customers:
   title: What customers are saying
   slides:
@@ -210,15 +207,22 @@ section-contact:
     <h3 class="font-fjalla">{{ page.section-stats.title }}</h3>
     <p>{{ page.section-stats.description }}</p>
   </div>
+
   {% for stats in page.section-stats.stats-list %}
     <div class="stats__block">
       <div class="flex--horizontal">
         <h5 class="stats__name">{{ stats.name }}</h5>
         <h4 class="font-fjalla stats__result">{{ stats.number }}</h4>
       </div>
-      <div class="stats">
-        <canvas class="chart" data-chart='{{ chart[1] | jsonify }}'></canvas>
-      </div>
+
+      {% if stats.chart %}
+        <div class="stats">
+          <canvas
+            class="chart"
+            data-chart='{{ stats.chart | jsonify }}'>
+          </canvas>
+        </div>
+      {% endif %}
     </div>
   {% endfor %}
 </section>
