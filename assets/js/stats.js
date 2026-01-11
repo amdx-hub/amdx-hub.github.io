@@ -20,6 +20,7 @@ document.querySelectorAll('canvas.chart').forEach(canvas => {
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       scales: {
         x: {
           offset: hasBar   // ✅ automatisch nur bei Bar
