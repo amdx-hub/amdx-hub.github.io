@@ -39,28 +39,37 @@ document.querySelectorAll('canvas.chart').forEach(canvas => {
     };
   });
 
-  new Chart(canvas, {
-    type: 'line', // Base-Type für Mixed Charts
-    data: {
-      labels: cfg.labels,
-      datasets
+new Chart(canvas, {
+  type: 'line', // Base-Type für Mixed Charts
+  data: {
+    labels: cfg.labels,
+    datasets
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false, // passt sich der Parent-Höhe an
+
+    plugins: {
+      legend: {
+        display: false   // ✅ Legende ausblenden
+      }
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false, // passt sich der Parent-Höhe an
-      plugins: {
-        legend: {
-          display: false   // ✅ Legende ausblenden
+
+    scales: {
+      x: {
+        offset: hasBar, // nur bei Bar-Charts nötig
+        ticks: {
+          color: "#444363",
+          fontSize: 12
         }
       },
-      scales: {
-        x: {
-          offset: hasBar // nur bei Bar-Charts nötig
-        },
-        y: {
-          beginAtZero: true
+      y: {
+        beginAtZero: true,
+        ticks: {
+          color: "#444363",
+          fontSize: 12
         }
       }
     }
-  });
+  }
 });
