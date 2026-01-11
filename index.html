@@ -71,24 +71,17 @@ section-stats:
   title: Stats on Oasis
   description: These long path length considerations are exacerbated when communicating with space probes and other long-range targets beyond Earth's atmosphere.
   stats-list:
-    - id: stats-0
-      name: A/B Split
-      number: A/B
-    - id: stats-1
-      name: Crash Rate
-      number: 89%
-    - id: stats-2
-      name: Error reporting API - Uptime
-      number: 100
-    - id: stats-3
-      name: General API
-      number: 81rps
-    - id: stats-4
-      name: Data Access API
-      number: 93%
-    - id: stats-5
-      name: Average Latency
-      number: 1.98ms
+    mixed:
+      labels: ["Q1", "Q2", "Q3", "Q4"]
+      datasets:
+        - type: bar
+          label: Gewinn
+          data: [30, 45, 20, 50]
+          color: "#f59e0b"
+        - type: line
+          label: Ziel
+          data: [40, 40, 40, 40]
+          color: "#ef4444"
 section-integrations:
   title: Trusted by
   logos:
