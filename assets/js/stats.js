@@ -1,16 +1,41 @@
+const CHART_COLORS = {
+  borderColor: "rgba(174,155,255,0.67)",
+  backgroundColor: "rgba(174,155,255,0.2)", // helle Balken
+  pointBackgroundColor: "#C0B2FC",
+  pointBorderColor: "#AE9BFF"
+};
+
 document.querySelectorAll('canvas.chart').forEach(canvas => {
   const cfg = JSON.parse(canvas.dataset.chart);
 
+  // prüfen, ob ein Bar-Dataset existiert
   const hasBar = cfg.datasets.some(ds => ds.type === 'bar');
 
-  const datasets = cfg.datasets.map(ds => ({
-    type: ds.type,
-    label: ds.label,
-    data: ds.data,
-    backgroundColor: ds.color,
-    borderColor: ds.color,
-    borderWidth: ds.type === 'bar' ? 0 : 2
-  }));
+  const datasets = cfg.datasets.map(ds => {
+    const isBar = ds.type === 'bar';
+
+    return {
+      type: ds.type,
+      label: ds.label,
+      data: ds.data,
+
+      // Balken
+      ...(isBar && {
+        backgroundColor: CHART_COLORS.backgroundColor,
+        borderColor: CHART_COLORS.borderColor,
+        borderWidth: 1
+      }),
+
+      // Linie
+      ...(!isBar && {
+        borderColor: CHART_COLORS.borderColor,
+        pointBackgroundColor: CHART_COLORS.pointBackgroundColor,
+        pointBorderColor: CHART_COLORS.pointBorderColor,
+        tension: 0.3,
+        fill: true
+      })
+    };
+  });
 
   new Chart(canvas, {
     type: 'line', // Base-Type für Mixed Charts
@@ -20,10 +45,10 @@ document.querySelectorAll('canvas.chart').forEach(canvas => {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false,
+      maintainAspectRatio: false, // passt sich der Parent-Höhe an
       scales: {
         x: {
-          offset: hasBar   // ✅ automatisch nur bei Bar
+          offset: hasBar // nur bei Bar-Charts nötig
         },
         y: {
           beginAtZero: true
@@ -32,4 +57,3 @@ document.querySelectorAll('canvas.chart').forEach(canvas => {
     }
   });
 });
-
