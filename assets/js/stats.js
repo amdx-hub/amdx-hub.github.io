@@ -59,14 +59,14 @@ new Chart(canvas, {
       x: {
         offset: hasBar, // nur bei Bar-Charts nötig
         ticks: {
-          color: "#444363",
+          color: #444363,
           fontSize: 12
         }
       },
       y: {
         beginAtZero: true,
         ticks: {
-          color: "#444363",
+          color: #444363,
           fontSize: 12
         }
       }
