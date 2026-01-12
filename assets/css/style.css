@@ -741,6 +741,12 @@ section {
   .section--contact {
     padding: 5rem 1rem; }
 
+    .section--contact > .section__container {
+    max-width: 960px;
+    margin: auto;
+    gap: 1rem;
+    display: grid; }
+  
   .form-group {
     max-width: none;
     width: auto; } }
