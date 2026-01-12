@@ -55,19 +55,24 @@ section-features:
   image: "assets/img/features-image.png"
   features-left:
     - img: "assets/img/features-circle.svg"
-      subtitle: Test
-      text: Performance issues such as throughput and end-to-end delay are also addressed.
+      subtitle: AI‑Driven Trend Analysis
+      text: Detects emerging trends and structural changes early, before movements fully develop.
     - img: "assets/img/features-polygon.svg"
-      text: Many systems can be characterized as dominated either by throughput limitations or by latency limitations in terms of end-user utility or experience. 
+      subtitle: Automated Trade Execution
+      text: Executes trades precisely and instantly, without human delay or emotional influence.
     - img: "assets/img/features-rec.svg"
-      text: In some cases, hard limits such as the speed of light present unique problems to such systems and nothing can be done to correct this.
+      subtitle: Integrated Risk Management
+      text: Limits losses and protects capital through intelligent safety mechanisms.
   features-right:
     - img: "assets/img/features-star.svg"
-      text: Other systems allow for significant balancing and optimization for best user experience.
+      subtitle: Dynamic Strategy Optimization
+      text: Continuously adapts to changing market conditions to maintain stable performance.
     - img: "assets/img/features-triangle.svg"
-      text: A telecom satellite in geosynchronous orbit imposes a path length of at least 71000 km between transmitter and receiver.
+      subtitle: Overtrading Prevention
+      text: Reduces trades during low-activity phases to avoid unnecessary risk.
     - img: "assets/img/features-rec.svg"
-      text: This delay can be very noticeable and affects satellite phone service regardless of available throughput capacity.
+      subtitle: Customizable Parameters
+      text: Risk profiles and strategy settings can be flexibly adjusted to personal goals and risk tolerance.
 section-stats:
   title: Stats on Oasis
   description: These long path length considerations are exacerbated when communicating with space probes and other long-range targets beyond Earth's atmosphere.
@@ -204,7 +209,7 @@ section-contact:
       {% for feature in page.section-features.features-left %}
         <div class="flex--vertical fadeInLeft fadeInLeft--{{ forloop.index0 }}">
           <object type="image/svg+xml" data="{{ feature.img }}"></object>
-          <h4>{{ feature.subtitle }}</h4>
+          <h5>{{ feature.subtitle }}</h5>
           <p>{{ feature.text }}</p>
         </div>
       {% endfor %}
