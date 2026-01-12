@@ -430,7 +430,9 @@ section {
     max-width: 960px;
     margin: auto;
     gap: 1rem;
-    display: grid; }
+    display: grid;
+    font-size: 0.83em;
+    }
 
 .slide__container {
   width: 90%;
