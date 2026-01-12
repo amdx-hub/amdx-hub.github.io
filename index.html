@@ -129,6 +129,10 @@ section-contact:
   title: Ready to get started?
   description: Sign up here and our representative will contact you shortly.
   btn-text: Sign Up
+section-disclaimer:
+  list:
+      - text: works on phone and all devices
+      - text: works on phone and all devices1
 ---
 <nav class="nav--desktop">
   {% for item in page.nav %}
@@ -300,7 +304,9 @@ section-contact:
   <div class="flex--vertical">
 
             <div class="flex_child--vertical flex--horizontal aligner fadeIn">
-                <p>{{ page.section-summary.text }}</p>
+      {% for list in page.section-disclaimer.list %}
+          <p>{{ list.text }}</p>
+      {% endfor %}
             </div>
         </div>
   
