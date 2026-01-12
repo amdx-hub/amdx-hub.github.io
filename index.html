@@ -210,7 +210,7 @@ section-contact:
         <div class="flex--vertical fadeInLeft fadeInLeft--{{ forloop.index0 }}">
           <object type="image/svg+xml" data="{{ feature.img }}"></object>
           <div>
-          <h5 class="features__subtitle">{{ feature.subtitle }}</h5>
+          <h5>{{ feature.subtitle }}</h5>
           <p>{{ feature.text }}</p>
           </div>
         </div>
@@ -222,7 +222,7 @@ section-contact:
         <div class="flex--vertical fadeInRight fadeInRight--{{ forloop.index0 }}">
           <object type="image/svg+xml" data="{{ feature.img }}"></object>
           <div>
-          <h5 class="features__subtitle">{{ feature.subtitle }}</h5>
+          <h5>{{ feature.subtitle }}</h5>
           <p>{{ feature.text }}</p>
           </div>
         </div>
@@ -239,7 +239,7 @@ section-contact:
   {% for stats in page.section-stats.stats-list %}
     <div class="stats__block">
       <div class="flex--horizontal">
-        <h5 class="stats__name">{{ stats.name }}</h5>
+        <h6 class="stats__name">{{ stats.name }}</h6>
         <h4 class="font-fjalla stats__result">{{ stats.number }}</h4>
       </div>
 
