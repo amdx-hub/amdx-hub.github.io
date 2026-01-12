@@ -55,18 +55,10 @@ document.querySelectorAll('canvas.chart').forEach(canvas => {
       },
       scales: {
         x: {
-          offset: hasBar,
-          ticks: {
-            color: "#444363",
-            font: { 12 }
-          }
+          offset: hasBar
         },
         y: {
-          beginAtZero: true,
-          ticks: {
-            color: "#444363",
-            font: { 12 }
-          }
+          beginAtZero: true
         }
       }
     }
