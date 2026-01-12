@@ -285,7 +285,7 @@ section {
         align-content: flex-end;
         padding-left: 1rem; }
 
-.section--snippets {
+ {
   opacity: 0;
   max-width: 760px;
   margin: 4rem auto 8rem auto;
@@ -589,6 +589,7 @@ section {
 
   .section--snippets {
     margin: 8rem auto;
+    padding-top: inherit;
     text-align: center; }
     .section--snippets > .flex--horizontal {
       flex-direction: column; }
@@ -704,7 +705,8 @@ section {
       z-index: 1; } }
 @media only screen and (max-width: 660px) {
   .snippets__cards {
-    display: none; }
+    flex-direction: column;
+    width: 100%; }
 
   .section--summary .summary__lists {
     text-align: center;
