@@ -618,7 +618,8 @@ section {
     .section--snippets:before, .section--snippets:after {
       display: none; }
       .section--snippets .snippets__cards {
-      flex-direction: column; }
+      flex-direction: column; 
+      width: 100%; }
 
   .section--hero .flex--horizontal {
     flex-direction: column;
@@ -697,10 +698,6 @@ section {
       order: -1;
       z-index: 1; } }
 @media only screen and (max-width: 660px) {
-  .snippets__cards {
-    flex-direction: column;
-    width: 100%; }
-
   .section--summary .summary__lists {
     text-align: center;
     padding: 2rem 0.5rem; }
