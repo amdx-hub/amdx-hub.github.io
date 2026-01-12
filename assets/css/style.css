@@ -346,6 +346,8 @@ section {
       width: 30px;
       height: 30px;
       margin-bottom: 0.5rem; }
+  .section--features features__subtitle {
+    font-size: 1em; }
   .section--features .features__left {
     text-align: right;
     padding-right: 2rem; }
