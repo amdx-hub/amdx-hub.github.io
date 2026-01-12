@@ -50,11 +50,12 @@ section-snippets:
     <br><br>
     Choice of an appropriate time window will often dominate calculations of throughput.
 section-features:
-  title: Features of Oasis
-  description: TCP acceleration converts the TCP packets into a stream that is similar to UDP. Because of this, the TCP acceleration software must provide its own mechanisms to ensure the reliability of the link.
+  title: Technology with market intelligence
+  description: Our systems combine advanced algorithms, AI-driven analysis, and automated processes. Market movements are captured, evaluated, and executed in real time, creating an adaptive system that continuously adjusts to changing conditions and enables data-driven decisions.
   image: "assets/img/features-image.png"
   features-left:
     - img: "assets/img/features-circle.svg"
+      subtitle: Test
       text: Performance issues such as throughput and end-to-end delay are also addressed.
     - img: "assets/img/features-polygon.svg"
       text: Many systems can be characterized as dominated either by throughput limitations or by latency limitations in terms of end-user utility or experience. 
@@ -203,6 +204,7 @@ section-contact:
       {% for feature in page.section-features.features-left %}
         <div class="flex--vertical fadeInLeft fadeInLeft--{{ forloop.index0 }}">
           <object type="image/svg+xml" data="{{ feature.img }}"></object>
+          <h4>{{ feature.subtitle }}</h4>
           <p>{{ feature.text }}</p>
         </div>
       {% endfor %}
