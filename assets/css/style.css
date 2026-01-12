@@ -517,7 +517,7 @@ section {
   .cta:after {
     position: absolute;
     content: "";
-    background-image: url(../img/apple.png);
+    background-image: url(../img/logos/TV_Logo.svg);
     right: 0.5rem;
     top: 20%;
     display: block;
