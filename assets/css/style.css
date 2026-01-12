@@ -215,7 +215,12 @@ section {
   max-width: 760px;
   margin-top: 4rem; }
   .section--hero .cta {
-    margin-top: 1rem; }
+    margin-top: 1rem;
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center; }
     .section--hero .cta small {
       vertical-align: top; }
     .section--hero .cta:hover {
@@ -515,14 +520,12 @@ section {
   position: relative;
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08); }
   .cta:after {
-    position: absolute;
     content: "";
     background-image: url(../img/logos/TV_Logo.svg);
-    right: 0.5rem;
-    top: 20%;
+    top: 15%;
     display: block;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     background-size: contain;
     background-repeat: no-repeat; }
 
