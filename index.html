@@ -50,7 +50,7 @@ section-snippets:
     <br><br>
     Choice of an appropriate time window will often dominate calculations of throughput.
 section-features:
-  title: Technology with market intelligence
+  title: Technology With Market Intelligence
   description: Our systems combine advanced algorithms, AI-driven analysis, and automated processes. Market movements are captured, evaluated, and executed in real time, creating an adaptive system that continuously adjusts to changing conditions and enables data-driven decisions.
   image: "assets/img/features-image.png"
   features-left:
@@ -219,6 +219,7 @@ section-contact:
       {% for feature in page.section-features.features-right %}
         <div class="flex--vertical fadeInRight fadeInRight--{{ forloop.index0 }}">
           <object type="image/svg+xml" data="{{ feature.img }}"></object>
+          <h5>{{ feature.subtitle }}</h5>
           <p>{{ feature.text }}</p>
         </div>
       {% endfor %}
