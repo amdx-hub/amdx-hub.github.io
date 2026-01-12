@@ -282,7 +282,7 @@ section {
         align-content: flex-end;
         padding-left: 1rem; }
 
- {
+ .section--snippets {
   opacity: 0;
   max-width: 760px;
   margin: 4rem auto 8rem auto;
