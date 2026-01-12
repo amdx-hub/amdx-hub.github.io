@@ -617,6 +617,8 @@ section {
       padding: 1.4rem; }
     .section--snippets:before, .section--snippets:after {
       display: none; }
+      .section--snippets .snippets__cards {
+      flex-direction: column; }
 
   .section--hero .flex--horizontal {
     flex-direction: column;
