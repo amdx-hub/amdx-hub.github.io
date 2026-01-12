@@ -589,7 +589,6 @@ section {
 
   .section--snippets {
     margin: 8rem auto;
-    padding-top: inherit;
     text-align: center; }
     .section--snippets > .flex--horizontal {
       flex-direction: column; }
