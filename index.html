@@ -209,8 +209,8 @@ section-contact:
       {% for feature in page.section-features.features-left %}
         <div class="flex--vertical fadeInLeft fadeInLeft--{{ forloop.index0 }}">
           <object type="image/svg+xml" data="{{ feature.img }}"></object>
-          <div class="features__subtitle">
-          <h5>{{ feature.subtitle }}</h5>
+          <div">
+          <h5 class="section--features features__subtitle">{{ feature.subtitle }}</h5>
           <p>{{ feature.text }}</p>
           </div>
         </div>
@@ -221,8 +221,8 @@ section-contact:
       {% for feature in page.section-features.features-right %}
         <div class="flex--vertical fadeInRight fadeInRight--{{ forloop.index0 }}">
           <object type="image/svg+xml" data="{{ feature.img }}"></object>
-          <div class="features__subtitle">
-          <h5>{{ feature.subtitle }}</h5>
+          <div>
+          <h5 class="section--features features__subtitle">{{ feature.subtitle }}</h5>
           <p>{{ feature.text }}</p>
           </div>
         </div>
