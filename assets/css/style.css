@@ -77,8 +77,8 @@ h5 { font-size: 1em; }
 
 p { margin: 0; font-size: 0.9em; line-height: 1.6em; }
 
-.txt-balanced {
-  text-wrap-style: balanced; }
+.txt-balance {
+  text-wrap-style: balance; }
 
 img { max-width: 100%; width: 100%; height: auto; display: block; }
 
