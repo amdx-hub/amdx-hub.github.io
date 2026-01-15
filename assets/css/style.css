@@ -645,6 +645,8 @@ section {
     padding: 30% 2rem 2rem 2rem; }
     .section--hero .flex_child--horizontal:first-of-type h1 {
       margin-bottom: 30%; }
+    .section--hero .flex_child--horizontal:first-of-type svg {
+      margin-bottom: 30%; }
   .section--hero .flex_child--horizontal:last-of-type {
     max-width: 300px;
     margin: auto;
