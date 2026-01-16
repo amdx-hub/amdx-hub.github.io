@@ -5,15 +5,6 @@
 var navLinks = document.querySelectorAll(".js-btn");
 var navIcon = document.querySelector(".nav--icon");
 var mobileList = document.querySelector(".mobile-list");
-var header = document.querySelector("nav");
-
-/* ================================
-   Helpers
-================================ */
-
-function getHeaderOffset() {
-  return header ? header.offsetHeight : 100;
-}
 
 /* ================================
    Smooth Scroll via href="#id"
@@ -22,7 +13,7 @@ function getHeaderOffset() {
 function smoothScroll(event) {
   var href = event.currentTarget.getAttribute("href");
 
-  // Nur interne Hash-Links abfangen
+  // nur interne Hash-Links abfangen
   if (!href || href.indexOf("#") === -1) return;
 
   var targetId = href.split("#")[1];
@@ -45,11 +36,11 @@ function smoothScroll(event) {
   }
 
   window.scrollTo({
-    top: targetEl.offsetTop - getHeaderOffset(),
+    top: targetEl.offsetTop - 100,
     behavior: "smooth"
   });
 
-  // URL Hash aktualisieren ohne Sprung
+  // URL Hash setzen (ohne Sprung)
   history.pushState(null, "", "#" + targetId);
 }
 
