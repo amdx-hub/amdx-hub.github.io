@@ -1,0 +1,14 @@
+- name: home
+  link: /#section-hero
+- name: snippets
+  link: /#section-snippets
+- name: features
+  link: /#section-features
+- name: stats
+  link: /#section-stats
+- name: integration
+  link: /#section-integrations
+- name: customers
+  link: /#section-customers
+- name: contact
+  link: /#section-contact
