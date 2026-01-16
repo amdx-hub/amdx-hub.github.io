@@ -144,6 +144,36 @@ document.addEventListener("DOMContentLoaded", () => {
     animated.forEach(el => observer.observe(el));
   }
 
+/* =====================================================
+   Scroll Spy – Active State beim Scroll
+===================================================== */
+
+const sections = document.querySelectorAll("section[id]");
+
+if ("IntersectionObserver" in window && sections.length) {
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+
+      const id = entry.target.getAttribute("id");
+      if (!id) return;
+
+      allNavLinks.forEach(link => {
+        const href = link.getAttribute("href");
+        if (href && href.includes("#" + id)) {
+          allNavLinks.forEach(l => l.classList.remove("selected"));
+          link.classList.add("selected");
+        }
+      });
+    });
+  }, {
+    rootMargin: "-50% 0px -45% 0px",
+    threshold: 0
+  });
+
+  sections.forEach(section => sectionObserver.observe(section));
+}
+  
   /* =====================================================
      Sticky Navigation
   ===================================================== */
