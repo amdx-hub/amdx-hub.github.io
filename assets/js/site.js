@@ -9,64 +9,75 @@ document.addEventListener("DOMContentLoaded", function () {
   var navIcon = document.querySelector(".nav--icon");
   var btns = document.querySelectorAll(".js-btn");
   var mobilebtns = document.querySelectorAll(".js-mobile-btn");
-  var sections = document.querySelectorAll(".js-section");
   var header = document.querySelector("nav"); // für Offset
 
   /* =====================================================
-     Tiny Slider – Initialisierung
+     Tiny Slider Initialisierung (safe)
   ===================================================== */
 
   if (typeof tns === "function") {
-    tns({
-      container: ".slide__container",
-      arrowKeys: true,
-      controlsText: [
-        '<i class="fas fa-angle-left"></i>',
-        '<i class="fas fa-angle-right"></i>'
-      ],
-      nav: false
-    });
+    var sliderContainer = document.querySelector(".slide__container");
+    if (sliderContainer) {
+      tns({
+        container: sliderContainer,
+        arrowKeys: true,
+        controlsText: [
+          '<i class="fas fa-angle-left"></i>',
+          '<i class="fas fa-angle-right"></i>'
+        ],
+        nav: false
+      });
+    }
   }
 
   /* =====================================================
      Smooth Scroll
   ===================================================== */
 
-  function smoothScroll(event) {
-  var link = event.currentTarget;
-  var href = link.getAttribute("href");
-
-  // Nur Links mit Hash prüfen
-  if (!href || href.indexOf("#") === -1) return;
-
-  // Hash extrahieren (unabhängig von voller URL)
-  var hash = href.split("#")[1];
-  var targetEl = document.getElementById(hash);
-
-  if (!targetEl) return;
-
-  event.preventDefault();
-
-  // Active State (Desktop + Mobile)
-  btns.forEach(l => l.classList.remove("selected"));
-  mobilebtns.forEach(l => l.classList.remove("selected"));
-  link.classList.add("selected");
-
-  // Mobile Menu schließen
-  if (mobileList && mobileList.classList.contains("show")) {
-    mobileList.classList.remove("show");
-    navIcon.classList.remove("rotate");
+  function getHeaderOffset() {
+    return header ? header.offsetHeight : 100;
   }
 
-  // Scrollen
-  window.scrollTo({
-    top: targetEl.offsetTop - getHeaderOffset(),
-    behavior: "smooth"
-  });
+  function smoothScroll(event) {
+    var link = event.currentTarget;
+    var href = link.getAttribute("href");
 
-  // URL Hash setzen ohne Sprung
-  history.pushState(null, "", "#" + hash);
-}
+    // Nur Links mit Hash prüfen
+    if (!href || href.indexOf("#") === -1) return;
+
+    // Hash extrahieren, egal ob URL absolut oder relativ
+    var hash = href.includes("#") ? href.split("#")[1] : null;
+    if (!hash) return;
+
+    var targetEl = document.getElementById(hash);
+    if (!targetEl) return;
+
+    event.preventDefault();
+
+    // Active State (Desktop + Mobile)
+    btns.forEach(l => l.classList.remove("selected"));
+    mobilebtns.forEach(l => l.classList.remove("selected"));
+    link.classList.add("selected");
+
+    // Mobile-Menü schließen
+    if (mobileList && mobileList.classList.contains("show")) {
+      mobileList.classList.remove("show");
+      if (navIcon) navIcon.classList.remove("rotate");
+    }
+
+    // Scroll
+    window.scrollTo({
+      top: targetEl.offsetTop - getHeaderOffset(),
+      behavior: "smooth"
+    });
+
+    // URL Hash setzen ohne Sprung
+    history.pushState(null, "", "#" + hash);
+  }
+
+  // Event Listener für alle Links binden
+  btns.forEach(btn => btn.addEventListener("click", smoothScroll));
+  mobilebtns.forEach(btn => btn.addEventListener("click", smoothScroll));
 
   /* =====================================================
      Intersection Observer – Scroll Animation (einmalig)
@@ -75,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var animationClasses = ["fadeIn", "fadeInUp", "fadeInLeft", "fadeInRight"];
 
   function buildSelector(classes) {
-    return classes.map(function (cls) { return "." + cls; }).join(",");
+    return classes.map(cls => "." + cls).join(",");
   }
 
   var animatedElements = document.querySelectorAll(buildSelector(animationClasses));
@@ -95,13 +106,11 @@ document.addEventListener("DOMContentLoaded", function () {
       rootMargin: "0px 0px -10% 0px"
     });
 
-    animatedElements.forEach(function (el) {
-      revealObserver.observe(el);
-    });
+    animatedElements.forEach(el => revealObserver.observe(el));
   }
 
   /* =====================================================
-     Navigation – Sticky beim Scroll
+     Sticky Navigation beim Scroll über .cta
   ===================================================== */
 
   if ("IntersectionObserver" in window && ctaBtn) {
@@ -127,9 +136,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (navIcon) {
     navIcon.addEventListener("click", function () {
-      if (mobileList) {
-        mobileList.classList.toggle("show");
-      }
+      if (mobileList) mobileList.classList.toggle("show");
       navIcon.classList.toggle("rotate");
     });
   }
