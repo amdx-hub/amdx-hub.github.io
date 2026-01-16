@@ -40,25 +40,45 @@ document.addEventListener("DOMContentLoaded", () => {
   /* =====================================================
      Active-State Helper
   ===================================================== */
-function setActiveNav() {
+  function setActiveNav(targetHash = null) {
   const path = location.pathname.replace(/\/$/, "") || "/";
-  const hash = location.hash.replace("#", "");
+  const hash = targetHash || location.hash.replace("#", "");
 
   document.querySelectorAll(".js-btn, .js-mobile-btn").forEach(link => {
     const url = new URL(link.getAttribute("href"), location.origin);
     const linkPath = url.pathname.replace(/\/$/, "") || "/";
     const linkHash = url.hash.replace("#", "");
 
-    const active =
-      linkPath === path &&
-      (!linkHash || linkHash === hash);
+    let active = false;
+
+    // 1️⃣ Gleiche Seite + Hash
+    if (linkPath === path && linkHash && linkHash === hash) {
+      active = true;
+    }
+
+    // 2️⃣ Seite ohne Hash (z. B. /about)
+    if (linkPath === path && !linkHash && !hash) {
+      active = true;
+    }
 
     link.classList.toggle("selected", active);
   });
 }
 
-window.addEventListener("load", setActiveNav);
-window.addEventListener("hashchange", setActiveNav);
+/* Initial */
+window.addEventListener("load", () => setActiveNav());
+
+/* Hash geändert (z. B. Browser / normaler Link) */
+window.addEventListener("hashchange", () => setActiveNav());
+
+/* Klick → sofort setzen */
+document.addEventListener("click", e => {
+  const link = e.target.closest(".js-btn, .js-mobile-btn");
+  if (!link) return;
+
+  const hash = link.getAttribute("href").split("#")[1];
+  setActiveNav(hash || null);
+});
 
   /* =====================================================
      Smooth Scroll + Cross-Page Navigation
