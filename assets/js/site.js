@@ -1,9 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  /* =====================================================
+     Variablen
+  ===================================================== */
   const navIcon = document.getElementById("nav-toggle");
   const mobileList = document.getElementById("mobile-menu");
   const header = document.querySelector("nav");
   const ctaBtn = document.querySelector(".cta");
+  const btns = document.querySelectorAll(".js-btn");
+  const mobilebtns = document.querySelectorAll(".js-mobile-btn");
 
   /* =====================================================
      Helper: Header Offset
@@ -33,18 +38,27 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =====================================================
-     Active State
+     Active-State Helper
   ===================================================== */
-  function setActiveLinkByHash(hash) {
+  function getCurrentNavHash() {
+    const path = window.location.pathname.replace(/\/$/, ""); // remove trailing slash
+    if (path === "/" || path.endsWith("index.html")) return "section-hero";
+    if (path.endsWith("about") || path.endsWith("about.html")) return "about";
+    // weitere Seiten hier einfügen
+    return window.location.hash.slice(1) || "section-hero";
+  }
+
+  function setActiveLinkByHashOrPage(hash) {
+    const currentHash = hash || getCurrentNavHash();
     const allLinks = document.querySelectorAll(".js-btn, .js-mobile-btn");
     allLinks.forEach(link => {
       const linkHash = link.getAttribute("href").split("#")[1];
-      link.classList.toggle("selected", linkHash === hash);
+      link.classList.toggle("selected", linkHash === currentHash);
     });
   }
 
   /* =====================================================
-     Smooth Scroll + Cross-Page
+     Smooth Scroll + Cross-Page Navigation
   ===================================================== */
   function smoothScroll(event) {
     const link = event.currentTarget;
@@ -74,8 +88,8 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    // Active State
-    setActiveLinkByHash(hash);
+    // Active-State setzen
+    setActiveLinkByHashOrPage(hash);
 
     // Mobile Menü schließen
     if (mobileList && mobileList.classList.contains("show")) {
@@ -86,32 +100,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  const btns = document.querySelectorAll(".js-btn");
-  const mobilebtns = document.querySelectorAll(".js-mobile-btn");
   btns.forEach(btn => btn.addEventListener("click", smoothScroll));
   mobilebtns.forEach(btn => btn.addEventListener("click", smoothScroll));
 
   /* =====================================================
      Scroll auf Hash nach Seitenwechsel
   ===================================================== */
-  const savedHash = sessionStorage.getItem("scrollToHash") || window.location.hash.slice(1);
-  if (savedHash) {
-    requestAnimationFrame(() => {
-      const el = document.getElementById(savedHash);
-      if (el) {
+  window.addEventListener("load", () => {
+    const savedHash = sessionStorage.getItem("scrollToHash") || window.location.hash.slice(1);
+    if (savedHash) {
+      const targetEl = document.getElementById(savedHash);
+      if (targetEl) {
         window.scrollTo({
-          top: el.offsetTop - getHeaderOffset(),
+          top: targetEl.offsetTop - getHeaderOffset(),
           behavior: "smooth"
         });
       }
-      setActiveLinkByHash(savedHash);
+      setActiveLinkByHashOrPage(savedHash);
       sessionStorage.removeItem("scrollToHash");
-    });
-  } else {
-    // Active State für aktuelle Seite/Hash
-    const initialHash = window.location.hash ? window.location.hash.slice(1) : "section-hero";
-    setActiveLinkByHash(initialHash);
-  }
+    } else {
+      setActiveLinkByHashOrPage();
+    }
+  });
 
   /* =====================================================
      Tiny Slider Initialisierung
@@ -153,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =====================================================
-     Sticky Navigation
+     Sticky Navigation beim Scroll über .cta
   ===================================================== */
   if ("IntersectionObserver" in window && ctaBtn) {
     const navObserver = new IntersectionObserver(entries => {
