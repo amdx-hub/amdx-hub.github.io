@@ -410,9 +410,14 @@ section {
 .section--integrations {
   text-align: center;
   padding-bottom: 3rem; }
-  .section--integrations .logo {
-    margin: 1rem; }
-
+  .section--integrations > .flex--horizontal > {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    margin-left: 1rem;
+    margin-right: 1rem; }
+  
 .section--customers {
   margin: 0;
   padding: 5rem 0;
