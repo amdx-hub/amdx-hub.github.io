@@ -40,22 +40,25 @@ document.addEventListener("DOMContentLoaded", () => {
   /* =====================================================
      Active-State Helper
   ===================================================== */
-  function getCurrentNavHash() {
-    const path = window.location.pathname.replace(/\/$/, ""); // remove trailing slash
-    if (path === "/" || path.endsWith("index.html")) return "section-hero";
-    if (path.endsWith("about") || path.endsWith("about.html")) return "about";
-    // weitere Seiten hier einfügen
-    return window.location.hash.slice(1) || "section-hero";
-  }
+function setActiveNav() {
+  const path = location.pathname.replace(/\/$/, "") || "/";
+  const hash = location.hash.replace("#", "");
 
-  function setActiveLinkByHashOrPage(hash) {
-    const currentHash = hash || getCurrentNavHash();
-    const allLinks = document.querySelectorAll(".js-btn, .js-mobile-btn");
-    allLinks.forEach(link => {
-      const linkHash = link.getAttribute("href").split("#")[1];
-      link.classList.toggle("selected", linkHash === currentHash);
-    });
-  }
+  document.querySelectorAll(".js-btn, .js-mobile-btn").forEach(link => {
+    const url = new URL(link.getAttribute("href"), location.origin);
+    const linkPath = url.pathname.replace(/\/$/, "") || "/";
+    const linkHash = url.hash.replace("#", "");
+
+    const active =
+      linkPath === path &&
+      (!linkHash || linkHash === hash);
+
+    link.classList.toggle("selected", active);
+  });
+}
+
+window.addEventListener("load", setActiveNav);
+window.addEventListener("hashchange", setActiveNav);
 
   /* =====================================================
      Smooth Scroll + Cross-Page Navigation
