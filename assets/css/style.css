@@ -550,7 +550,6 @@ section {
 .fadeInRight {
   opacity: 0;
   will-change: opacity, transform;
-  overflow-x: hidden; /* verhindert horizontales Scrollen */
 }
 
 /* Verzögerung optional */
