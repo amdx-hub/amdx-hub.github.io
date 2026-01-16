@@ -548,14 +548,10 @@ section {
 .fadeInLeft,
 .fadeInRight {
   opacity: 0;
-  transform: translate3d(0, 0, 0);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-/* aktiv */
-.is-visible {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
+  will-change: opacity, transform;
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
 }
 
 /* Richtungen */
@@ -569,6 +565,12 @@ section {
 
 .fadeInRight {
   transform: translate3d(100px, 0, 0);
+}
+
+/* Aktiv sichtbar */
+.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
 }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
