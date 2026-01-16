@@ -1,20 +1,83 @@
 document.addEventListener("DOMContentLoaded", function () {
 
   /* =====================================================
-     Konfiguration
+     Variablen
      ===================================================== */
 
-  // Alle Animationsklassen, die beobachtet werden sollen
+  var ctaBtn = document.querySelector(".cta");
+  var mobileList = document.querySelector(".mobile-list");
+  var navIcon = document.querySelector(".nav--icon");
+  var btns = document.querySelectorAll(".js-btn");
+  var mobilebtns = document.querySelectorAll(".js-mobile-btn");
+  var sections = document.querySelectorAll(".js-section");
+
+  /* =====================================================
+     Slider
+     ===================================================== */
+
+  if (typeof tns === "function") {
+    tns({
+      container: ".slide__container",
+      arrowKeys: true,
+      controlsText: [
+        '<i class="fas fa-angle-left"></i>',
+        '<i class="fas fa-angle-right"></i>'
+      ],
+      nav: false
+    });
+  }
+
+  /* =====================================================
+     Navigation – Smooth Scroll
+     ===================================================== */
+
+  function setActiveLink(event, buttons) {
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].classList.remove("selected");
+    }
+    event.target.classList.add("selected");
+  }
+
+  function smoothScrollTo(i, buttons, event) {
+    var element = sections[i - 1] || sections[i - 8];
+    setActiveLink(event, buttons);
+
+    if (mobileList.classList.contains("show")) {
+      mobileList.classList.remove("show");
+    }
+
+    window.scrollTo({
+      behavior: "smooth",
+      top: element ? element.offsetTop - 100 : 0,
+      left: 0
+    });
+  }
+
+  if (btns.length && sections.length) {
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener("click", smoothScrollTo.bind(this, i, btns));
+    }
+  }
+
+  if (mobilebtns.length && sections.length) {
+    for (var i = 0; i < mobilebtns.length; i++) {
+      mobilebtns[i].addEventListener(
+        "click",
+        smoothScrollTo.bind(this, i, mobilebtns)
+      );
+    }
+  }
+
+  /* =====================================================
+     🔥 Intersection Observer – Scroll Animation (ONCE)
+     ===================================================== */
+
   var animationClasses = [
     "fadeIn",
     "fadeInUp",
     "fadeInLeft",
     "fadeInRight"
   ];
-
-  /* =====================================================
-     Hilfsfunktion: Selektor bauen
-     ===================================================== */
 
   function buildSelector(classes) {
     return classes.map(function (cls) {
@@ -26,12 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
     buildSelector(animationClasses)
   );
 
-  /* =====================================================
-     Intersection Observer – Scroll Reveal (ONCE)
-     ===================================================== */
-
   if ("IntersectionObserver" in window && animatedElements.length) {
-
     var revealObserver = new IntersectionObserver(
       function (entries, observer) {
         entries.forEach(function (entry) {
@@ -53,10 +111,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   /* =====================================================
-     📌 Fixed Navigation (unverändert, falls vorhanden)
+     📌 Navigation fixed on scroll
      ===================================================== */
-
-  var ctaBtn = document.querySelector(".cta");
 
   if ("IntersectionObserver" in window && ctaBtn) {
     var nav = document.querySelector("nav");
@@ -79,5 +135,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     navObserver.observe(ctaBtn);
   }
+
+  /* =====================================================
+     Mobile Navigation Toggle
+     ===================================================== */
+
+  navIcon.addEventListener("click", function () {
+    mobileList.classList.toggle("show");
+    navIcon.classList.toggle("rotate");
+  });
 
 });
