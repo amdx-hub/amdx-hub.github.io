@@ -7,154 +7,159 @@ document.addEventListener("DOMContentLoaded", () => {
   const mobileList = document.getElementById("mobile-menu");
   const header = document.querySelector("nav");
   const ctaBtn = document.querySelector(".cta");
+
   const btns = document.querySelectorAll(".js-btn");
-  const mobilebtns = document.querySelectorAll(".js-mobile-btn");
+  const mobileBtns = document.querySelectorAll(".js-mobile-btn");
 
   /* =====================================================
-     Helper: Header Offset
+     Helper – Header Offset (immer korrekt)
   ===================================================== */
   function getHeaderOffset() {
     return header ? header.offsetHeight : 100;
   }
 
-  /* =====================================================
-     Mobile Menu Toggle
-  ===================================================== */
-  if (navIcon && mobileList) {
-    const toggleMenu = () => {
-      const isOpen = mobileList.classList.toggle("show");
-      navIcon.classList.toggle("rotate", isOpen);
-      navIcon.setAttribute("aria-expanded", isOpen);
-      navIcon.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
-    };
+  function scrollToTarget(targetEl) {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const offset = getHeaderOffset();
+        window.scrollTo({
+          top: targetEl.getBoundingClientRect().top + window.scrollY - offset,
+          behavior: "smooth"
+        });
+      });
+    });
+  }
 
-    navIcon.addEventListener("click", toggleMenu);
+  /* =====================================================
+     Mobile Navigation (hidden + aria korrekt)
+  ===================================================== */
+  function openMobileMenu() {
+    if (!mobileList || !navIcon) return;
+    mobileList.hidden = false;
+    mobileList.classList.add("show");
+    navIcon.classList.add("rotate");
+    navIcon.setAttribute("aria-expanded", "true");
+    navIcon.setAttribute("aria-label", "Close navigation");
+  }
+
+  function closeMobileMenu() {
+    if (!mobileList || !navIcon) return;
+    mobileList.classList.remove("show");
+    mobileList.hidden = true;
+    navIcon.classList.remove("rotate");
+    navIcon.setAttribute("aria-expanded", "false");
+    navIcon.setAttribute("aria-label", "Open navigation");
+  }
+
+  if (navIcon && mobileList) {
+    navIcon.addEventListener("click", () => {
+      mobileList.hidden ? openMobileMenu() : closeMobileMenu();
+    });
+
     navIcon.addEventListener("keydown", e => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        toggleMenu();
+        mobileList.hidden ? openMobileMenu() : closeMobileMenu();
       }
     });
   }
 
   /* =====================================================
-     Active-State Helper
+     Active State (Page + Hash + Scroll)
   ===================================================== */
-  function setActiveNav(targetHash = null) {
-  const path = location.pathname.replace(/\/$/, "") || "/";
-  const hash = targetHash || location.hash.replace("#", "");
+  function setActiveNav(forceHash = null) {
+    const currentPath = location.pathname.replace(/\/$/, "") || "/";
+    const hash = forceHash || location.hash.replace("#", "");
 
-  document.querySelectorAll(".js-btn, .js-mobile-btn").forEach(link => {
-    const url = new URL(link.getAttribute("href"), location.origin);
-    const linkPath = url.pathname.replace(/\/$/, "") || "/";
-    const linkHash = url.hash.replace("#", "");
+    document.querySelectorAll(".js-btn, .js-mobile-btn").forEach(link => {
+      const url = new URL(link.getAttribute("href"), location.origin);
+      const linkPath = url.pathname.replace(/\/$/, "") || "/";
+      const linkHash = url.hash.replace("#", "");
 
-    let active = false;
+      let active = false;
 
-    // 1️⃣ Gleiche Seite + Hash
-    if (linkPath === path && linkHash && linkHash === hash) {
-      active = true;
-    }
+      // Same page + hash
+      if (linkPath === currentPath && linkHash && linkHash === hash) {
+        active = true;
+      }
 
-    // 2️⃣ Seite ohne Hash (z. B. /about)
-    if (linkPath === path && !linkHash && !hash) {
-      active = true;
-    }
+      // Page without hash (e.g. /about)
+      if (linkPath === currentPath && !linkHash && !hash) {
+        active = true;
+      }
 
-    link.classList.toggle("selected", active);
-  });
-}
+      link.classList.toggle("selected", active);
+    });
+  }
 
-/* Initial */
-window.addEventListener("load", () => setActiveNav());
-
-/* Hash geändert (z. B. Browser / normaler Link) */
-window.addEventListener("hashchange", () => setActiveNav());
-
-/* Klick → sofort setzen */
-document.addEventListener("click", e => {
-  const link = e.target.closest(".js-btn, .js-mobile-btn");
-  if (!link) return;
-
-  const hash = link.getAttribute("href").split("#")[1];
-  setActiveNav(hash || null);
-});
+  window.addEventListener("load", () => setActiveNav());
+  window.addEventListener("hashchange", () => setActiveNav());
 
   /* =====================================================
      Smooth Scroll + Cross-Page Navigation
   ===================================================== */
-function smoothScroll(event) {
-  const link = event.currentTarget;
-  const href = link.getAttribute("href");
-  if (!href || !href.includes("#")) return;
+  function handleNavClick(event) {
+    const link = event.currentTarget;
+    const href = link.getAttribute("href");
+    if (!href) return;
 
-  const [targetUrl = "/", hash] = href.split("#");
-  if (!hash) return;
+    // Immer Active-State sofort
+    const hash = href.includes("#") ? href.split("#")[1] : null;
+    setActiveNav(hash);
 
-  const currentPath = window.location.pathname.replace(/\/$/, "") || "/";
-  const destinationPath = new URL(targetUrl || "/", location.origin)
-    .pathname.replace(/\/$/, "") || "/";
+    // Mobile Menü IMMER schließen
+    closeMobileMenu();
 
-  event.preventDefault();
+    if (!hash) return; // normale Seiten-Navigation
 
-  /* ✅ MOBILE MENU IMMER SCHLIESSEN */
-  if (mobileList && mobileList.classList.contains("show")) {
-    mobileList.classList.remove("show");
-    navIcon?.classList.remove("rotate");
-    navIcon?.setAttribute("aria-expanded", "false");
-    navIcon?.setAttribute("aria-label", "Open navigation");
+    const [targetUrl = "/", targetHash] = href.split("#");
+    const destinationPath = new URL(targetUrl || "/", location.origin)
+      .pathname.replace(/\/$/, "") || "/";
+    const currentPath = location.pathname.replace(/\/$/, "") || "/";
+
+    event.preventDefault();
+
+    // Cross-Page
+    if (currentPath !== destinationPath) {
+      sessionStorage.setItem("scrollToHash", targetHash);
+      window.location.href = destinationPath + "#" + targetHash;
+      return;
+    }
+
+    // Same Page
+    const targetEl = document.getElementById(targetHash);
+    if (targetEl) scrollToTarget(targetEl);
   }
 
-  /* ✅ ACTIVE STATE SOFORT */
-  setActiveNav(hash);
-
-  /* 🔁 Cross-Page */
-  if (currentPath !== destinationPath) {
-    sessionStorage.setItem("scrollToHash", hash);
-    window.location.href = destinationPath + "#" + hash;
-    return;
-  }
-
-  /* ⬇️ Same Page Scroll */
-  const targetEl = document.getElementById(hash);
-  if (targetEl) {
-    requestAnimationFrame(() => {
-      window.scrollTo({
-        top: targetEl.offsetTop - getHeaderOffset(),
-        behavior: "smooth"
-      });
-    });
-  }
-}
+  btns.forEach(btn => btn.addEventListener("click", handleNavClick));
+  mobileBtns.forEach(btn => btn.addEventListener("click", handleNavClick));
 
   /* =====================================================
-     Scroll auf Hash nach Seitenwechsel
+     Scroll nach Seitenwechsel (#hash)
   ===================================================== */
   window.addEventListener("load", () => {
-    const savedHash = sessionStorage.getItem("scrollToHash") || window.location.hash.slice(1);
-    if (savedHash) {
-      const targetEl = document.getElementById(savedHash);
-      if (targetEl) {
-        window.scrollTo({
-          top: targetEl.offsetTop - getHeaderOffset(),
-          behavior: "smooth"
-        });
-      }
-      setActiveLinkByHashOrPage(savedHash);
-      sessionStorage.removeItem("scrollToHash");
-    } else {
-      setActiveLinkByHashOrPage();
-    }
+    const hash = sessionStorage.getItem("scrollToHash") || location.hash.slice(1);
+    if (!hash) return;
+
+    const targetEl = document.getElementById(hash);
+    if (!targetEl) return;
+
+    sessionStorage.removeItem("scrollToHash");
+
+    setTimeout(() => {
+      scrollToTarget(targetEl);
+      setActiveNav(hash);
+    }, 50);
   });
 
   /* =====================================================
-     Tiny Slider Initialisierung
+     Tiny Slider (safe)
   ===================================================== */
   if (typeof tns === "function") {
-    const sliderContainer = document.querySelector(".slide__container");
-    if (sliderContainer) {
+    const slider = document.querySelector(".slide__container");
+    if (slider) {
       tns({
-        container: sliderContainer,
+        container: slider,
         arrowKeys: true,
         controlsText: [
           '<i class="fas fa-angle-left"></i>',
@@ -166,30 +171,29 @@ function smoothScroll(event) {
   }
 
   /* =====================================================
-     Intersection Observer – Scroll Animation
+     Intersection Observer – Animations (once)
   ===================================================== */
-  const animationClasses = ["fadeIn", "fadeInUp", "fadeInLeft", "fadeInRight"];
-  const animatedElements = document.querySelectorAll(animationClasses.map(c => "." + c).join(","));
+  const animated = document.querySelectorAll(
+    ".fadeIn, .fadeInUp, .fadeInLeft, .fadeInRight"
+  );
 
-  if ("IntersectionObserver" in window && animatedElements.length) {
-    const revealObserver = new IntersectionObserver((entries, observer) => {
+  if ("IntersectionObserver" in window && animated.length) {
+    const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          const delay = entry.target.dataset.delay || 0;
-          entry.target.style.transitionDelay = delay + "ms";
           entry.target.classList.add("in-view");
           observer.unobserve(entry.target);
         }
       });
     }, { threshold: 0.2, rootMargin: "0px 0px -10% 0px" });
 
-    animatedElements.forEach(el => revealObserver.observe(el));
+    animated.forEach(el => observer.observe(el));
   }
 
   /* =====================================================
-     Sticky Navigation beim Scroll über .cta
+     Sticky Navigation (CTA)
   ===================================================== */
-  if ("IntersectionObserver" in window && ctaBtn) {
+  if ("IntersectionObserver" in window && ctaBtn && header) {
     const navObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         header.classList.toggle("fixed", !entry.isIntersecting);
