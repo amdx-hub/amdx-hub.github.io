@@ -543,11 +543,30 @@ section {
     background-repeat: no-repeat; }
 
 /* --- 7. ANIMATIONEN --- */
-.fadeIn, .fadeInUp, .fadeInRight, .fadeInLeft { animation-duration: 1s; animation-fill-mode: forwards; animation-timing-function: ease-in-out; }
-.fadeIn { animation-name: fadeIn; }
-.fadeInUp { animation-name: fadeInUp; }
-.fadeInRight { animation-name: fadeInRight; }
-.fadeInLeft { animation-name: fadeInLeft; }
+/* Initialzustand */
+.fadeIn,
+.fadeInUp,
+.fadeInLeft,
+.fadeInRight {
+  opacity: 0;
+}
+
+/* Start der Animation */
+.in-view.fadeIn {
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+.in-view.fadeInUp {
+  animation: fadeInUp 1s ease-in-out forwards;
+}
+
+.in-view.fadeInLeft {
+  animation: fadeInLeft 1s ease-in-out forwards;
+}
+
+.in-view.fadeInRight {
+  animation: fadeInRight 1s ease-in-out forwards;
+}
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes fadeInUp {
