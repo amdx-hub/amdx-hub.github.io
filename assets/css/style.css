@@ -141,13 +141,19 @@ nav {
   display: none; }
 
 .nav--icon {
+  aspect-ratio: 1 / 1;          /* Höhe = Breite automatisch */
+  display: inline-flex;         /* Icon zentrieren */
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
   border-radius: 100px;
+  border: 0px;
   padding: 0.5rem;
   width: 25px;
   height: 25px;
   background-color: #38355a;
-  text-align: right;
   font-size: 1rem;
+  color: var(--white) ;
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
