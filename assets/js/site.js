@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
   ===================================================== */
   const navIcon = document.getElementById("nav-toggle");
   const mobileList = document.getElementById("mobile-menu");
+  const btns = document.querySelectorAll(".js-btn");
+  const mobilebtns = document.querySelectorAll(".js-mobile-btn");
   const header = document.querySelector("nav");
   const ctaBtn = document.querySelector(".cta");
 
@@ -28,21 +30,6 @@ document.addEventListener("DOMContentLoaded", function () {
         "aria-label",
         !isOpen ? "Close navigation" : "Open navigation"
       );
-    });
-  }
-
-  /* =====================================================
-     Active State Helper
-     (funktioniert auf allen Seiten)
-  ===================================================== */
-  function setActiveLink(targetHref) {
-    const allLinks = document.querySelectorAll(".js-btn, .js-mobile-btn");
-    allLinks.forEach(link => {
-      if (link.getAttribute("href") === targetHref) {
-        link.classList.add("selected");
-      } else {
-        link.classList.remove("selected");
-      }
     });
   }
 
@@ -82,8 +69,10 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    // Active-State setzen
-    setActiveLink(href);
+    // Active State
+    btns.forEach(l => l.classList.remove("selected"));
+    mobilebtns.forEach(l => l.classList.remove("selected"));
+    link.classList.add("selected");
 
     // Mobile Menü schließen
     if (mobileList && !mobileList.hidden) {
@@ -94,9 +83,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Event Listener für alle Links
-  const btns = document.querySelectorAll(".js-btn");
-  const mobilebtns = document.querySelectorAll(".js-mobile-btn");
   btns.forEach(btn => btn.addEventListener("click", smoothScroll));
   mobilebtns.forEach(btn => btn.addEventListener("click", smoothScroll));
 
@@ -112,8 +98,6 @@ document.addEventListener("DOMContentLoaded", function () {
         behavior: "smooth"
       });
     }
-    // Active-State auf Cross-Page Link setzen
-    setActiveLink("#" + savedHash);
     sessionStorage.removeItem("scrollToHash");
   }
 
