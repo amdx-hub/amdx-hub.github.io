@@ -143,7 +143,7 @@ section-customers:
                 {% for list in page.section-summary.list %}
                 <div class="summary__list flex--horizontal fadeIn">
                     <img src="{{ list.img }}" alt="">
-                    <p>{{ list.text }}</p>
+                    <p class="txt-balance">{{ list.text }}</p>
                 </div>
                 {% endfor %}
             </div>
@@ -160,7 +160,7 @@ section-customers:
     <div class="snippets__cards flex--vertical">
       {% for card in page.section-snippets.cards %}
         <div class="snippets__card flex--horizontal">
-          <p>{{ card.text }}</p>
+          <p class="txt-balance">{{ card.text }}</p>
           <h3 class="font-fjalla">{{ card.stats }}</h3>
         </div>
       {% endfor %}
