@@ -548,26 +548,16 @@ section {
 .fadeInLeft,
 .fadeInRight {
   opacity: 0;
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-.in-view {
-  animation-delay: var(--delay, 0s);
-}
+.fadeInUp { transform: translate3d(0, 50px, 0); }
+.fadeInLeft { transform: translate3d(-100px, 0, 0); }
+.fadeInRight { transform: translate3d(100px, 0, 0); }
 
-.in-view.fadeInUp {
-  animation: fadeInUp 1s ease-in-out forwards;
-}
-
-.in-view.fadeInLeft {
-  animation: fadeInLeft 1s ease-in-out forwards;
-}
-
-.in-view.fadeInRight {
-  animation: fadeInRight 1s ease-in-out forwards;
-}
-
-.in-view.fadeIn {
-  animation: fadeIn 1s ease-in-out forwards;
+.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
 }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
