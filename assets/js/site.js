@@ -11,17 +11,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const btns = document.querySelectorAll(".js-btn");
   const mobilebtns = document.querySelectorAll(".js-mobile-btn");
 
-  // Alle Nav-Links zusammenfassen
+  // Alle Nav Links zusammenfassen
   const allNavLinks = [...btns, ...mobilebtns];
 
-  // Header-Offset berechnen, bei Resize anpassen
+  // Header Offset berechnen + bei Resize anpassen
   let headerOffset = header ? header.offsetHeight : 100;
   window.addEventListener("resize", () => {
     headerOffset = header ? header.offsetHeight : 100;
   });
 
   /* =====================================================
-     Tiny Slider Initialisierung (safe)
+     Tiny Slider Initialisierung (optional)
   ===================================================== */
   if (typeof tns === "function") {
     const sliderContainer = document.querySelector(".slide__container");
@@ -39,14 +39,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =====================================================
-     Smooth Scroll
+     Smooth Scroll Funktion
   ===================================================== */
   function smoothScroll(event) {
     const link = event.currentTarget;
     const href = link.getAttribute("href");
     if (!href || href.indexOf("#") === -1) return;
 
-    // Hash extrahieren (funktioniert auch bei absoluten URLs)
+    // Hash extrahieren (funktioniert mit absoluten & relativen URLs)
     const hash = new URL(href, window.location.href).hash.substring(1);
     if (!hash) return;
 
@@ -55,11 +55,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     event.preventDefault();
 
-    // Active State (Desktop + Mobile)
+    // Active State setzen
     allNavLinks.forEach(l => l.classList.remove("selected"));
     link.classList.add("selected");
 
-    // Mobile Menü schließen
+    // Mobile-Menü schließen
     if (mobileList?.classList.contains("show")) {
       mobileList.classList.remove("show");
       navIcon?.classList.remove("rotate");
@@ -75,11 +75,24 @@ document.addEventListener("DOMContentLoaded", () => {
     history.pushState(null, "", "#" + hash);
   }
 
-  // Event Listener für alle Nav Links
+  // Event Listener für alle Links
   allNavLinks.forEach(link => link.addEventListener("click", smoothScroll));
 
   /* =====================================================
-     Intersection Observer – Scroll Animation (einmalig)
+     Scroll-on-Load für Hash aus anderer Seite
+  ===================================================== */
+  if (window.location.hash) {
+    const targetEl = document.getElementById(window.location.hash.substring(1));
+    if (targetEl) {
+      window.scrollTo({
+        top: targetEl.offsetTop - headerOffset,
+        behavior: "smooth"
+      });
+    }
+  }
+
+  /* =====================================================
+     Intersection Observer – Animations
   ===================================================== */
   const animationClasses = ["fadeIn", "fadeInUp", "fadeInLeft", "fadeInRight"];
   const animatedElements = document.querySelectorAll(animationClasses.map(c => "." + c).join(","));
@@ -91,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const delay = entry.target.dataset.delay || 0;
           entry.target.style.transitionDelay = delay + "ms";
           entry.target.classList.add("in-view");
-          observer.unobserve(entry.target); // nur einmal animieren
+          observer.unobserve(entry.target); // nur einmal
         }
       });
     }, {
@@ -103,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =====================================================
-     Sticky Navigation beim Scroll über .cta
+     Sticky Navigation über .cta
   ===================================================== */
   if ("IntersectionObserver" in window && ctaBtn && header) {
     const navObserver = new IntersectionObserver(entries => {
