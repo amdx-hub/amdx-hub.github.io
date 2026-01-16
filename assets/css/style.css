@@ -141,8 +141,9 @@ nav {
   display: none; }
 
 .nav--icon {
-  aspect-ratio: 1 / 1;          /* Höhe = Breite automatisch */
-  display: inline-flex;         /* Icon zentrieren */
+  width: 2rem;
+  height: 2rem;
+  display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 100px;
@@ -150,7 +151,7 @@ nav {
   padding: 0.5rem;
   background-color: #38355a;
   font-size: 1rem;
-  color: var(--white) ;
+  color: var(--white);
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
