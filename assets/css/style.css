@@ -66,6 +66,7 @@ body {
   color: var(--white);
   font-weight: 300;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden; 
 }
 
 h1, h2, h3, h4, h5 { margin: 0; }
@@ -548,10 +549,20 @@ section {
 .fadeInLeft,
 .fadeInRight {
   opacity: 0;
+  will-change: opacity, transform;
+  overflow-x: hidden; /* verhindert horizontales Scrollen */
 }
 
+/* Verzögerung optional */
 .in-view {
   animation-delay: var(--delay, 0s);
+}
+
+/* ================================
+   Animationen beim In-View
+   ================================ */
+.in-view.fadeIn {
+  animation: fadeIn 1s ease-in-out forwards;
 }
 
 .in-view.fadeInUp {
@@ -566,23 +577,29 @@ section {
   animation: fadeInRight 1s ease-in-out forwards;
 }
 
-.in-view.fadeIn {
-  animation: fadeIn 1s ease-in-out forwards;
+/* ================================
+   Keyframes
+   ================================ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes fadeInUp {
   from { opacity: 0; transform: translate3d(0, 50px, 0); }
   to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
+
 @keyframes fadeInRight {
-  from { opacity: 0; transform: translate3d(100px, 0, 0); }
+  from { opacity: 0; transform: translate3d(100%, 0, 0); } /* Prozent statt px */
   to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
+
 @keyframes fadeInLeft {
-  from { opacity: 0; transform: translate3d(-100px, 0, 0); }
+  from { opacity: 0; transform: translate3d(-100%, 0, 0); } /* Prozent statt px */
   to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
+
 @keyframes infiniteStats {
   from { background-position: 0 0; }
   to { background-position: calc(-1 * var(--tile)) 0; }
