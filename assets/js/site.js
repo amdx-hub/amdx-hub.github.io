@@ -83,48 +83,49 @@ document.addEventListener("click", e => {
   /* =====================================================
      Smooth Scroll + Cross-Page Navigation
   ===================================================== */
-  function smoothScroll(event) {
-    const link = event.currentTarget;
-    const href = link.getAttribute("href");
-    if (!href || href.indexOf("#") === -1) return;
+function smoothScroll(event) {
+  const link = event.currentTarget;
+  const href = link.getAttribute("href");
+  if (!href || !href.includes("#")) return;
 
-    const hash = href.split("#")[1];
-    const targetUrl = href.split("#")[0] || "/";
-    const targetEl = document.getElementById(hash);
+  const [targetUrl = "/", hash] = href.split("#");
+  if (!hash) return;
 
-    event.preventDefault();
+  const currentPath = window.location.pathname.replace(/\/$/, "") || "/";
+  const destinationPath = new URL(targetUrl || "/", location.origin)
+    .pathname.replace(/\/$/, "") || "/";
 
-    // Cross-Page Navigation
-    if (window.location.pathname !== new URL(targetUrl, window.location.origin).pathname) {
-      sessionStorage.setItem("scrollToHash", hash);
-      window.location.href = targetUrl + "#" + hash;
-      return;
-    }
+  event.preventDefault();
 
-    // Scroll auf derselben Seite
-    if (targetEl) {
-      requestAnimationFrame(() => {
-        window.scrollTo({
-          top: targetEl.offsetTop - getHeaderOffset(),
-          behavior: "smooth"
-        });
-      });
-    }
-
-    // Active-State setzen
-    setActiveLinkByHashOrPage(hash);
-
-    // Mobile Menü schließen
-    if (mobileList && mobileList.classList.contains("show")) {
-      mobileList.classList.remove("show");
-      navIcon.classList.remove("rotate");
-      navIcon.setAttribute("aria-expanded", false);
-      navIcon.setAttribute("aria-label", "Open navigation");
-    }
+  /* ✅ MOBILE MENU IMMER SCHLIESSEN */
+  if (mobileList && mobileList.classList.contains("show")) {
+    mobileList.classList.remove("show");
+    navIcon?.classList.remove("rotate");
+    navIcon?.setAttribute("aria-expanded", "false");
+    navIcon?.setAttribute("aria-label", "Open navigation");
   }
 
-  btns.forEach(btn => btn.addEventListener("click", smoothScroll));
-  mobilebtns.forEach(btn => btn.addEventListener("click", smoothScroll));
+  /* ✅ ACTIVE STATE SOFORT */
+  setActiveNav(hash);
+
+  /* 🔁 Cross-Page */
+  if (currentPath !== destinationPath) {
+    sessionStorage.setItem("scrollToHash", hash);
+    window.location.href = destinationPath + "#" + hash;
+    return;
+  }
+
+  /* ⬇️ Same Page Scroll */
+  const targetEl = document.getElementById(hash);
+  if (targetEl) {
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: targetEl.offsetTop - getHeaderOffset(),
+        behavior: "smooth"
+      });
+    });
+  }
+}
 
   /* =====================================================
      Scroll auf Hash nach Seitenwechsel
