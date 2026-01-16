@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+  /* =====================================================
+     Variablen
+  ===================================================== */
   const navIcon = document.getElementById("nav-toggle");
   const mobileList = document.getElementById("mobile-menu");
   const header = document.querySelector("nav");
@@ -10,8 +13,9 @@ document.addEventListener("DOMContentLoaded", function () {
     return header ? header.offsetHeight : 100;
   }
 
-  // =====================================================
-  // Mobile Menü Toggle
+  /* =====================================================
+     Mobile Menü Toggle
+  ===================================================== */
   if (navIcon && mobileList) {
     const toggleMenu = () => {
       mobileList.classList.toggle("show");
@@ -33,17 +37,21 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // =====================================================
-  // Active-State Helper
+  /* =====================================================
+     Active-State Helper
+  ===================================================== */
   function setActiveLink(targetHref) {
     const allLinks = document.querySelectorAll(".js-btn, .js-mobile-btn");
     allLinks.forEach(link => {
-      link.classList.toggle("selected", link.getAttribute("href") === targetHref);
+      const linkHash = link.getAttribute("href").split("#")[1];
+      const targetHash = targetHref.split("#")[1];
+      link.classList.toggle("selected", linkHash === targetHash);
     });
   }
 
-  // =====================================================
-  // Smooth Scroll
+  /* =====================================================
+     Smooth Scroll
+  ===================================================== */
   function smoothScroll(event) {
     const link = event.currentTarget;
     const href = link.getAttribute("href");
@@ -57,20 +65,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     event.preventDefault();
 
-    if (window.location.pathname === new URL(targetUrl, window.location.origin).pathname) {
-      if (targetEl) {
-        window.scrollTo({
-          top: targetEl.offsetTop - getHeaderOffset(),
-          behavior: "smooth"
-        });
-      }
-    } else {
+    // Cross-Page Navigation
+    if (window.location.pathname !== new URL(targetUrl, window.location.origin).pathname) {
       sessionStorage.setItem("scrollToHash", hash);
       window.location.href = targetUrl + "#" + hash;
       return;
     }
 
-    // Active-State
+    // Scroll auf derselben Seite
+    if (targetEl) {
+      window.scrollTo({
+        top: targetEl.offsetTop - getHeaderOffset(),
+        behavior: "smooth"
+      });
+    }
+
+    // Active-State setzen
     setActiveLink(href);
 
     // Mobile Menü schließen
@@ -82,27 +92,36 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  // Event Listener für alle Links
   const btns = document.querySelectorAll(".js-btn");
   const mobilebtns = document.querySelectorAll(".js-mobile-btn");
   btns.forEach(btn => btn.addEventListener("click", smoothScroll));
   mobilebtns.forEach(btn => btn.addEventListener("click", smoothScroll));
 
-  // Cross-Page Scroll nach Laden
-  const savedHash = sessionStorage.getItem("scrollToHash");
+  /* =====================================================
+     Cross-Page Scroll nach Laden
+  ===================================================== */
+  const savedHash = sessionStorage.getItem("scrollToHash") || window.location.hash.slice(1);
   if (savedHash) {
-    const el = document.getElementById(savedHash);
-    if (el) {
-      window.scrollTo({
-        top: el.offsetTop - getHeaderOffset(),
-        behavior: "smooth"
+    const targetEl = document.getElementById(savedHash);
+    if (targetEl) {
+      requestAnimationFrame(() => {
+        window.scrollTo({
+          top: targetEl.offsetTop - getHeaderOffset(),
+          behavior: "smooth"
+        });
+        setActiveLink("#" + savedHash);
       });
     }
-    setActiveLink("#" + savedHash);
     sessionStorage.removeItem("scrollToHash");
+  } else {
+    // Active-State für aktuelle Seite setzen
+    setActiveLink(window.location.hash || "#section-hero");
   }
 
-  // =====================================================
-  // Tiny Slider
+  /* =====================================================
+     Tiny Slider Initialisierung
+  ===================================================== */
   if (typeof tns === "function") {
     const sliderContainer = document.querySelector(".slide__container");
     if (sliderContainer) {
@@ -118,8 +137,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // =====================================================
-  // Intersection Observer Animation
+  /* =====================================================
+     Intersection Observer – Scroll Animation (einmalig)
+  ===================================================== */
   const animationClasses = ["fadeIn", "fadeInUp", "fadeInLeft", "fadeInRight"];
   const animatedElements = document.querySelectorAll(animationClasses.map(c => "." + c).join(","));
 
@@ -138,8 +158,9 @@ document.addEventListener("DOMContentLoaded", function () {
     animatedElements.forEach(el => revealObserver.observe(el));
   }
 
-  // =====================================================
-  // Sticky Navigation
+  /* =====================================================
+     Sticky Navigation beim Scroll über .cta
+  ===================================================== */
   if ("IntersectionObserver" in window && ctaBtn) {
     const navObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
