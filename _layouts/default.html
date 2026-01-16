@@ -26,16 +26,17 @@
   <meta name="twitter:description" content="{{ page.description }}">
   <meta name="twitter:image" content="{{ page.social-image }}">
 
-  <link rel="preload" href="./assets/font/FjallaOne-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-  <link rel="preload" href="./assets/font/OpenSans-VariableFont_wdth,wght.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="{{ '/assets/font/FjallaOne-Regular.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ '/assets/font/OpenSans-VariableFont_wdth,wght.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
 
   <link rel="prefetch" href="{{ '/' | relative_url }}">
   <link rel="prefetch" href="{{ '/about/' | relative_url }}">
-  
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css">
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tiny-slider@2.9.3/dist/tiny-slider.css">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tiny-slider@2.9.3/dist/tiny-slider.css">
+
   <link rel="author" href="humans.txt">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/tiny-slider@2.9.3/dist/min/tiny-slider.js"></script>
@@ -47,7 +48,7 @@
       {{ content }}
     </main>
     {% include footer.html %}
-    <script type="text/javascript" src="./assets/js/stats.js"></script>
-    <script type="text/javascript" src="./assets/js/site.js"></script>
+    <script type="text/javascript" src="{{ '/assets/js/site.js' | relative_url }}"></script>
+    <script type="text/javascript" src="{{ '/assets/js/stats.js' | relative_url }}"></script>
   </body>
 </html>
