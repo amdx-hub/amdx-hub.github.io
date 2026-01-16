@@ -543,29 +543,32 @@ section {
     background-repeat: no-repeat; }
 
 /* --- 7. ANIMATIONEN --- */
-/* Initialzustand */
 .fadeIn,
 .fadeInUp,
 .fadeInLeft,
 .fadeInRight {
   opacity: 0;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-/* Start der Animation */
-.in-view.fadeIn {
-  animation: fadeIn 1s ease-in-out forwards;
+/* aktiv */
+.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
 }
 
-.in-view.fadeInUp {
-  animation: fadeInUp 1s ease-in-out forwards;
+/* Richtungen */
+.fadeInUp {
+  transform: translate3d(0, 50px, 0);
 }
 
-.in-view.fadeInLeft {
-  animation: fadeInLeft 1s ease-in-out forwards;
+.fadeInLeft {
+  transform: translate3d(-100px, 0, 0);
 }
 
-.in-view.fadeInRight {
-  animation: fadeInRight 1s ease-in-out forwards;
+.fadeInRight {
+  transform: translate3d(100px, 0, 0);
 }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
