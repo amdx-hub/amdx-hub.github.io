@@ -1,29 +1,19 @@
 /* ================================
-   DOM References
+   Navigation & Mobile Menu
 ================================ */
 
 var navLinks = document.querySelectorAll(".js-btn");
 var navIcon = document.querySelector(".nav--icon");
 var mobileList = document.querySelector(".mobile-list");
-var header = document.querySelector("nav");
 
 /* ================================
-   Helpers
-================================ */
-
-function getHeaderOffset() {
-  return header ? header.offsetHeight : 100;
-}
-
-/* ================================
-   Smooth Scroll (href="#section-id")
+   Smooth Scroll via href="#id"
 ================================ */
 
 function smoothScroll(event) {
-  var link = event.currentTarget;
-  var href = link.getAttribute("href");
+  var href = event.currentTarget.getAttribute("href");
 
-  // Nur Hash-Links abfangen
+  // nur interne Hash-Links abfangen
   if (!href || href.indexOf("#") === -1) return;
 
   var targetId = href.split("#")[1];
@@ -34,11 +24,11 @@ function smoothScroll(event) {
   event.preventDefault();
 
   // Active State
-  navLinks.forEach(function (l) {
-    l.classList.remove("selected");
+  navLinks.forEach(function (link) {
+    link.classList.remove("selected");
   });
 
-  link.classList.add("selected");
+  event.currentTarget.classList.add("selected");
 
   // Mobile Nav schließen
   if (mobileList && mobileList.classList.contains("show")) {
@@ -46,16 +36,16 @@ function smoothScroll(event) {
   }
 
   window.scrollTo({
-    top: targetEl.offsetTop - getHeaderOffset(),
+    top: targetEl.offsetTop - 100,
     behavior: "smooth"
   });
 
-  // URL Hash ohne Sprung setzen
+  // URL Hash setzen (ohne Sprung)
   history.pushState(null, "", "#" + targetId);
 }
 
 /* ================================
-   Bind Navigation Events
+   Event Binding Navigation
 ================================ */
 
 navLinks.forEach(function (link) {
@@ -64,38 +54,30 @@ navLinks.forEach(function (link) {
 
 /* ================================
    Intersection Observer Animations
-   (nur einmal)
 ================================ */
 
 var animatedElements = document.querySelectorAll(
   ".fadeIn, .fadeInUp, .fadeInLeft, .fadeInRight"
 );
 
-if ("IntersectionObserver" in window) {
-  var observer = new IntersectionObserver(
-    function (entries, obs) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
+var observer = new IntersectionObserver(
+  function (entries, obs) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
 
-        var delay = entry.target.dataset.delay || 0;
-        entry.target.style.transitionDelay = delay + "ms";
-        entry.target.classList.add("is-visible");
+      var delay = entry.target.dataset.delay || 0;
+      entry.target.style.transitionDelay = delay + "ms";
+      entry.target.classList.add("is-visible");
 
-        obs.unobserve(entry.target);
-      });
-    },
-    { threshold: 0.2 }
-  );
+      obs.unobserve(entry.target);
+    });
+  },
+  { threshold: 0.2 }
+);
 
-  animatedElements.forEach(function (el) {
-    observer.observe(el);
-  });
-} else {
-  // Fallback
-  animatedElements.forEach(function (el) {
-    el.classList.add("is-visible");
-  });
-}
+animatedElements.forEach(function (el) {
+  observer.observe(el);
+});
 
 /* ================================
    Mobile Navigation Toggle
