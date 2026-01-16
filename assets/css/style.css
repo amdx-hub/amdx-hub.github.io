@@ -739,8 +739,7 @@ section {
     flex-wrap: wrap;
     justify-content: center; }
   .section--integrations .logo {
-    max-width: 100px;
-    margin: 1rem; }
+    max-width: 100px; }
 
   .section--customers {
     padding: 2rem 0; }
