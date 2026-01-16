@@ -88,20 +88,20 @@ section-stats:
             data: [40, 40, 40, 40]
 
 section-integrations:
-  title: Trusted by
+  title: Technology Partners
   logos:
     - img: assets/img/logos/1.svg
-      name: airbnb
+      name: tradingview
     - img: assets/img/logos/2.svg
-      name: twitter
+      name: pinescript
     - img: assets/img/logos/3.svg
-      name: eventbrite
+      name: googlecloud
     - img: assets/img/logos/4.svg
-      name: netflix
+      name: python
     - img: assets/img/logos/5.svg
-      name: google
+      name: bitget
     - img: assets/img/logos/6.svg
-      name: spotify
+      name: bitcoin
 section-customers:
   title: What customers are saying
   slides:
