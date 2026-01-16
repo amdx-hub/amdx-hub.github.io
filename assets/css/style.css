@@ -196,7 +196,8 @@ nav {
 
 .flex--horizontal {
   display: flex;
-  flex-direction: row; }
+  flex-direction: row;
+  overflow : hidden; }
 
 .flex--vertical {
   display: flex;
