@@ -32,52 +32,41 @@ document.addEventListener("DOMContentLoaded", function () {
      Smooth Scroll
   ===================================================== */
 
-  function getHeaderOffset() {
-    return header ? header.offsetHeight : 100;
-  }
-
   function smoothScroll(event) {
-    var link = event.currentTarget;
-    var href = link.getAttribute("href");
+  var link = event.currentTarget;
+  var href = link.getAttribute("href");
 
-    // Nur Hash-Links
-    if (!href || href.indexOf("#") === -1) return;
+  // Nur Links mit Hash prüfen
+  if (!href || href.indexOf("#") === -1) return;
 
-    var targetId = href.split("#")[1];
-    var targetEl = document.getElementById(targetId);
+  // Hash extrahieren (unabhängig von voller URL)
+  var hash = href.split("#")[1];
+  var targetEl = document.getElementById(hash);
 
-    if (!targetEl) return;
+  if (!targetEl) return;
 
-    event.preventDefault();
+  event.preventDefault();
 
-    // Active State (Desktop + Mobile)
-    btns.forEach(function (l) { l.classList.remove("selected"); });
-    mobilebtns.forEach(function (l) { l.classList.remove("selected"); });
+  // Active State (Desktop + Mobile)
+  btns.forEach(l => l.classList.remove("selected"));
+  mobilebtns.forEach(l => l.classList.remove("selected"));
+  link.classList.add("selected");
 
-    link.classList.add("selected");
-
-    // Mobile Menu schließen
-    if (mobileList && mobileList.classList.contains("show")) {
-      mobileList.classList.remove("show");
-      navIcon.classList.remove("rotate");
-    }
-
-    window.scrollTo({
-      top: targetEl.offsetTop - getHeaderOffset(),
-      behavior: "smooth"
-    });
-
-    // URL Hash aktualisieren ohne Sprung
-    history.pushState(null, "", "#" + targetId);
+  // Mobile Menu schließen
+  if (mobileList && mobileList.classList.contains("show")) {
+    mobileList.classList.remove("show");
+    navIcon.classList.remove("rotate");
   }
 
-  // Event Listener binden
-  btns.forEach(function (btn) {
-    btn.addEventListener("click", smoothScroll);
+  // Scrollen
+  window.scrollTo({
+    top: targetEl.offsetTop - getHeaderOffset(),
+    behavior: "smooth"
   });
-  mobilebtns.forEach(function (btn) {
-    btn.addEventListener("click", smoothScroll);
-  });
+
+  // URL Hash setzen ohne Sprung
+  history.pushState(null, "", "#" + hash);
+}
 
   /* =====================================================
      Intersection Observer – Scroll Animation (einmalig)
