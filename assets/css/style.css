@@ -165,8 +165,9 @@ nav {
   transition: all 0.3s ease-in-out; }
   
 .mobile-list {
-  display: none;
+  max-height: 0;
   overflow: hidden;
+  transition: max-height 0.3s ease;
   z-index: 50;
   background-color: #3e3c65;
   padding: 6rem 1rem 1rem 1rem;
@@ -187,7 +188,8 @@ nav {
     .mobile-list a:not(:last-child) {
       margin-right: 0; }
   .mobile-list.show {
-    display: block; }
+    display: block;
+    max-height: 100svh; }
 
 .aligner {
   display: flex;
