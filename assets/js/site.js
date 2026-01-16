@@ -7,69 +7,51 @@ document.addEventListener("DOMContentLoaded", () => {
   const mobileList = document.getElementById("mobile-menu");
   const header = document.querySelector("nav");
   const ctaBtn = document.querySelector(".cta");
-
   const btns = document.querySelectorAll(".js-btn");
   const mobileBtns = document.querySelectorAll(".js-mobile-btn");
 
   /* =====================================================
-     Helper – Header Offset (immer korrekt)
+     Helper: Header Offset
   ===================================================== */
   function getHeaderOffset() {
     return header ? header.offsetHeight : 100;
   }
 
-  function scrollToTarget(targetEl) {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const offset = getHeaderOffset();
-        window.scrollTo({
-          top: targetEl.getBoundingClientRect().top + window.scrollY - offset,
-          behavior: "smooth"
-        });
-      });
-    });
-  }
-
   /* =====================================================
-     Mobile Navigation (hidden + aria korrekt)
+     Mobile Menü Toggle
   ===================================================== */
-  function openMobileMenu() {
-    if (!mobileList || !navIcon) return;
-    mobileList.hidden = false;
-    mobileList.classList.add("show");
-    navIcon.classList.add("rotate");
-    navIcon.setAttribute("aria-expanded", "true");
-    navIcon.setAttribute("aria-label", "Close navigation");
-  }
+  const closeMobileMenu = () => {
+    if (mobileList && mobileList.classList.contains("show")) {
+      mobileList.classList.remove("show");
+      navIcon?.classList.remove("rotate");
+      navIcon?.setAttribute("aria-expanded", "false");
+      navIcon?.setAttribute("aria-label", "Open navigation");
+    }
+  };
 
-  function closeMobileMenu() {
-    if (!mobileList || !navIcon) return;
-    mobileList.classList.remove("show");
-    mobileList.hidden = true;
-    navIcon.classList.remove("rotate");
-    navIcon.setAttribute("aria-expanded", "false");
-    navIcon.setAttribute("aria-label", "Open navigation");
-  }
+  const toggleMenu = () => {
+    const isOpen = mobileList.classList.toggle("show");
+    navIcon.classList.toggle("rotate", isOpen);
+    navIcon.setAttribute("aria-expanded", isOpen);
+    navIcon.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
+  };
 
-  if (navIcon && mobileList) {
-    navIcon.addEventListener("click", () => {
-      mobileList.hidden ? openMobileMenu() : closeMobileMenu();
-    });
-
+  if (navIcon) {
+    navIcon.addEventListener("click", toggleMenu);
     navIcon.addEventListener("keydown", e => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        mobileList.hidden ? openMobileMenu() : closeMobileMenu();
+        toggleMenu();
       }
     });
   }
 
   /* =====================================================
-     Active State (Page + Hash + Scroll)
+     Active-State Helper
   ===================================================== */
-  function setActiveNav(forceHash = null) {
-    const currentPath = location.pathname.replace(/\/$/, "") || "/";
-    const hash = forceHash || location.hash.replace("#", "");
+  function setActiveNav(targetHash = null) {
+    const path = location.pathname.replace(/\/$/, "") || "/";
+    const hash = targetHash || location.hash.replace("#", "");
 
     document.querySelectorAll(".js-btn, .js-mobile-btn").forEach(link => {
       const url = new URL(link.getAttribute("href"), location.origin);
@@ -78,44 +60,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let active = false;
 
-      // Same page + hash
-      if (linkPath === currentPath && linkHash && linkHash === hash) {
-        active = true;
-      }
+      // Gleiche Seite + Hash
+      if (linkPath === path && linkHash && linkHash === hash) active = true;
 
-      // Page without hash (e.g. /about)
-      if (linkPath === currentPath && !linkHash && !hash) {
-        active = true;
-      }
+      // Seite ohne Hash
+      if (linkPath === path && !linkHash && !hash) active = true;
 
       link.classList.toggle("selected", active);
     });
   }
 
-  window.addEventListener("load", () => setActiveNav());
-  window.addEventListener("hashchange", () => setActiveNav());
-
   /* =====================================================
      Smooth Scroll + Cross-Page Navigation
   ===================================================== */
+  const scrollToTarget = (el) => {
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: el.offsetTop - getHeaderOffset(),
+        behavior: "smooth"
+      });
+    });
+  };
+
   function handleNavClick(event) {
     const link = event.currentTarget;
     const href = link.getAttribute("href");
     if (!href) return;
 
-    // Immer Active-State sofort
     const hash = href.includes("#") ? href.split("#")[1] : null;
-    setActiveNav(hash);
 
-    // Mobile Menü IMMER schließen
+    // Mobile-Menü schließen immer
     closeMobileMenu();
 
-    if (!hash) return; // normale Seiten-Navigation
+    // Active-State sofort setzen
+    setActiveNav(hash);
+
+    // Nur Hash scrollen
+    if (!hash) return;
 
     const [targetUrl = "/", targetHash] = href.split("#");
+    const currentPath = window.location.pathname.replace(/\/$/, "") || "/";
     const destinationPath = new URL(targetUrl || "/", location.origin)
       .pathname.replace(/\/$/, "") || "/";
-    const currentPath = location.pathname.replace(/\/$/, "") || "/";
 
     event.preventDefault();
 
@@ -126,40 +112,46 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Same Page
+    // Same Page Scroll
     const targetEl = document.getElementById(targetHash);
     if (targetEl) scrollToTarget(targetEl);
   }
 
+  // Links binden
   btns.forEach(btn => btn.addEventListener("click", handleNavClick));
   mobileBtns.forEach(btn => btn.addEventListener("click", handleNavClick));
 
   /* =====================================================
-     Scroll nach Seitenwechsel (#hash)
+     Hashchange / SessionStorage → Cross-Page Scroll + Active-State
   ===================================================== */
-  window.addEventListener("load", () => {
-    const hash = sessionStorage.getItem("scrollToHash") || location.hash.slice(1);
-    if (!hash) return;
+  const checkScrollFromSession = () => {
+    const savedHash = sessionStorage.getItem("scrollToHash") || window.location.hash.slice(1);
+    if (savedHash) {
+      const targetEl = document.getElementById(savedHash);
+      if (targetEl) scrollToTarget(targetEl);
+      setActiveNav(savedHash);
+      sessionStorage.removeItem("scrollToHash");
+    } else {
+      setActiveNav();
+    }
+  };
 
-    const targetEl = document.getElementById(hash);
-    if (!targetEl) return;
-
-    sessionStorage.removeItem("scrollToHash");
-
-    setTimeout(() => {
-      scrollToTarget(targetEl);
-      setActiveNav(hash);
-    }, 50);
+  window.addEventListener("load", checkScrollFromSession);
+  window.addEventListener("hashchange", () => {
+    setActiveNav(location.hash.slice(1));
+    closeMobileMenu();
+    const targetEl = document.getElementById(location.hash.slice(1));
+    if (targetEl) scrollToTarget(targetEl);
   });
 
   /* =====================================================
-     Tiny Slider (safe)
+     Tiny Slider Initialisierung
   ===================================================== */
   if (typeof tns === "function") {
-    const slider = document.querySelector(".slide__container");
-    if (slider) {
+    const sliderContainer = document.querySelector(".slide__container");
+    if (sliderContainer) {
       tns({
-        container: slider,
+        container: sliderContainer,
         arrowKeys: true,
         controlsText: [
           '<i class="fas fa-angle-left"></i>',
@@ -171,33 +163,32 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =====================================================
-     Intersection Observer – Animations (once)
+     Intersection Observer – Scroll Animation
   ===================================================== */
-  const animated = document.querySelectorAll(
-    ".fadeIn, .fadeInUp, .fadeInLeft, .fadeInRight"
-  );
+  const animationClasses = ["fadeIn", "fadeInUp", "fadeInLeft", "fadeInRight"];
+  const animatedElements = document.querySelectorAll(animationClasses.map(c => "." + c).join(","));
 
-  if ("IntersectionObserver" in window && animated.length) {
-    const observer = new IntersectionObserver(entries => {
+  if ("IntersectionObserver" in window && animatedElements.length) {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
+          const delay = entry.target.dataset.delay || 0;
+          entry.target.style.transitionDelay = delay + "ms";
           entry.target.classList.add("in-view");
           observer.unobserve(entry.target);
         }
       });
     }, { threshold: 0.2, rootMargin: "0px 0px -10% 0px" });
 
-    animated.forEach(el => observer.observe(el));
+    animatedElements.forEach(el => revealObserver.observe(el));
   }
 
   /* =====================================================
-     Sticky Navigation (CTA)
+     Sticky Navigation beim Scroll über .cta
   ===================================================== */
-  if ("IntersectionObserver" in window && ctaBtn && header) {
+  if ("IntersectionObserver" in window && ctaBtn) {
     const navObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        header.classList.toggle("fixed", !entry.isIntersecting);
-      });
+      header.classList.toggle("fixed", !entries[0].isIntersecting);
     }, { rootMargin: "-80px 0px 0px 0px", threshold: 0 });
 
     navObserver.observe(ctaBtn);
