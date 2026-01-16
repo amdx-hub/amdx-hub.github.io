@@ -37,7 +37,7 @@ section-snippets:
     The focus is on realistic assumptions and verifiable results rather than theoretical models.
 section-features:
   title: Features of the System
-  description: AI-driven algorithms analyze market movements in real time and execute trades automatically. The system continuously adapts to changing conditions, enabling a consistent, data-driven trading approach.
+  description: Advanced algorithms and AI-driven analysis monitor and evaluate market movements in real time. Trade decisions are executed instantly, creating an adaptive system that responds dynamically to changing market conditions — operating continuously, without manual intervention.
   image: "assets/img/features-image.png"
   features-left:
     - img: "assets/img/features-circle.svg"
