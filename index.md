@@ -268,21 +268,3 @@ section-disclaimer:
     </div>
   </div>
 </section>
-<section id="section-contact" class="section--contact">
-  <div class="section__title">
-    <h3 class="font-fjalla">{{ page.section-contact.title }}</h3>
-    <p>{{ page.section-contact.description }}</p>
-    <div class="form-group">
-      <input type="text" class="input" placeholder="Your Email">
-      <button class="input-button">Sign Up</button>
-    </div>
-  </div>
-
-  <div class="section__container">
-    {% for list in page.section-disclaimer.list %}
-      <p>{{ list.text }}</p>
-    {% endfor %}
-
-        </div>
-  
-</section>
