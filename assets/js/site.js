@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
   ========================== */
   const header = document.querySelector("nav");
   const ctaBtn = document.querySelector(".cta");
-  const mobileList = document.querySelector(".mobile-list");
-  const navIcon = document.querySelector(".nav--icon");
+  const mobileList = document.getElementById("mobile-menu");
+  const navIcon = document.getElementById("nav-toggle");
   const btns = document.querySelectorAll(".js-btn");
   const mobilebtns = document.querySelectorAll(".js-mobile-btn");
 
@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* ==========================
      Smooth Scroll (Desktop + Mobile)
+     – inkl. Cross-Page Scroll
   ========================== */
   function smoothScroll(event) {
     const link = event.currentTarget;
@@ -29,10 +30,25 @@ document.addEventListener("DOMContentLoaded", function () {
     const hash = href.split("#")[1];
     if (!hash) return;
 
+    const targetUrl = href.split("#")[0] || window.location.origin + "/";
     const targetEl = document.getElementById(hash);
-    if (!targetEl) return;
 
     event.preventDefault();
+
+    if (window.location.pathname === new URL(targetUrl, window.location.origin).pathname) {
+      // Scroll auf derselben Seite
+      if (targetEl) {
+        window.scrollTo({
+          top: targetEl.offsetTop - getHeaderOffset(),
+          behavior: "smooth"
+        });
+      }
+    } else {
+      // Scroll auf anderer Seite
+      sessionStorage.setItem("scrollToHash", hash);
+      window.location.href = targetUrl + "#" + hash;
+      return;
+    }
 
     // Active State
     btns.forEach(l => l.classList.remove("selected"));
@@ -42,19 +58,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // Mobile Menü schließen
     if (mobileList && mobileList.classList.contains("show")) {
       mobileList.classList.remove("show");
-      if (navIcon) navIcon.classList.remove("rotate");
-      if (navIcon) navIcon.setAttribute("aria-expanded", "false");
-      if (navIcon) navIcon.setAttribute("aria-label", "Open navigation");
+      navIcon.classList.remove("rotate");
+      navIcon.setAttribute("aria-expanded", "false");
+      navIcon.setAttribute("aria-label", "Open navigation");
     }
-
-    // Smooth Scroll
-    window.scrollTo({
-      top: targetEl.offsetTop - getHeaderOffset(),
-      behavior: "smooth"
-    });
-
-    // URL Hash ohne Sprung setzen
-    history.pushState(null, "", "#" + hash);
   }
 
   btns.forEach(btn => btn.addEventListener("click", smoothScroll));
@@ -70,10 +77,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
     navIcon.addEventListener("click", function () {
       const isOpen = mobileList.classList.toggle("show");
-      navIcon.classList.toggle("rotate");
+      navIcon.classList.toggle("rotate", isOpen);
       navIcon.setAttribute("aria-expanded", isOpen);
       navIcon.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
     });
+
+    // Tastaturbedienung (Enter/Space)
+    navIcon.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        navIcon.click();
+      }
+    });
+  }
+
+  /* ==========================
+     Cross-Page Scroll nach Laden
+  ========================== */
+  const savedHash = sessionStorage.getItem("scrollToHash");
+  if (savedHash) {
+    const el = document.getElementById(savedHash);
+    if (el) {
+      window.scrollTo({
+        top: el.offsetTop - getHeaderOffset(),
+        behavior: "smooth"
+      });
+    }
+    sessionStorage.removeItem("scrollToHash");
   }
 
   /* ==========================
@@ -137,4 +167,16 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
   }
+
+  /* ==========================
+     Optional: JS Prefetch (für z.B. Charts)
+  ========================== */
+  // const prefetchJS = (url) => {
+  //   const link = document.createElement("link");
+  //   link.rel = "prefetch";
+  //   link.href = url;
+  //   document.head.appendChild(link);
+  // };
+  // prefetchJS("/assets/js/chart.min.js");
+
 });
