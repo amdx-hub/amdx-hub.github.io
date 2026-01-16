@@ -1,12 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   /* =====================================================
-     Grundvariablen
+     Basis-Elemente
   ===================================================== */
 
   const header = document.querySelector("nav");
   const ctaBtn = document.querySelector(".cta");
-  const allNavLinks = [...document.querySelectorAll(".js-btn, .js-mobile-btn")];
+  const navLinks = document.querySelectorAll(".js-btn, .js-mobile-btn");
 
   let headerOffset = header ? header.offsetHeight : 100;
 
@@ -34,44 +34,47 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =====================================================
-     Mobile Navigation Toggle (ROBUST)
+     Mobile Navigation (FINAL FIX)
   ===================================================== */
 
-  document.addEventListener("click", (e) => {
-    const icon = e.target.closest(".nav--icon");
-    if (!icon) return;
+  const mobileNavs = document.querySelectorAll(".nav--mobile");
 
-    const navMobile = icon.closest(".nav--mobile");
-    if (!navMobile) return;
+  mobileNavs.forEach(nav => {
+    const icon = nav.querySelector(".nav--icon");
+    const list = nav.querySelector(".mobile-list");
 
-    const mobileList = navMobile.querySelector(".mobile-list");
-    if (!mobileList) return;
+    if (!icon || !list) return;
 
-    mobileList.classList.toggle("show");
-    icon.classList.toggle("rotate");
+    icon.addEventListener("click", (e) => {
+      e.stopPropagation(); // 🔥 extrem wichtig
+      const isOpen = list.classList.toggle("show");
+      icon.classList.toggle("rotate", isOpen);
+      icon.setAttribute("aria-expanded", isOpen);
+    });
   });
 
-  function closeMobileMenu() {
+  function closeMobileMenus() {
     document.querySelectorAll(".mobile-list.show").forEach(list => {
       list.classList.remove("show");
     });
     document.querySelectorAll(".nav--icon.rotate").forEach(icon => {
       icon.classList.remove("rotate");
+      icon.setAttribute("aria-expanded", "false");
     });
   }
 
   /* =====================================================
-     Smooth Scroll (inkl. Seitenwechsel)
+     Smooth Scroll (seitenübergreifend)
   ===================================================== */
 
-  function smoothScroll(event) {
-    const link = event.currentTarget;
+  function smoothScroll(e) {
+    const link = e.currentTarget;
     const href = link.getAttribute("href");
     if (!href || !href.includes("#")) return;
 
     const url = new URL(href, window.location.href);
-    const targetId = url.hash.replace("#", "");
-    if (!targetId) return;
+    const id = url.hash.replace("#", "");
+    if (!id) return;
 
     // Seitenwechsel
     if (url.pathname !== window.location.pathname) {
@@ -79,37 +82,38 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const targetEl = document.getElementById(targetId);
-    if (!targetEl) return;
+    const target = document.getElementById(id);
+    if (!target) return;
 
-    event.preventDefault();
+    e.preventDefault();
 
     window.scrollTo({
-      top: targetEl.offsetTop - headerOffset,
+      top: target.offsetTop - headerOffset,
       behavior: "smooth"
     });
 
-    // Active State
-    allNavLinks.forEach(l => l.classList.remove("selected"));
+    navLinks.forEach(l => l.classList.remove("selected"));
     link.classList.add("selected");
 
-    closeMobileMenu();
+    closeMobileMenus();
 
-    history.pushState(null, "", "#" + targetId);
+    history.pushState(null, "", "#" + id);
   }
 
-  allNavLinks.forEach(link => link.addEventListener("click", smoothScroll));
+  navLinks.forEach(link => {
+    link.addEventListener("click", smoothScroll);
+  });
 
   /* =====================================================
      Hash-Scroll nach Seitenwechsel
   ===================================================== */
 
   if (window.location.hash) {
-    const targetEl = document.getElementById(window.location.hash.replace("#", ""));
-    if (targetEl) {
+    const target = document.getElementById(window.location.hash.substring(1));
+    if (target) {
       setTimeout(() => {
         window.scrollTo({
-          top: targetEl.offsetTop - headerOffset,
+          top: target.offsetTop - headerOffset,
           behavior: "smooth"
         });
       }, 80);
@@ -117,20 +121,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =====================================================
-     Intersection Observer – Animationen (einmalig)
+     Intersection Observer – Animationen
   ===================================================== */
 
-  const animationClasses = ["fadeIn", "fadeInUp", "fadeInLeft", "fadeInRight"];
-  const animatedElements = document.querySelectorAll(
-    animationClasses.map(c => "." + c).join(",")
+  const animated = document.querySelectorAll(
+    ".fadeIn, .fadeInUp, .fadeInLeft, .fadeInRight"
   );
 
-  if ("IntersectionObserver" in window && animatedElements.length) {
-    const revealObserver = new IntersectionObserver((entries, observer) => {
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add("in-view");
-          observer.unobserve(entry.target);
+          obs.unobserve(entry.target);
         }
       });
     }, {
@@ -138,11 +141,11 @@ document.addEventListener("DOMContentLoaded", () => {
       rootMargin: "0px 0px -10% 0px"
     });
 
-    animatedElements.forEach(el => revealObserver.observe(el));
+    animated.forEach(el => observer.observe(el));
   }
 
   /* =====================================================
-     Sticky Navigation über CTA
+     Sticky Navigation
   ===================================================== */
 
   if ("IntersectionObserver" in window && ctaBtn && header) {
@@ -151,8 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
         header.classList.toggle("fixed", !entry.isIntersecting);
       });
     }, {
-      rootMargin: "-80px 0px 0px 0px",
-      threshold: 0
+      rootMargin: "-80px 0px 0px 0px"
     });
 
     navObserver.observe(ctaBtn);
