@@ -28,6 +28,9 @@
 
   <link rel="preload" href="./assets/font/FjallaOne-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
   <link rel="preload" href="./assets/font/OpenSans-VariableFont_wdth,wght.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+  <link rel="prefetch" href="{{ '/' | relative_url }}">
+  <link rel="prefetch" href="{{ '/about/' | relative_url }}">
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css">
 
@@ -40,7 +43,9 @@
   </head>
   <body>
     {% include nav.html %}
-    {{content}}
+    <main>
+      {{ content }}
+    </main>
     {% include footer.html %}
     <script type="text/javascript" src="./assets/js/stats.js"></script>
     <script type="text/javascript" src="./assets/js/site.js"></script>
