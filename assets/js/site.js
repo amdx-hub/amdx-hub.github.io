@@ -1,81 +1,83 @@
-var scrollToRevealArray = document.querySelectorAll(".scroll-to-reveal");
-var ctaBtn = document.querySelector(".cta");
-var mobileList = document.querySelector(".mobile-list");
-var navIcon = document.querySelector(".nav--icon");
-var btns = document.querySelectorAll(".js-btn");
-var mobilebtns = document.querySelectorAll(".js-mobile-btn");
-var sections = document.querySelectorAll(".js-section");
-var slider = tns({
-  container: ".slide__container",
-  arrowKeys: true,
-  controlsText: [
-    '<i class="fas fa-angle-left"></i>',
-    '<i class="fas fa-angle-right"></i>'
-  ],
-  nav: false
-});
+document.addEventListener("DOMContentLoaded", function () {
 
-//in page scrolling for documentaiton page
-function setActiveLink(event, buttons) {
-  for (var i = 0; i < buttons.length; i++) {
-    buttons[i].classList.remove("selected");
-  }
-  event.target.classList.add("selected");
-}
+  /* =====================================================
+     Konfiguration
+     ===================================================== */
 
-function smoothScrollTo(i, buttons, event) {
-  var element = sections[i - 1] || sections[i - 8];
-  setActiveLink(event, buttons);
+  // Alle Animationsklassen, die beobachtet werden sollen
+  var animationClasses = [
+    "fadeIn",
+    "fadeInUp",
+    "fadeInLeft",
+    "fadeInRight"
+  ];
 
-  if (mobileList.classList.contains("show")) {
-    mobileList.classList.toggle("show");
+  /* =====================================================
+     Hilfsfunktion: Selektor bauen
+     ===================================================== */
+
+  function buildSelector(classes) {
+    return classes.map(function (cls) {
+      return "." + cls;
+    }).join(",");
   }
 
-  window.scrollTo({
-    behavior: "smooth",
-    top: element ? element.offsetTop - 100 : 0,
-    left: 0
-  });
-}
+  var animatedElements = document.querySelectorAll(
+    buildSelector(animationClasses)
+  );
 
-for (var i = 0; i < scrollToRevealArray.length; i++) {
-  var waypoint = new Waypoint({
-    element: scrollToRevealArray[i],
-    handler: function(direction) {
-      this.element.classList.add("fadeInUp");
-    },
-    offset: Waypoint.viewportHeight()
-  });
-}
+  /* =====================================================
+     Intersection Observer – Scroll Reveal (ONCE)
+     ===================================================== */
 
-new Waypoint({
-  element: ctaBtn,
-  handler: function(direction) {
-    if (direction === "down") {
-      document.querySelector("nav").classList.add("fixed");
-    } else {
-      document.querySelector("nav").classList.remove("fixed");
-    }
-  },
-  offset: -80
-});
+  if ("IntersectionObserver" in window && animatedElements.length) {
 
-if (btns.length && sections.length > 0) {
-  for (var i = 0; i < btns.length; i++) {
-    btns[i].addEventListener("click", smoothScrollTo.bind(this, i, btns));
-  }
-}
-
-if (mobilebtns.length && sections.length > 0) {
-  for (var i = 0; i < mobilebtns.length; i++) {
-    mobilebtns[i].addEventListener(
-      "click",
-      smoothScrollTo.bind(this, i, mobilebtns)
+    var revealObserver = new IntersectionObserver(
+      function (entries, observer) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in-view");
+            observer.unobserve(entry.target); // ✅ nur einmal
+          }
+        });
+      },
+      {
+        threshold: 0.2,
+        rootMargin: "0px 0px -10% 0px"
+      }
     );
-  }
-}
 
-navIcon.addEventListener("click", function() {
-  document.querySelector(".mobile-list").classList.toggle("show");
-  navIcon.classList.toggle("rotate");
+    animatedElements.forEach(function (el) {
+      revealObserver.observe(el);
+    });
+  }
+
+  /* =====================================================
+     📌 Fixed Navigation (unverändert, falls vorhanden)
+     ===================================================== */
+
+  var ctaBtn = document.querySelector(".cta");
+
+  if ("IntersectionObserver" in window && ctaBtn) {
+    var nav = document.querySelector("nav");
+
+    var navObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) {
+            nav.classList.add("fixed");
+          } else {
+            nav.classList.remove("fixed");
+          }
+        });
+      },
+      {
+        rootMargin: "-80px 0px 0px 0px",
+        threshold: 0
+      }
+    );
+
+    navObserver.observe(ctaBtn);
+  }
+
 });
