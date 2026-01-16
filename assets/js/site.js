@@ -2,31 +2,41 @@
    Navigation & Mobile Menu
 ================================ */
 
-var btns = document.querySelectorAll(".js-btn");
-var mobileBtns = document.querySelectorAll(".js-mobile-btn");
-var mobileList = document.querySelector(".mobile-list");
+var navLinks = document.querySelectorAll(".js-btn");
 var navIcon = document.querySelector(".nav--icon");
+var mobileList = document.querySelector(".mobile-list");
+var header = document.querySelector("nav");
 
 /* ================================
-   Smooth Scroll (data-target)
+   Helpers
+================================ */
+
+function getHeaderOffset() {
+  return header ? header.offsetHeight : 100;
+}
+
+/* ================================
+   Smooth Scroll via href="#id"
 ================================ */
 
 function smoothScroll(event) {
-  event.preventDefault();
+  var href = event.currentTarget.getAttribute("href");
 
-  var targetId = event.currentTarget.dataset.target;
+  // Nur interne Hash-Links abfangen
+  if (!href || href.indexOf("#") === -1) return;
+
+  var targetId = href.split("#")[1];
   var targetEl = document.getElementById(targetId);
 
   if (!targetEl) return;
 
-  // Active State entfernen
-  document
-    .querySelectorAll(".js-btn, .js-mobile-btn")
-    .forEach(function (btn) {
-      btn.classList.remove("selected");
-    });
+  event.preventDefault();
 
-  // Aktives Element setzen
+  // Active State
+  navLinks.forEach(function (link) {
+    link.classList.remove("selected");
+  });
+
   event.currentTarget.classList.add("selected");
 
   // Mobile Nav schließen
@@ -35,21 +45,20 @@ function smoothScroll(event) {
   }
 
   window.scrollTo({
-    top: targetEl.offsetTop - 100,
+    top: targetEl.offsetTop - getHeaderOffset(),
     behavior: "smooth"
   });
+
+  // URL Hash aktualisieren ohne Sprung
+  history.pushState(null, "", "#" + targetId);
 }
 
 /* ================================
    Event Binding Navigation
 ================================ */
 
-btns.forEach(function (btn) {
-  btn.addEventListener("click", smoothScroll);
-});
-
-mobileBtns.forEach(function (btn) {
-  btn.addEventListener("click", smoothScroll);
+navLinks.forEach(function (link) {
+  link.addEventListener("click", smoothScroll);
 });
 
 /* ================================
@@ -69,13 +78,10 @@ var observer = new IntersectionObserver(
       entry.target.style.transitionDelay = delay + "ms";
       entry.target.classList.add("is-visible");
 
-      // Animation nur einmal ausführen
       obs.unobserve(entry.target);
     });
   },
-  {
-    threshold: 0.2
-  }
+  { threshold: 0.2 }
 );
 
 animatedElements.forEach(function (el) {
