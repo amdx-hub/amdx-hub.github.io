@@ -145,12 +145,9 @@ nav {
   display: inline-flex;         /* Icon zentrieren */
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   border-radius: 100px;
   border: 0px;
   padding: 0.5rem;
-  width: 25px;
-  height: 25px;
   background-color: #38355a;
   font-size: 1rem;
   color: var(--white) ;
