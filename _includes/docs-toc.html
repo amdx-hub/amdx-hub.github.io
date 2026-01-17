@@ -1,0 +1,17 @@
+{% assign headings = content | split: '<h' %}
+{% if headings.size > 1 %}
+<aside class="docs-toc">
+  <strong>On this page</strong>
+  <ul>
+    {% for h in headings %}
+      {% if h contains 'id="' %}
+        {% assign id = h | split: 'id="' | last | split: '"' | first %}
+        {% assign title = h | split: '>' | last | split: '<' | first %}
+        <li>
+          <a href="#{{ id }}">{{ title }}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</aside>
+{% endif %}
