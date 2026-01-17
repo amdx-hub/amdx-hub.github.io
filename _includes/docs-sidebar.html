@@ -1,0 +1,17 @@
+<aside class="docs-sidebar">
+  <nav>
+    <ul>
+      {% assign docs = site.docs | sort: "order" %}
+      {% for doc in docs %}
+      <li>
+        <a
+          href="{{ doc.url | relative_url }}"
+          class="{% if page.url == doc.url %}active{% endif %}"
+        >
+          {{ doc.title }}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </nav>
+</aside>
