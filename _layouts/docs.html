@@ -1,0 +1,20 @@
+---
+layout: default
+---
+
+<div class="docs">
+
+  <aside class="docs__sidebar">
+    {% include docs-search.html %}
+    {% include docs-sidebar.html %}
+  </aside>
+
+  <main class="docs__content">
+    <article class="docs__article">
+      <h1>{{ page.title }}</h1>
+      {% include docs-toc.html %}
+      {{ content }}
+    </article>
+  </main>
+
+</div>
