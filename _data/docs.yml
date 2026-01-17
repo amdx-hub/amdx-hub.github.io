@@ -1,0 +1,13 @@
+- title: Introduction
+  items:
+    - index
+    - getting-started
+
+- title: Trading
+  items:
+    - indicators
+    - strategies
+
+- title: Help
+  items:
+    - faq
