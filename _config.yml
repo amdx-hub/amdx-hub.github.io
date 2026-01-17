@@ -7,6 +7,12 @@ url: ""
 twitter_username: jekyllrb
 github_username:  jekyll
 
+# Docs settings
+collections:
+  docs:
+    output: true
+    permalink: /docs/:title/
+
 # Build settings
 markdown: kramdown
 plugins:
