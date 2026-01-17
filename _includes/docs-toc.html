@@ -1,17 +1,21 @@
-{% assign headings = content | split: '<h' %}
-{% if headings.size > 1 %}
-<aside class="docs-toc">
-  <strong>On this page</strong>
-  <ul>
-    {% for h in headings %}
-      {% if h contains 'id="' %}
-        {% assign id = h | split: 'id="' | last | split: '"' | first %}
-        {% assign title = h | split: '>' | last | split: '<' | first %}
-        <li>
-          <a href="#{{ id }}">{{ title }}</a>
-        </li>
-      {% endif %}
-    {% endfor %}
-  </ul>
-</aside>
-{% endif %}
+<div class="docs__toc" id="docs-toc"></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const toc = document.getElementById("docs-toc");
+  const headers = document.querySelectorAll(".docs__article h2, .docs__article h3");
+  if (!headers.length) return;
+
+  const ul = document.createElement("ul");
+
+  headers.forEach(h => {
+    if (!h.id) h.id = h.textContent.toLowerCase().replace(/\s+/g, "-");
+    const li = document.createElement("li");
+    li.className = h.tagName === "H3" ? "toc-sub" : "";
+    li.innerHTML = `<a href="#${h.id}">${h.textContent}</a>`;
+    ul.appendChild(li);
+  });
+
+  toc.appendChild(ul);
+});
+</script>
