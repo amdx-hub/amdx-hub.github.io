@@ -557,21 +557,35 @@ section {
     background-repeat: no-repeat; }
 
 /* --- 7. ANIMATIONEN --- */
+.fadeIn,
+.fadeInUp,
+.fadeInLeft,
+.fadeInRight {
+  opacity: 1;
+  transform: none;
+}
+
 .fadeIn     { --x: 0;  --y: 0; }
 .fadeInUp   { --y: 40px; }
 .fadeInLeft { --x: -40px; }
 .fadeInRight{ --x: 40px; }
 
 @supports (animation-timeline: view()) {
+
   .fadeIn,
   .fadeInUp,
   .fadeInLeft,
   .fadeInRight {
+    opacity: 0;
+    will-change: opacity, transform;
+
     animation: reveal 1s ease-out both;
     animation-timeline: view();
     animation-range: entry 20% cover 40%;
   }
+
 }
+
 /* ================================
    Keyframes
    ================================ */
