@@ -1,17 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  // === Body JS-Klasse setzen ===
+  /* =====================================================
+     BASIC SETUP
+  ===================================================== */
   document.body.classList.remove("no-js");
   document.body.classList.add("js");
 
-  // === Elemente ===
-  const navToggle = document.getElementById("nav-toggle");
+  const navToggle  = document.getElementById("nav-toggle");
   const mobileMenu = document.getElementById("mobile-menu");
-  const header = document.querySelector("nav");
-  const cta = document.querySelector(".cta");
-  const navLinks = document.querySelectorAll(".js-btn, .js-mobile-btn");
+  const header     = document.querySelector("nav");
+  const cta        = document.querySelector(".cta");
+  const navLinks   = document.querySelectorAll(".js-btn, .js-mobile-btn");
 
-  // === Helfer ===
   const cleanPath = p => (p || "/").replace(/\/$/, "") || "/";
   const headerOffset = () => header?.offsetHeight || 100;
 
@@ -24,7 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  // === Mobile Menu ===
+  /* =====================================================
+     MOBILE MENU
+  ===================================================== */
   const closeMobileMenu = () => {
     if (!mobileMenu?.classList.contains("show")) return;
     mobileMenu.classList.remove("show");
@@ -34,23 +36,24 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const toggleMobileMenu = () => {
+    if (!mobileMenu || !navToggle) return;
     const open = mobileMenu.classList.toggle("show");
     navToggle.classList.toggle("rotate", open);
     navToggle.setAttribute("aria-expanded", open);
     navToggle.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
   };
 
-  if (navToggle && mobileMenu) {
-    navToggle.addEventListener("click", toggleMobileMenu);
-    navToggle.addEventListener("keydown", e => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        toggleMobileMenu();
-      }
-    });
-  }
+  navToggle?.addEventListener("click", toggleMobileMenu);
+  navToggle?.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggleMobileMenu();
+    }
+  });
 
-  // === Active-State ===
+  /* =====================================================
+     ACTIVE STATE (LINK LOGIC)
+  ===================================================== */
   function setActiveNav(hash = location.hash.slice(1)) {
     const currentPath = cleanPath(location.pathname);
 
@@ -67,7 +70,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // === Navigation Click Handling ===
+  /* =====================================================
+     NAV CLICK HANDLING
+  ===================================================== */
   function handleNavClick(e) {
     const link = e.currentTarget;
     const href = link.getAttribute("href");
@@ -77,24 +82,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const currentPath = cleanPath(location.pathname);
     const destinationPath = cleanPath(new URL(targetUrl || "/", location.origin).pathname);
 
-    // Mobile Menü schließen
     closeMobileMenu();
-
-    // Active-State sofort
     setActiveNav(hash);
 
     if (!hash) return;
 
     e.preventDefault();
 
-    // Cross-Page Navigation
     if (currentPath !== destinationPath) {
       sessionStorage.setItem("scrollToHash", hash);
       location.href = destinationPath + "#" + hash;
       return;
     }
 
-    // Same-Page Scroll
     const targetEl = document.getElementById(hash);
     if (targetEl) {
       scrollToEl(targetEl);
@@ -104,15 +104,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   navLinks.forEach(l => l.addEventListener("click", handleNavClick));
 
-  // === Restore Scroll after Page Change ===
+  /* =====================================================
+     RESTORE SCROLL AFTER PAGE CHANGE
+  ===================================================== */
   window.addEventListener("load", () => {
-    // Fallback: Browser hat schon automatisch zum Hash gescrollt → zurücksetzen
     if (location.hash) window.scrollTo(0, 0);
 
     const hash = sessionStorage.getItem("scrollToHash") || location.hash.slice(1);
     if (hash) {
       const el = document.getElementById(hash);
-      if (el) scrollToEl(el, false); // sofort scrollen beim Laden
+      if (el) scrollToEl(el, false);
       history.replaceState(null, "", "#" + hash);
       sessionStorage.removeItem("scrollToHash");
     }
@@ -127,7 +128,80 @@ document.addEventListener("DOMContentLoaded", () => {
     closeMobileMenu();
   });
 
-  // === Tiny Slider (safe) ===
+  /* =====================================================
+     SCROLL SPY (ACTIVE ON SCROLL)
+  ===================================================== */
+  const sectionMap = new Map();
+
+  navLinks.forEach(link => {
+    const url = new URL(link.getAttribute("href"), location.origin);
+    const hash = url.hash.replace("#", "");
+    if (!hash) return;
+
+    const section = document.getElementById(hash);
+    if (section) sectionMap.set(section, hash);
+  });
+
+  if ("IntersectionObserver" in window && sectionMap.size) {
+    const spyObserver = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+
+          const hash = sectionMap.get(entry.target);
+          if (!hash) return;
+
+          history.replaceState(null, "", "#" + hash);
+          setActiveNav(hash);
+        });
+      },
+      {
+        rootMargin: `-${headerOffset()}px 0px -60% 0px`,
+        threshold: 0
+      }
+    );
+
+    sectionMap.forEach((_, section) => spyObserver.observe(section));
+  }
+
+  /* =====================================================
+     REVEAL ANIMATIONS
+  ===================================================== */
+  const revealEls = document.querySelectorAll(
+    ".fadeIn,.fadeInUp,.fadeInLeft,.fadeInRight"
+  );
+
+  if ("IntersectionObserver" in window && revealEls.length) {
+    const revealObserver = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          e.target.style.transitionDelay =
+            (e.target.dataset.delay || 0) + "ms";
+          e.target.classList.add("in-view");
+          obs.unobserve(e.target);
+        });
+      },
+      { threshold: 0.2, rootMargin: "0px 0px -10% 0px" }
+    );
+
+    revealEls.forEach(el => revealObserver.observe(el));
+  }
+
+  /* =====================================================
+     STICKY NAVIGATION
+  ===================================================== */
+  if ("IntersectionObserver" in window && cta && header) {
+    const stickyObs = new IntersectionObserver(
+      ([entry]) => header.classList.toggle("fixed", !entry.isIntersecting),
+      { rootMargin: "-80px 0px 0px 0px", threshold: 0 }
+    );
+    stickyObs.observe(cta);
+  }
+
+  /* =====================================================
+     TINY SLIDER (SAFE)
+  ===================================================== */
   if (typeof tns === "function") {
     const slider = document.querySelector(".slide__container");
     if (slider) {
@@ -141,29 +215,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ]
       });
     }
-  }
-
-  // === Scroll Reveal / Animation ===
-  const revealEls = document.querySelectorAll(".fadeIn,.fadeInUp,.fadeInLeft,.fadeInRight");
-  if ("IntersectionObserver" in window && revealEls.length) {
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(e => {
-        if (!e.isIntersecting) return;
-        e.target.style.transitionDelay = (e.target.dataset.delay || 0) + "ms";
-        e.target.classList.add("in-view");
-        obs.unobserve(e.target);
-      });
-    }, { threshold: 0.2, rootMargin: "0px 0px -10% 0px" });
-    revealEls.forEach(el => observer.observe(el));
-  }
-
-  // === Sticky Navigation ===
-  if ("IntersectionObserver" in window && cta && header) {
-    const stickyObs = new IntersectionObserver(
-      ([entry]) => header.classList.toggle("fixed", !entry.isIntersecting),
-      { rootMargin: "-80px 0px 0px 0px", threshold: 0 }
-    );
-    stickyObs.observe(cta);
   }
 
 });
