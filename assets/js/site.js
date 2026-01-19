@@ -1,23 +1,30 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // JS ist aktiv → Body Klasse setzen
+
+  // === Body JS-Klasse setzen ===
   document.body.classList.remove("no-js");
   document.body.classList.add("js");
 
-  /* =====================================================
-     Elements
-  ===================================================== */
+  // === Elemente ===
   const navToggle = document.getElementById("nav-toggle");
   const mobileMenu = document.getElementById("mobile-menu");
   const header = document.querySelector("nav");
   const cta = document.querySelector(".cta");
   const navLinks = document.querySelectorAll(".js-btn, .js-mobile-btn");
 
-  /* =====================================================
-     Helpers
-  ===================================================== */
+  // === Helfer ===
   const cleanPath = p => (p || "/").replace(/\/$/, "") || "/";
   const headerOffset = () => header?.offsetHeight || 100;
 
+  const scrollToEl = (el, smooth = true) => {
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: el.offsetTop - headerOffset(),
+        behavior: smooth ? "smooth" : "auto"
+      });
+    });
+  };
+
+  // === Mobile Menu ===
   const closeMobileMenu = () => {
     if (!mobileMenu?.classList.contains("show")) return;
     mobileMenu.classList.remove("show");
@@ -33,18 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
     navToggle.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
   };
 
-  const scrollToEl = el => {
-    requestAnimationFrame(() => {
-      window.scrollTo({
-        top: el.offsetTop - headerOffset(),
-        behavior: "smooth"
-      });
-    });
-  };
-
-  /* =====================================================
-     Mobile Menu Toggle
-  ===================================================== */
   if (navToggle && mobileMenu) {
     navToggle.addEventListener("click", toggleMobileMenu);
     navToggle.addEventListener("keydown", e => {
@@ -55,9 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* =====================================================
-     Active Navigation State
-  ===================================================== */
+  // === Active-State ===
   function setActiveNav(hash = location.hash.slice(1)) {
     const currentPath = cleanPath(location.pathname);
 
@@ -74,9 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* =====================================================
-     Navigation Click Handling
-  ===================================================== */
+  // === Navigation Click Handling ===
   function handleNavClick(e) {
     const link = e.currentTarget;
     const href = link.getAttribute("href");
@@ -84,25 +75,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const [targetUrl = "/", hash] = href.split("#");
     const currentPath = cleanPath(location.pathname);
-    const destinationPath = cleanPath(
-      new URL(targetUrl || "/", location.origin).pathname
-    );
+    const destinationPath = cleanPath(new URL(targetUrl || "/", location.origin).pathname);
 
+    // Mobile Menü schließen
     closeMobileMenu();
+
+    // Active-State sofort
     setActiveNav(hash);
 
     if (!hash) return;
 
     e.preventDefault();
 
-    // Cross-page navigation
+    // Cross-Page Navigation
     if (currentPath !== destinationPath) {
       sessionStorage.setItem("scrollToHash", hash);
       location.href = destinationPath + "#" + hash;
       return;
     }
 
-    // Same-page scroll
+    // Same-Page Scroll
     const targetEl = document.getElementById(hash);
     if (targetEl) {
       scrollToEl(targetEl);
@@ -112,14 +104,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   navLinks.forEach(l => l.addEventListener("click", handleNavClick));
 
-  /* =====================================================
-     Restore Scroll after Page Change
-  ===================================================== */
+  // === Restore Scroll after Page Change ===
   window.addEventListener("load", () => {
+    // Fallback: Browser hat schon automatisch zum Hash gescrollt → zurücksetzen
+    if (location.hash) window.scrollTo(0, 0);
+
     const hash = sessionStorage.getItem("scrollToHash") || location.hash.slice(1);
     if (hash) {
       const el = document.getElementById(hash);
-      if (el) scrollToEl(el);
+      if (el) scrollToEl(el, false); // sofort scrollen beim Laden
       history.replaceState(null, "", "#" + hash);
       sessionStorage.removeItem("scrollToHash");
     }
@@ -134,9 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
     closeMobileMenu();
   });
 
-  /* =====================================================
-     Tiny Slider (safe)
-  ===================================================== */
+  // === Tiny Slider (safe) ===
   if (typeof tns === "function") {
     const slider = document.querySelector(".slide__container");
     if (slider) {
@@ -152,30 +143,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-/* =====================================================
-   Scroll Reveal / View-Timeline Animations
-===================================================== */
-  const revealEls = document.querySelectorAll(
-    ".fadeIn,.fadeInUp,.fadeInLeft,.fadeInRight"
-  );
-
+  // === Scroll Reveal / Animation ===
+  const revealEls = document.querySelectorAll(".fadeIn,.fadeInUp,.fadeInLeft,.fadeInRight");
   if ("IntersectionObserver" in window && revealEls.length) {
-    const observer = new IntersectionObserver(entries => {
+    const observer = new IntersectionObserver((entries, obs) => {
       entries.forEach(e => {
         if (!e.isIntersecting) return;
-        e.target.style.transitionDelay =
-          (e.target.dataset.delay || 0) + "ms";
+        e.target.style.transitionDelay = (e.target.dataset.delay || 0) + "ms";
         e.target.classList.add("in-view");
-        observer.unobserve(e.target);
+        obs.unobserve(e.target);
       });
     }, { threshold: 0.2, rootMargin: "0px 0px -10% 0px" });
-
     revealEls.forEach(el => observer.observe(el));
   }
 
-  /* =====================================================
-     Sticky Navigation
-  ===================================================== */
+  // === Sticky Navigation ===
   if ("IntersectionObserver" in window && cta && header) {
     const stickyObs = new IntersectionObserver(
       ([entry]) => header.classList.toggle("fixed", !entry.isIntersecting),
