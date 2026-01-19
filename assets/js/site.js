@@ -152,26 +152,47 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* =====================================================
-     Scroll Reveal Animations
-  ===================================================== */
-  const revealEls = document.querySelectorAll(
-    ".fadeIn,.fadeInUp,.fadeInLeft,.fadeInRight"
-  );
+/* =====================================================
+   Scroll Reveal / View-Timeline Animations
+===================================================== */
+const revealEls = document.querySelectorAll(
+  ".fadeIn,.fadeInUp,.fadeInLeft,.fadeInRight"
+);
 
-  if ("IntersectionObserver" in window && revealEls.length) {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (!e.isIntersecting) return;
-        e.target.style.transitionDelay =
-          (e.target.dataset.delay || 0) + "ms";
-        e.target.classList.add("in-view");
-        observer.unobserve(e.target);
-      });
-    }, { threshold: 0.2, rootMargin: "0px 0px -10% 0px" });
+if (revealEls.length) {
+  // 1️⃣ Sofort animieren, wenn schon im View
+  revealEls.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    const inView = rect.top < window.innerHeight && rect.bottom > 0;
+
+    if (inView) {
+      el.style.animationPlayState = "running";
+    }
+  });
+
+  // 2️⃣ IntersectionObserver für nachfolgendes Scrollen
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+
+          // Optional: Delay aus data-attribute
+          const delay = e.target.dataset.delay || 0;
+          e.target.style.animationDelay = delay + "ms";
+
+          // Animation starten
+          e.target.style.animationPlayState = "running";
+
+          observer.unobserve(e.target);
+        });
+      },
+      { threshold: 0.2, rootMargin: "0px 0px -10% 0px" }
+    );
 
     revealEls.forEach(el => observer.observe(el));
   }
+}
 
   /* =====================================================
      Sticky Navigation
