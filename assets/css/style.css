@@ -369,13 +369,15 @@ section {
     padding-right: 2rem; }
     .section--features .features__left > .flex--vertical {
       align-items: flex-end;
-      margin: 2rem 0; }
+      margin: 2rem 0; 
+      opacity: 0; }
   .section--features .features__right {
     text-align: left;
     padding-left: 2rem; }
     .section--features .features__right > .flex--vertical {
       align-items: flex-start;
-      margin: 2rem 0; }
+      margin: 2rem 0; 
+      opacity: 0; }
   .section--features .features__image {
     align-self: flex-start;
     max-width: 340px; }
@@ -562,13 +564,17 @@ section {
 .fadeInUp,
 .fadeInLeft,
 .fadeInRight {
-  opacity: 1; /* sichtbar ohne JS */
-  transform: none; /* keine Verschiebung */
-  will-change: auto; /* kein Performance-Hinweis nötig */
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* Verzögerung optional */
+.in-view {
+  animation-delay: var(--delay, 0s);
 }
 
 /* ================================
-   Animationen beim In-View (JS steuert)
+   Animationen beim In-View
    ================================ */
 .in-view.fadeIn {
   animation: fadeIn 1s ease-in-out forwards;
@@ -587,7 +593,7 @@ section {
 }
 
 /* ================================
-   Keyframes bleiben unverändert
+   Keyframes
    ================================ */
 @keyframes fadeIn {
   from { opacity: 0; }
@@ -600,12 +606,12 @@ section {
 }
 
 @keyframes fadeInRight {
-  from { opacity: 0; transform: translate3d(100%, 0, 0); }
+  from { opacity: 0; transform: translate3d(100%, 0, 0); } /* Prozent statt px */
   to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
 @keyframes fadeInLeft {
-  from { opacity: 0; transform: translate3d(-100%, 0, 0); }
+  from { opacity: 0; transform: translate3d(-100%, 0, 0); } /* Prozent statt px */
   to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
