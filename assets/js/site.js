@@ -1,11 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   /* =====================================================
-     BASIC SETUP
+     GLOBAL FIXES
   ===================================================== */
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+
   document.body.classList.remove("no-js");
   document.body.classList.add("js");
 
+  /* =====================================================
+     ELEMENTS & HELPERS
+  ===================================================== */
   const navToggle  = document.getElementById("nav-toggle");
   const mobileMenu = document.getElementById("mobile-menu");
   const header     = document.querySelector("nav");
@@ -16,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const headerOffset = () => header?.offsetHeight || 100;
 
   const scrollToEl = (el, smooth = true) => {
+    if (!el) return;
     requestAnimationFrame(() => {
       window.scrollTo({
         top: el.offsetTop - headerOffset(),
@@ -52,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* =====================================================
-     ACTIVE STATE (LINK LOGIC)
+     ACTIVE STATE
   ===================================================== */
   function setActiveNav(hash = location.hash.slice(1)) {
     const currentPath = cleanPath(location.pathname);
@@ -63,8 +71,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const linkHash = url.hash.replace("#", "");
 
       const active =
-        (linkPath === currentPath && linkHash && linkHash === hash) ||
-        (linkPath === currentPath && !linkHash && !hash);
+        linkPath === currentPath &&
+        ((linkHash && linkHash === hash) || (!linkHash && !hash));
 
       link.classList.toggle("selected", active);
     });
@@ -80,7 +88,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const [targetUrl = "/", hash] = href.split("#");
     const currentPath = cleanPath(location.pathname);
-    const destinationPath = cleanPath(new URL(targetUrl || "/", location.origin).pathname);
+    const destinationPath = cleanPath(
+      new URL(targetUrl || "/", location.origin).pathname
+    );
 
     closeMobileMenu();
     setActiveNav(hash);
@@ -95,29 +105,40 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const targetEl = document.getElementById(hash);
-    if (targetEl) {
-      scrollToEl(targetEl);
-      history.replaceState(null, "", "#" + hash);
-    }
+    scrollToEl(document.getElementById(hash));
+    history.replaceState(null, "", "#" + hash);
   }
 
   navLinks.forEach(l => l.addEventListener("click", handleNavClick));
 
   /* =====================================================
-     RESTORE SCROLL AFTER PAGE CHANGE
+     RESTORE SCROLL (MOBILE SAFE)
   ===================================================== */
   window.addEventListener("load", () => {
-    if (location.hash) window.scrollTo(0, 0);
+    const hash =
+      sessionStorage.getItem("scrollToHash") ||
+      location.hash.slice(1);
 
-    const hash = sessionStorage.getItem("scrollToHash") || location.hash.slice(1);
-    if (hash) {
-      const el = document.getElementById(hash);
-      if (el) scrollToEl(el, false);
-      history.replaceState(null, "", "#" + hash);
-      sessionStorage.removeItem("scrollToHash");
+    if (!hash) {
+      setActiveNav();
+      return;
     }
-    setActiveNav(hash);
+
+    // ⛔ kill browser auto-scroll
+    window.scrollTo(0, 0);
+
+    // ⏱ wait for mobile layout stability
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        const el = document.getElementById(hash);
+        if (el) {
+          scrollToEl(el, false);
+          history.replaceState(null, "", "#" + hash);
+          setActiveNav(hash);
+        }
+        sessionStorage.removeItem("scrollToHash");
+      }, 60);
+    });
   });
 
   window.addEventListener("hashchange", () => {
@@ -147,7 +168,6 @@ document.addEventListener("DOMContentLoaded", () => {
       entries => {
         entries.forEach(entry => {
           if (!entry.isIntersecting) return;
-
           const hash = sectionMap.get(entry.target);
           if (!hash) return;
 
@@ -156,7 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       },
       {
-        rootMargin: `-${headerOffset()}px 0px -60% 0px`,
+        rootMargin: `-${headerOffset()}px 0px -55% 0px`,
         threshold: 0
       }
     );
@@ -189,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =====================================================
-     STICKY NAVIGATION
+     STICKY NAV
   ===================================================== */
   if ("IntersectionObserver" in window && cta && header) {
     const stickyObs = new IntersectionObserver(
