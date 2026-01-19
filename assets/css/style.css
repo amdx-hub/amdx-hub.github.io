@@ -375,8 +375,7 @@ section {
     padding-left: 2rem; }
     .section--features .features__right > .flex--vertical {
       align-items: flex-start;
-      margin: 2rem 0;
-      opacity: 0; }
+      margin: 2rem 0; }
   .section--features .features__image {
     align-self: flex-start;
     max-width: 340px; }
