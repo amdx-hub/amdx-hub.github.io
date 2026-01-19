@@ -369,8 +369,7 @@ section {
     padding-right: 2rem; }
     .section--features .features__left > .flex--vertical {
       align-items: flex-end;
-      margin: 2rem 0;
-      opacity: 0; }
+      margin: 2rem 0; }
   .section--features .features__right {
     text-align: left;
     padding-left: 2rem; }
