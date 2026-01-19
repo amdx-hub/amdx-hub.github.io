@@ -129,42 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* =====================================================
-     SCROLL SPY (ACTIVE ON SCROLL)
-  ===================================================== */
-  const sectionMap = new Map();
-
-  navLinks.forEach(link => {
-    const url = new URL(link.getAttribute("href"), location.origin);
-    const hash = url.hash.replace("#", "");
-    if (!hash) return;
-
-    const section = document.getElementById(hash);
-    if (section) sectionMap.set(section, hash);
-  });
-
-  if ("IntersectionObserver" in window && sectionMap.size) {
-    const spyObserver = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (!entry.isIntersecting) return;
-
-          const hash = sectionMap.get(entry.target);
-          if (!hash) return;
-
-          history.replaceState(null, "", "#" + hash);
-          setActiveNav(hash);
-        });
-      },
-      {
-        rootMargin: `-${headerOffset()}px 0px -60% 0px`,
-        threshold: 0
-      }
-    );
-
-    sectionMap.forEach((_, section) => spyObserver.observe(section));
-  }
-
-  /* =====================================================
      REVEAL ANIMATIONS
   ===================================================== */
   const revealEls = document.querySelectorAll(
