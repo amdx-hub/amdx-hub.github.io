@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // JS ist aktiv → Body Klasse setzen
+  document.body.classList.remove("no-js");
+  document.body.classList.add("js");
 
   /* =====================================================
      Elements
