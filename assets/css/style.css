@@ -564,64 +564,48 @@ section {
 .fadeInUp,
 .fadeInLeft,
 .fadeInRight {
-  opacity: 1; /* sichtbar für No-JS Fallback */
-  will-change: opacity, transform;
-  transition: opacity 1s, transform 1s;
+  opacity: 1;
+  transform: none;
+  --x: 0;
+  --y: 0;
 }
 
-/* Wenn JS aktiv ist, initial unsichtbar */
-.js .fadeIn,
-.js .fadeInUp,
-.js .fadeInLeft,
-.js .fadeInRight {
-  opacity: 0;
-}
+.fadeInUp    { --y: 40px; }
+.fadeInLeft  { --x: -40px; }
+.fadeInRight { --x: 40px; }
 
-/* Verzögerung optional */
-.in-view {
-  animation-delay: var(--delay, 0s);
-}
+@supports (animation-timeline: view()) {
 
-/* ================================
-   Animationen beim In-View
-   ================================ */
-.in-view.fadeIn {
-  animation: fadeIn 1s ease-in-out forwards;
-}
+  .fadeIn,
+  .fadeInUp,
+  .fadeInLeft,
+  .fadeInRight {
+    opacity: 0;
+    transform: translate(var(--x), var(--y));
+    will-change: opacity, transform;
 
-.in-view.fadeInUp {
-  animation: fadeInUp 1s ease-in-out forwards;
-}
+    animation: reveal 1s ease-out both;
+    animation-timeline: view();
+    animation-range: entry 20% cover 40%;
+    animation-delay: 0.5s;
 
-.in-view.fadeInLeft {
-  animation: fadeInLeft 1s ease-in-out forwards;
-}
-
-.in-view.fadeInRight {
-  animation: fadeInRight 1s ease-in-out forwards;
+    /* paused by default, JS startet es wenn nötig */
+    animation-play-state: paused;
+  }
 }
 
 /* ================================
    Keyframes
    ================================ */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translate3d(0, 50px, 0); }
-  to { opacity: 1; transform: translate3d(0, 0, 0); }
-}
-
-@keyframes fadeInRight {
-  from { opacity: 0; transform: translate3d(100%, 0, 0); }
-  to { opacity: 1; transform: translate3d(0, 0, 0); }
-}
-
-@keyframes fadeInLeft {
-  from { opacity: 0; transform: translate3d(-100%, 0, 0); }
-  to { opacity: 1; transform: translate3d(0, 0, 0); }
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translate(var(--x), var(--y));
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
 }
 
 @keyframes infiniteStats {
