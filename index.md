@@ -159,7 +159,7 @@ section-customers:
   <div class="flex--horizontal">
     <div class="snippets__cards flex--vertical">
       {% for card in page.section-snippets.cards %}
-        <div class="snippets__card flex--horizontal">
+        <div class="snippets__card flex--horizontal fadeInLeft fadeInLeft--{{ forloop.index0 }}">
           <p class="txt-balance">{{ card.text }}</p>
           <h3 class="font-fjalla">{{ card.stats }}</h3>
         </div>
