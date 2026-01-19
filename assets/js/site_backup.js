@@ -1,197 +1,184 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   /* =====================================================
-     Variablen
+     Elements
   ===================================================== */
-  const navIcon = document.getElementById("nav-toggle");
-  const mobileList = document.getElementById("mobile-menu");
+  const navToggle = document.getElementById("nav-toggle");
+  const mobileMenu = document.getElementById("mobile-menu");
   const header = document.querySelector("nav");
-  const ctaBtn = document.querySelector(".cta");
-  const btns = document.querySelectorAll(".js-btn");
-  const mobileBtns = document.querySelectorAll(".js-mobile-btn");
+  const cta = document.querySelector(".cta");
+  const navLinks = document.querySelectorAll(".js-btn, .js-mobile-btn");
 
   /* =====================================================
-     Helper: Header Offset
+     Helpers
   ===================================================== */
-  function getHeaderOffset() {
-    return header ? header.offsetHeight : 100;
-  }
+  const cleanPath = p => (p || "/").replace(/\/$/, "") || "/";
+  const headerOffset = () => header?.offsetHeight || 100;
 
-  /* =====================================================
-     Mobile Menü Toggle
-  ===================================================== */
   const closeMobileMenu = () => {
-    if (mobileList && mobileList.classList.contains("show")) {
-      mobileList.classList.remove("show");
-      navIcon?.classList.remove("rotate");
-      navIcon?.setAttribute("aria-expanded", "false");
-      navIcon?.setAttribute("aria-label", "Open navigation");
-    }
+    if (!mobileMenu?.classList.contains("show")) return;
+    mobileMenu.classList.remove("show");
+    navToggle?.classList.remove("rotate");
+    navToggle?.setAttribute("aria-expanded", "false");
+    navToggle?.setAttribute("aria-label", "Open navigation");
   };
 
-  const toggleMenu = () => {
-    const isOpen = mobileList.classList.toggle("show");
-    navIcon.classList.toggle("rotate", isOpen);
-    navIcon.setAttribute("aria-expanded", isOpen);
-    navIcon.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
+  const toggleMobileMenu = () => {
+    const open = mobileMenu.classList.toggle("show");
+    navToggle.classList.toggle("rotate", open);
+    navToggle.setAttribute("aria-expanded", open);
+    navToggle.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
   };
 
-  if (navIcon) {
-    navIcon.addEventListener("click", toggleMenu);
-    navIcon.addEventListener("keydown", e => {
+  const scrollToEl = el => {
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: el.offsetTop - headerOffset(),
+        behavior: "smooth"
+      });
+    });
+  };
+
+  /* =====================================================
+     Mobile Menu Toggle
+  ===================================================== */
+  if (navToggle && mobileMenu) {
+    navToggle.addEventListener("click", toggleMobileMenu);
+    navToggle.addEventListener("keydown", e => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        toggleMenu();
+        toggleMobileMenu();
       }
     });
   }
 
   /* =====================================================
-     Active-State Helper
+     Active Navigation State
   ===================================================== */
-  function setActiveNav(targetHash = null) {
-    const path = location.pathname.replace(/\/$/, "") || "/";
-    const hash = targetHash || location.hash.replace("#", "");
+  function setActiveNav(hash = location.hash.slice(1)) {
+    const currentPath = cleanPath(location.pathname);
 
-    document.querySelectorAll(".js-btn, .js-mobile-btn").forEach(link => {
+    navLinks.forEach(link => {
       const url = new URL(link.getAttribute("href"), location.origin);
-      const linkPath = url.pathname.replace(/\/$/, "") || "/";
+      const linkPath = cleanPath(url.pathname);
       const linkHash = url.hash.replace("#", "");
 
-      let active = false;
-
-      // Gleiche Seite + Hash
-      if (linkPath === path && linkHash && linkHash === hash) active = true;
-
-      // Seite ohne Hash
-      if (linkPath === path && !linkHash && !hash) active = true;
+      const active =
+        (linkPath === currentPath && linkHash && linkHash === hash) ||
+        (linkPath === currentPath && !linkHash && !hash);
 
       link.classList.toggle("selected", active);
     });
   }
 
   /* =====================================================
-     Smooth Scroll + Cross-Page Navigation
+     Navigation Click Handling
   ===================================================== */
-  const scrollToTarget = (el) => {
-    requestAnimationFrame(() => {
-      window.scrollTo({
-        top: el.offsetTop - getHeaderOffset(),
-        behavior: "smooth"
-      });
-    });
-  };
-
-  function handleNavClick(event) {
-    const link = event.currentTarget;
+  function handleNavClick(e) {
+    const link = e.currentTarget;
     const href = link.getAttribute("href");
     if (!href) return;
 
-    const hash = href.includes("#") ? href.split("#")[1] : null;
+    const [targetUrl = "/", hash] = href.split("#");
+    const currentPath = cleanPath(location.pathname);
+    const destinationPath = cleanPath(
+      new URL(targetUrl || "/", location.origin).pathname
+    );
 
-    // Mobile-Menü schließen immer
     closeMobileMenu();
-
-    // Active-State sofort setzen
     setActiveNav(hash);
 
-    // Nur Hash scrollen
     if (!hash) return;
 
-    const [targetUrl = "/", targetHash] = href.split("#");
-    const currentPath = window.location.pathname.replace(/\/$/, "") || "/";
-    const destinationPath = new URL(targetUrl || "/", location.origin)
-      .pathname.replace(/\/$/, "") || "/";
+    e.preventDefault();
 
-    event.preventDefault();
-
-    // Cross-Page
+    // Cross-page navigation
     if (currentPath !== destinationPath) {
-      sessionStorage.setItem("scrollToHash", targetHash);
-      window.location.href = destinationPath + "#" + targetHash;
+      sessionStorage.setItem("scrollToHash", hash);
+      location.href = destinationPath + "#" + hash;
       return;
     }
 
-    // Same Page Scroll
-    const targetEl = document.getElementById(targetHash);
-    if (targetEl) scrollToTarget(targetEl);
+    // Same-page scroll
+    const targetEl = document.getElementById(hash);
+    if (targetEl) {
+      scrollToEl(targetEl);
+      history.replaceState(null, "", "#" + hash);
+    }
   }
 
-  // Links binden
-  btns.forEach(btn => btn.addEventListener("click", handleNavClick));
-  mobileBtns.forEach(btn => btn.addEventListener("click", handleNavClick));
+  navLinks.forEach(l => l.addEventListener("click", handleNavClick));
 
   /* =====================================================
-     Hashchange / SessionStorage → Cross-Page Scroll + Active-State
+     Restore Scroll after Page Change
   ===================================================== */
-  const checkScrollFromSession = () => {
-    const savedHash = sessionStorage.getItem("scrollToHash") || window.location.hash.slice(1);
-    if (savedHash) {
-      const targetEl = document.getElementById(savedHash);
-      if (targetEl) scrollToTarget(targetEl);
-      setActiveNav(savedHash);
+  window.addEventListener("load", () => {
+    const hash = sessionStorage.getItem("scrollToHash") || location.hash.slice(1);
+    if (hash) {
+      const el = document.getElementById(hash);
+      if (el) scrollToEl(el);
+      history.replaceState(null, "", "#" + hash);
       sessionStorage.removeItem("scrollToHash");
-    } else {
-      setActiveNav();
     }
-  };
+    setActiveNav(hash);
+  });
 
-  window.addEventListener("load", checkScrollFromSession);
   window.addEventListener("hashchange", () => {
-    setActiveNav(location.hash.slice(1));
+    const hash = location.hash.slice(1);
+    const el = document.getElementById(hash);
+    if (el) scrollToEl(el);
+    setActiveNav(hash);
     closeMobileMenu();
-    const targetEl = document.getElementById(location.hash.slice(1));
-    if (targetEl) scrollToTarget(targetEl);
   });
 
   /* =====================================================
-     Tiny Slider Initialisierung
+     Tiny Slider (safe)
   ===================================================== */
   if (typeof tns === "function") {
-    const sliderContainer = document.querySelector(".slide__container");
-    if (sliderContainer) {
+    const slider = document.querySelector(".slide__container");
+    if (slider) {
       tns({
-        container: sliderContainer,
+        container: slider,
         arrowKeys: true,
+        nav: false,
         controlsText: [
           '<i class="fas fa-angle-left"></i>',
           '<i class="fas fa-angle-right"></i>'
-        ],
-        nav: false
+        ]
       });
     }
   }
 
   /* =====================================================
-     Intersection Observer – Scroll Animation
+     Scroll Reveal Animations
   ===================================================== */
-  const animationClasses = ["fadeIn", "fadeInUp", "fadeInLeft", "fadeInRight"];
-  const animatedElements = document.querySelectorAll(animationClasses.map(c => "." + c).join(","));
+  const revealEls = document.querySelectorAll(
+    ".fadeIn,.fadeInUp,.fadeInLeft,.fadeInRight"
+  );
 
-  if ("IntersectionObserver" in window && animatedElements.length) {
-    const revealObserver = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const delay = entry.target.dataset.delay || 0;
-          entry.target.style.transitionDelay = delay + "ms";
-          entry.target.classList.add("in-view");
-          observer.unobserve(entry.target);
-        }
+  if ("IntersectionObserver" in window && revealEls.length) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        e.target.style.transitionDelay =
+          (e.target.dataset.delay || 0) + "ms";
+        e.target.classList.add("in-view");
+        observer.unobserve(e.target);
       });
     }, { threshold: 0.2, rootMargin: "0px 0px -10% 0px" });
 
-    animatedElements.forEach(el => revealObserver.observe(el));
+    revealEls.forEach(el => observer.observe(el));
   }
 
   /* =====================================================
-     Sticky Navigation beim Scroll über .cta
+     Sticky Navigation
   ===================================================== */
-  if ("IntersectionObserver" in window && ctaBtn) {
-    const navObserver = new IntersectionObserver(entries => {
-      header.classList.toggle("fixed", !entries[0].isIntersecting);
-    }, { rootMargin: "-80px 0px 0px 0px", threshold: 0 });
-
-    navObserver.observe(ctaBtn);
+  if ("IntersectionObserver" in window && cta && header) {
+    const stickyObs = new IntersectionObserver(
+      ([entry]) => header.classList.toggle("fixed", !entry.isIntersecting),
+      { rootMargin: "-80px 0px 0px 0px", threshold: 0 }
+    );
+    stickyObs.observe(cta);
   }
 
 });
