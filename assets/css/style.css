@@ -557,21 +557,20 @@ section {
     background-repeat: no-repeat; }
 
 /* --- 7. ANIMATIONEN --- */
+/* ================================
+   Grundzustand (Fallback, kein JS)
+   ================================ */
 .fadeIn,
 .fadeInUp,
 .fadeInLeft,
 .fadeInRight {
-  opacity: 0;
-  will-change: opacity, transform;
-}
-
-/* Verzögerung optional */
-.in-view {
-  animation-delay: var(--delay, 0s);
+  opacity: 1; /* sichtbar ohne JS */
+  transform: none; /* keine Verschiebung */
+  will-change: auto; /* kein Performance-Hinweis nötig */
 }
 
 /* ================================
-   Animationen beim In-View
+   Animationen beim In-View (JS steuert)
    ================================ */
 .in-view.fadeIn {
   animation: fadeIn 1s ease-in-out forwards;
@@ -590,7 +589,7 @@ section {
 }
 
 /* ================================
-   Keyframes
+   Keyframes bleiben unverändert
    ================================ */
 @keyframes fadeIn {
   from { opacity: 0; }
@@ -603,12 +602,12 @@ section {
 }
 
 @keyframes fadeInRight {
-  from { opacity: 0; transform: translate3d(100%, 0, 0); } /* Prozent statt px */
+  from { opacity: 0; transform: translate3d(100%, 0, 0); }
   to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
 @keyframes fadeInLeft {
-  from { opacity: 0; transform: translate3d(-100%, 0, 0); } /* Prozent statt px */
+  from { opacity: 0; transform: translate3d(-100%, 0, 0); }
   to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
