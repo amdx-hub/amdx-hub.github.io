@@ -1,32 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   /* =====================================================
-     BASIC SETUP
+     Elements
   ===================================================== */
-  document.body.classList.remove("no-js");
-  document.body.classList.add("js");
-
-  const navToggle  = document.getElementById("nav-toggle");
+  const navToggle = document.getElementById("nav-toggle");
   const mobileMenu = document.getElementById("mobile-menu");
-  const header     = document.querySelector("nav");
-  const cta        = document.querySelector(".cta");
-  const navLinks   = document.querySelectorAll(".js-btn, .js-mobile-btn");
+  const header = document.querySelector("nav");
+  const cta = document.querySelector(".cta");
+  const navLinks = document.querySelectorAll(".js-btn, .js-mobile-btn");
 
+  /* =====================================================
+     Helpers
+  ===================================================== */
   const cleanPath = p => (p || "/").replace(/\/$/, "") || "/";
   const headerOffset = () => header?.offsetHeight || 100;
 
-  const scrollToEl = (el, smooth = true) => {
-    requestAnimationFrame(() => {
-      window.scrollTo({
-        top: el.offsetTop - headerOffset(),
-        behavior: smooth ? "smooth" : "auto"
-      });
-    });
-  };
-
-  /* =====================================================
-     MOBILE MENU
-  ===================================================== */
   const closeMobileMenu = () => {
     if (!mobileMenu?.classList.contains("show")) return;
     mobileMenu.classList.remove("show");
@@ -36,23 +24,36 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const toggleMobileMenu = () => {
-    if (!mobileMenu || !navToggle) return;
     const open = mobileMenu.classList.toggle("show");
     navToggle.classList.toggle("rotate", open);
     navToggle.setAttribute("aria-expanded", open);
     navToggle.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
   };
 
-  navToggle?.addEventListener("click", toggleMobileMenu);
-  navToggle?.addEventListener("keydown", e => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      toggleMobileMenu();
-    }
-  });
+  const scrollToEl = el => {
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: el.offsetTop - headerOffset(),
+        behavior: "smooth"
+      });
+    });
+  };
 
   /* =====================================================
-     ACTIVE STATE (LINK LOGIC)
+     Mobile Menu Toggle
+  ===================================================== */
+  if (navToggle && mobileMenu) {
+    navToggle.addEventListener("click", toggleMobileMenu);
+    navToggle.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggleMobileMenu();
+      }
+    });
+  }
+
+  /* =====================================================
+     Active Navigation State
   ===================================================== */
   function setActiveNav(hash = location.hash.slice(1)) {
     const currentPath = cleanPath(location.pathname);
@@ -71,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =====================================================
-     NAV CLICK HANDLING
+     Navigation Click Handling
   ===================================================== */
   function handleNavClick(e) {
     const link = e.currentTarget;
@@ -80,7 +81,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const [targetUrl = "/", hash] = href.split("#");
     const currentPath = cleanPath(location.pathname);
-    const destinationPath = cleanPath(new URL(targetUrl || "/", location.origin).pathname);
+    const destinationPath = cleanPath(
+      new URL(targetUrl || "/", location.origin).pathname
+    );
 
     closeMobileMenu();
     setActiveNav(hash);
@@ -89,12 +92,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     e.preventDefault();
 
+    // Cross-page navigation
     if (currentPath !== destinationPath) {
       sessionStorage.setItem("scrollToHash", hash);
       location.href = destinationPath + "#" + hash;
       return;
     }
 
+    // Same-page scroll
     const targetEl = document.getElementById(hash);
     if (targetEl) {
       scrollToEl(targetEl);
@@ -105,15 +110,13 @@ document.addEventListener("DOMContentLoaded", () => {
   navLinks.forEach(l => l.addEventListener("click", handleNavClick));
 
   /* =====================================================
-     RESTORE SCROLL AFTER PAGE CHANGE
+     Restore Scroll after Page Change
   ===================================================== */
   window.addEventListener("load", () => {
-    if (location.hash) window.scrollTo(0, 0);
-
     const hash = sessionStorage.getItem("scrollToHash") || location.hash.slice(1);
     if (hash) {
       const el = document.getElementById(hash);
-      if (el) scrollToEl(el, false);
+      if (el) scrollToEl(el);
       history.replaceState(null, "", "#" + hash);
       sessionStorage.removeItem("scrollToHash");
     }
@@ -129,42 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* =====================================================
-     REVEAL ANIMATIONS
-  ===================================================== */
-  const revealEls = document.querySelectorAll(
-    ".fadeIn,.fadeInUp,.fadeInLeft,.fadeInRight"
-  );
-
-  if ("IntersectionObserver" in window && revealEls.length) {
-    const revealObserver = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach(e => {
-          if (!e.isIntersecting) return;
-          e.target.style.transitionDelay =
-            (e.target.dataset.delay || 0) + "ms";
-          e.target.classList.add("in-view");
-          obs.unobserve(e.target);
-        });
-      },
-      { threshold: 0.2, rootMargin: "0px 0px -10% 0px" }
-    );
-
-    revealEls.forEach(el => revealObserver.observe(el));
-  }
-
-  /* =====================================================
-     STICKY NAVIGATION
-  ===================================================== */
-  if ("IntersectionObserver" in window && cta && header) {
-    const stickyObs = new IntersectionObserver(
-      ([entry]) => header.classList.toggle("fixed", !entry.isIntersecting),
-      { rootMargin: "-80px 0px 0px 0px", threshold: 0 }
-    );
-    stickyObs.observe(cta);
-  }
-
-  /* =====================================================
-     TINY SLIDER (SAFE)
+     Tiny Slider (safe)
   ===================================================== */
   if (typeof tns === "function") {
     const slider = document.querySelector(".slide__container");
@@ -179,6 +147,38 @@ document.addEventListener("DOMContentLoaded", () => {
         ]
       });
     }
+  }
+
+  /* =====================================================
+     Scroll Reveal Animations
+  ===================================================== */
+  const revealEls = document.querySelectorAll(
+    ".fadeIn,.fadeInUp,.fadeInLeft,.fadeInRight"
+  );
+
+  if ("IntersectionObserver" in window && revealEls.length) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        e.target.style.transitionDelay =
+          (e.target.dataset.delay || 0) + "ms";
+        e.target.classList.add("in-view");
+        observer.unobserve(e.target);
+      });
+    }, { threshold: 0.2, rootMargin: "0px 0px -10% 0px" });
+
+    revealEls.forEach(el => observer.observe(el));
+  }
+
+  /* =====================================================
+     Sticky Navigation
+  ===================================================== */
+  if ("IntersectionObserver" in window && cta && header) {
+    const stickyObs = new IntersectionObserver(
+      ([entry]) => header.classList.toggle("fixed", !entry.isIntersecting),
+      { rootMargin: "-80px 0px 0px 0px", threshold: 0 }
+    );
+    stickyObs.observe(cta);
   }
 
 });
