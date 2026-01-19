@@ -1,27 +1,29 @@
+<!-- ==============================
+     Desktop Navigation
+============================== -->
 <nav class="nav--desktop">
   {% for item in site.data.nav %}
-    <a href="{{ item.link }}" class="js-btn" data-hover="{{ item.name }}">{{ item.name }}</a>
+    <a href="{{ item.link }}" class="js-btn {% if page.url == item.link or page.url == item.link | append: '#' %}selected{% endif %}" data-hover="{{ item.name }}">
+      {{ item.name }}
+    </a>
   {% endfor %}
 </nav>
 
-<nav class="nav--mobile">
-  <!-- Hamburger Button -->
-  <button
-    class="nav--icon"
-    id="nav-toggle"
-    aria-label="Open navigation"
-    aria-expanded="false"
-    aria-controls="mobile-menu"
-  >
-    <i class="fas fa-cube" aria-hidden="true"></i>
-  </button>
+<!-- ==============================
+     Mobile Navigation (Details/Summary)
+============================== -->
+<div class="nav--mobile">
+  <details>
+    <summary>
+      <i class="fas fa-cube" aria-hidden="true"></i>
+    </summary>
 
-  <!-- Mobile Menü -->
-  <div id="mobile-menu" class="mobile-list" hidden>
-    <div class="centered">
+    <div class="mobile-list">
       {% for item in site.data.nav %}
-        <a href="{{ item.link }}" class="js-btn js-mobile-btn" data-hover="{{ item.name }}">{{ item.name }}</a>
+        <a href="{{ item.link }}" class="js-mobile-btn {% if page.url == item.link or page.url == item.link | append: '#' %}selected{% endif %}" data-hover="{{ item.name }}">
+          {{ item.name }}
+        </a>
       {% endfor %}
     </div>
-  </div>
-</nav>
+  </details>
+</div>
