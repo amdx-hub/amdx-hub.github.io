@@ -77,7 +77,7 @@ h3 { font-size: 2.2em; }
 h4 { font-size: 1.4em; }
 h5 { font-size: 1em; }
 
-p { margin: 0; font-size: 0.9em; line-height: 1.6em; }
+p { margin: 0; font-size: 0.9em; line-height: 1.6em; width: 100%; }
 
 .txt-balance {
   text-wrap-style: balance; }
