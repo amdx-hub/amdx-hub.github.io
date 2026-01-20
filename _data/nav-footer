@@ -1,0 +1,8 @@
+- name: About
+  link: /about/
+- name: Privacy
+  link: /privacy/
+- name: Terms of Use
+  link: /terms/
+- name: Contact
+  link: /contact/
