@@ -11,13 +11,10 @@
 
     {% endfor %}
       </nav>
-<div class="disclaimer--footer">
     {% for item in site.data.footer.section-disclaimer.list %}
-      <p>{{ item.text }}</p>
+      <p class="disclaimer--footer">{{ item.text }}</p>
     {% endfor %}
-</div>
-<div class="copyright--footer">
-    <p>Copyright &copy; {{ "now" | date: "%Y" }} AmendLogic. All rights reserved.</p>
-</div>
+
+    <small class="copyright--footer">Copyright &copy; {{ "now" | date: "%Y" }} AmendLogic. All rights reserved.</small>
   </div>
 </section>
