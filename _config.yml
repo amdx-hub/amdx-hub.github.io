@@ -12,7 +12,6 @@ markdown: kramdown
 plugins:
   - jekyll-feed
 
-collections:
-  pages:
-    output: true
-    permalink: /:name/
+include:
+  - _pages
+
