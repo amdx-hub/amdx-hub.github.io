@@ -1,18 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
-
   /* =====================================================
      Elements
   ===================================================== */
-  const navToggle = document.getElementById("nav-toggle");
+  const navToggle  = document.getElementById("nav-toggle");
   const mobileMenu = document.getElementById("mobile-menu");
-  const header = document.querySelector("nav");
-  const cta = document.querySelector(".cta");
-  const navLinks = document.querySelectorAll(".js-btn, .js-mobile-btn");
+  const header     = document.querySelector("nav");
+  const cta        = document.querySelector(".cta");
+  const navLinks   = document.querySelectorAll(".js-btn, .js-mobile-btn");
+
+  if (!navLinks.length) return;
 
   /* =====================================================
      Helpers
   ===================================================== */
   const cleanPath = p => (p || "/").replace(/\/$/, "") || "/";
+  const getHash = () => location.hash.slice(1);
   const headerOffset = () => header?.offsetHeight || 100;
 
   const closeMobileMenu = () => {
@@ -24,14 +26,19 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const toggleMobileMenu = () => {
+    if (!mobileMenu || !navToggle) return;
     const open = mobileMenu.classList.toggle("show");
     navToggle.classList.toggle("rotate", open);
     navToggle.setAttribute("aria-expanded", open);
-    navToggle.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+    navToggle.setAttribute(
+      "aria-label",
+      open ? "Close navigation" : "Open navigation"
+    );
   };
 
   const scrollToEl = el => {
-    requestAnimationFrame(() => {
+    if (!el) return;
+    window.requestAnimationFrame(() => {
       window.scrollTo({
         top: el.offsetTop - headerOffset(),
         behavior: "smooth"
@@ -55,34 +62,31 @@ document.addEventListener("DOMContentLoaded", () => {
   /* =====================================================
      Active Navigation State
   ===================================================== */
-  function setActiveNav(hash = location.hash.slice(1)) {
+  const setActiveNav = (hash = getHash()) => {
     const currentPath = cleanPath(location.pathname);
 
     navLinks.forEach(link => {
       const url = new URL(link.getAttribute("href"), location.origin);
-      const linkPath = cleanPath(url.pathname);
-      const linkHash = url.hash.replace("#", "");
-
       const active =
-        (linkPath === currentPath && linkHash && linkHash === hash) ||
-        (linkPath === currentPath && !linkHash && !hash);
+        cleanPath(url.pathname) === currentPath &&
+        url.hash.replace("#", "") === hash;
 
       link.classList.toggle("selected", active);
     });
-  }
+  };
 
   /* =====================================================
      Navigation Click Handling
   ===================================================== */
-  function handleNavClick(e) {
+  const handleNavClick = e => {
     const link = e.currentTarget;
     const href = link.getAttribute("href");
     if (!href) return;
 
-    const [targetUrl = "/", hash] = href.split("#");
+    const [urlPart = "/", hash] = href.split("#");
     const currentPath = cleanPath(location.pathname);
     const destinationPath = cleanPath(
-      new URL(targetUrl || "/", location.origin).pathname
+      new URL(urlPart, location.origin).pathname
     );
 
     closeMobileMenu();
@@ -92,41 +96,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
     e.preventDefault();
 
-    // Cross-page navigation
     if (currentPath !== destinationPath) {
       sessionStorage.setItem("scrollToHash", hash);
-      location.href = destinationPath + "#" + hash;
+      location.href = `${destinationPath}#${hash}`;
       return;
     }
 
-    // Same-page scroll
-    const targetEl = document.getElementById(hash);
-    if (targetEl) {
-      scrollToEl(targetEl);
-      history.replaceState(null, "", "#" + hash);
-    }
-  }
+    scrollToEl(document.getElementById(hash));
+    history.replaceState(null, "", `#${hash}`);
+  };
 
-  navLinks.forEach(l => l.addEventListener("click", handleNavClick));
+  navLinks.forEach(link =>
+    link.addEventListener("click", handleNavClick)
+  );
 
   /* =====================================================
      Restore Scroll after Page Change
   ===================================================== */
   window.addEventListener("load", () => {
-    const hash = sessionStorage.getItem("scrollToHash") || location.hash.slice(1);
+    const hash =
+      sessionStorage.getItem("scrollToHash") || getHash();
+
     if (hash) {
-      const el = document.getElementById(hash);
-      if (el) scrollToEl(el);
-      history.replaceState(null, "", "#" + hash);
+      scrollToEl(document.getElementById(hash));
+      history.replaceState(null, "", `#${hash}`);
       sessionStorage.removeItem("scrollToHash");
     }
+
     setActiveNav(hash);
   });
 
   window.addEventListener("hashchange", () => {
-    const hash = location.hash.slice(1);
-    const el = document.getElementById(hash);
-    if (el) scrollToEl(el);
+    const hash = getHash();
+    scrollToEl(document.getElementById(hash));
     setActiveNav(hash);
     closeMobileMenu();
   });
@@ -136,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ===================================================== */
   if (typeof tns === "function") {
     const slider = document.querySelector(".slide__container");
-    if (slider) {
+    slider &&
       tns({
         container: slider,
         arrowKeys: true,
@@ -146,7 +148,6 @@ document.addEventListener("DOMContentLoaded", () => {
           '<i class="fas fa-angle-right"></i>'
         ]
       });
-    }
   }
 
   /* =====================================================
@@ -157,15 +158,18 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   if ("IntersectionObserver" in window && revealEls.length) {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (!e.isIntersecting) return;
-        e.target.style.transitionDelay =
-          (e.target.dataset.delay || 0) + "ms";
-        e.target.classList.add("in-view");
-        observer.unobserve(e.target);
-      });
-    }, { threshold: 0.2, rootMargin: "0px 0px -10% 0px" });
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(({ isIntersecting, target }) => {
+          if (!isIntersecting) return;
+          target.style.transitionDelay =
+            (target.dataset.delay || 0) + "ms";
+          target.classList.add("in-view");
+          observer.unobserve(target);
+        });
+      },
+      { threshold: 0.2, rootMargin: "0px 0px -10% 0px" }
+    );
 
     revealEls.forEach(el => observer.observe(el));
   }
@@ -173,12 +177,11 @@ document.addEventListener("DOMContentLoaded", () => {
   /* =====================================================
      Sticky Navigation
   ===================================================== */
-  if ("IntersectionObserver" in window && cta && header) {
-    const stickyObs = new IntersectionObserver(
-      ([entry]) => header.classList.toggle("fixed", !entry.isIntersecting),
-      { rootMargin: "-80px 0px 0px 0px", threshold: 0 }
-    );
-    stickyObs.observe(cta);
+  if ("IntersectionObserver" in window && header && cta) {
+    new IntersectionObserver(
+      ([entry]) =>
+        header.classList.toggle("fixed", !entry.isIntersecting),
+      { rootMargin: "-80px 0px 0px 0px" }
+    ).observe(cta);
   }
-
 });
