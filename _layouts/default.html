@@ -40,15 +40,19 @@
   <link rel="author" href="humans.txt">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/tiny-slider@2.9.3/dist/min/tiny-slider.js"></script>
-
   </head>
-  <body">
-    {% include nav.html %}
+  <body>
+    <header>
+      {% include nav.html %}
+    </header>
     <main>
       {{ content }}
     </main>
-    {% include footer.html %}
-    <script type="text/javascript" src="{{ '/assets/js/site.js' | relative_url }}"></script>
-    <script type="text/javascript" src="{{ '/assets/js/stats.js' | relative_url }}"></script>
+    <footer>
+      {% include footer.html %}
+    </footer>
+  <script src="{{ '/assets/js/site.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/stats.js' | relative_url }}"></script>
   </body>
+
 </html>
