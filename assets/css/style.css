@@ -59,7 +59,7 @@
 html {
   box-sizing: border-box;
   font-size: 18px;
-
+  scrollbar-gutter: stable;
   scroll-behavior: smooth;
   text-rendering: optimizeLegibility;
 }
