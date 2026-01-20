@@ -5,7 +5,10 @@
       <nav class="nav--footer">
     {% for item in site.data.nav %}
       <a href="{{ item.link }}" class="js-btn" data-hover="{{ item.name }}">{{ item.name }}</a>
-      <span aria-hidden="true" class="separator--footer">•</span>
+      {% unless forloop.last %}
+        <span aria-hidden="true" class="separator--footer">•</span>
+      {% endunless %}
+
     {% endfor %}
       </nav>
 <div class="disclaimer--footer">
