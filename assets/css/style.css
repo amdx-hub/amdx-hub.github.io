@@ -228,6 +228,7 @@ section {
     margin-bottom: 1.5rem; }
 
 .section--hero {
+  position: relative; 
   max-width: 760px;
   margin-top: 4rem; }
   .section--hero .cta {
@@ -251,6 +252,7 @@ section {
     z-index: -1; }
 
 .section--summary {
+  position: relative;
   margin-top: -4rem;
   background-color: white;
   color: #575757;
@@ -261,7 +263,7 @@ section {
     position: absolute;
     left: 50%;
     bottom: 0;
-    width: 100%;
+    width: 100vw;
     height: 406px;
     transform: translateX(-50%);
     background: url(../img/lines.svg) repeat-x;
@@ -641,7 +643,7 @@ section {
     position: absolute;
     left: 50%;
     bottom: 0;
-    width: 100%;
+    width: 100vw;
     height: 406px;
     transform: translateX(-50%);
     background: url(../img/lines.svg) repeat-x;
