@@ -453,6 +453,7 @@ section {
     align-items: center; }
 
 .nav--footer {
+  gap: 1rem;
   padding: 0; }
 
 .separator--footer {
