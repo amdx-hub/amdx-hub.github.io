@@ -35,6 +35,13 @@
   --font-base: "Open Sans", "Helvetica Neue", Arial, "Segoe UI", sans-serif;
   --font-display: "Fjalla One", "Anton", "Oswald", "League Gothic", sans-serif;
 
+  --font-h1: 1rem;
+  --font-h2: 1rem;
+  --font-h3: 1rem;
+  --font-h4: 1rem;
+  --font-h5: 1rem;
+  --font-p: 1rem;
+
   /* Spacing Scale */
   --space-xs: 0.5rem;
   --space-sm: 1rem;
