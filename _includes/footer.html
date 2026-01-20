@@ -2,16 +2,18 @@
 
 
   <div class="section__container">
-      <nav class="nav--footer"><ul>
+      <nav class="nav--footer">
     {% for item in site.data.nav %}
-      <li><a href="{{ item.link }}" class="js-btn" data-hover="{{ item.name }}">{{ item.name }}</a></li>
+      <a href="{{ item.link }}" class="js-btn" data-hover="{{ item.name }}">{{ item.name }}</a>
     {% endfor %}
-      </ul></nav>
-    <div class="divider"></div>
+      </nav>
+<div class="disclaimer--footer">
     {% for item in site.data.footer.section-disclaimer.list %}
       <p>{{ item.text }}</p>
     {% endfor %}
-    <div class="divider"></div>
+</div>
+<div class="copyright--footer">
     <p>Copyright &copy; {{ "now" | date: "%Y" }} AmendLogic. All rights reserved.</p>
+</div>
   </div>
 </section>
