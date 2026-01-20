@@ -43,12 +43,8 @@
   </head>
   <body>
       {% include nav.html %}
-    <main>
       {{ content }}
-    </main>
-    <footer>
-      {% include footer2.html %}
-    </footer>
+      {% include footer.html %}
   <script src="{{ '/assets/js/site.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/stats.js' | relative_url }}"></script>
   </body>
