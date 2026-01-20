@@ -1,8 +1,10 @@
 <section id="section-contact" class="section--contact">
   <nav class="nav--footer">
+    <ul>
     {% for item in site.data.nav %}
-      <a href="{{ item.link }}" class="js-btn" data-hover="{{ item.name }}">{{ item.name }}</a>
+      <li><<a href="{{ item.link }}" class="js-btn" data-hover="{{ item.name }}">{{ item.name }}</a></li>
     {% endfor %}
+    </ul>
   </nav>
 
   <div class="section__container">
