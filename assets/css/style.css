@@ -458,6 +458,9 @@ section {
     font-size: 0.83em;
     }
 
+.nav--footer {
+  padding: 0; }
+
 .divider {
     margin-top: var(--2rem);
     margin-bottom: var(--2rem);
