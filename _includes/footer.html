@@ -3,11 +3,9 @@
 
   <div class="section__container">
       <nav class="nav--footer">
-    <ul>
     {% for item in site.data.nav %}
-      <li><a href="{{ item.link }}" class="js-btn" data-hover="{{ item.name }}">{{ item.name }}</a></li>
+      <a href="{{ item.link }}" class="js-btn" data-hover="{{ item.name }}">{{ item.name }}</a>
     {% endfor %}
-    </ul>
   </nav>
     {% for item in site.data.footer.section-disclaimer.list %}
       <p>{{ item.text }}</p>
