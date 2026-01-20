@@ -425,8 +425,10 @@ section {
     width: 90%;
     margin: auto;
     justify-content: center; }
-
-  .section--footer .title {
+  .section--customers > .section__container {
+    max-width: 960px;
+    margin: auto; }
+  .section--customers .title {
     color: #1d1a2b;
     text-align: center;
     font-weight: 100;
