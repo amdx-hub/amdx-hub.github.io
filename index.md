@@ -113,7 +113,7 @@ section-customers:
       image: assets/img/customer-2.png
 ---
 
-<div class="container">
+
     <section id="section-hero" class="section--hero">
         <div class="flex--horizontal">
             <div class="flex_child--horizontal aligner">
@@ -134,9 +134,9 @@ section-customers:
             </div>
         </div>
     </section>
-</div>
 
-<div class="container">
+
+
     <section class="section--summary">
         <div class="flex--vertical">
             <div class="flex_child--vertical flex--horizontal summary__lists">
@@ -153,7 +153,7 @@ section-customers:
             </div>
         </div>
     </section>
-</div>
+
 
 <section id="section-snippets" class="section--snippets fadeInUp">
   <div class="flex--horizontal">
