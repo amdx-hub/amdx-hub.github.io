@@ -11,3 +11,8 @@ github_username:  jekyll
 markdown: kramdown
 plugins:
   - jekyll-feed
+
+collections:
+  pages:
+    output: true
+    permalink: /:name/
