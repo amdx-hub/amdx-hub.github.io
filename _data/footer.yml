@@ -1,7 +1,12 @@
-section-contact:
-  title: Ready to get started?
-  description: Sign up here and our representative will contact you shortly.
-  btn-text: Sign Up
+footer-nav:
+  - name: About
+    link: /about/
+  - name: Privacy
+    link: /privacy/
+  - name: Terms of Use
+    link: /terms/
+  - name: Contact
+    link: /contact/
 section-disclaimer:
   list: 
     - text: Trading in financial markets involves significant risk and may result in the loss of capital. The content provided on this website is for informational purposes only and does not constitute financial advice. Simulated or historical performance results are not indicative of future results. Testimonials are not necessarily representative of all users. Charts are provided by TradingView® and are used for illustrative purposes only.
