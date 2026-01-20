@@ -114,45 +114,43 @@ section-customers:
 ---
 
 
-    <section id="section-hero" class="section--hero">
-        <div class="flex--horizontal">
-            <div class="flex_child--horizontal aligner">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1025 198">
-	              <path d="M 110 151 h -22 v -8 a 55 55 90 0 1 -88 -44 a 55 55 90 0 1 88 -44 a 33 33 90 0 0 -33 -33 v -22 a 55 55 90 0 1 55 55 z m -22 -52 a 1 1 0 0 0 -66 0 a 1 1 0 0 0 66 0 z M 119 151 v -104 h 22 l 44 64 h 1 l 43 -64 h 22 v 104 h -22 v -65 l -43 64 h -1 l -44 -64 v 65 z M 259 99 a 4 4 90 0 1 110 0 a 55 55 90 0 1 -1 10 h -85 a 32 31 0 0 0 57 10 h 25 a 55 55 90 0 1 -50 35 a 55 55 90 0 1 -56 -55 m 86 -12 a 33 32 0 0 0 -62 0 z M 377 47 h 22 v 8 a 46.878 46.878 0 0 1 77 36 v 60 h -22 v -60 a 1 1 0 0 0 -55 0 v 60 h -22 z M 571 22 h 22 v 129 h -22 v -8 a 55 55 90 0 1 -88 -44 a 55 55 90 0 1 88 -44 z m 0 77 a 4 4 90 0 0 -66 0 a 4 4 90 0 0 66 0 M 602 22 h 22 v 77 a 33 33 0 0 0 33 33 v 22 a 55 55 0 0 1 -55 -55 z M 653 99 a 1 1 0 0 0 110 0 a 1 1 0 0 0 -110 0 m 88 0 a 1 1 0 0 1 -66 0 a 1 1 0 0 1 66 0 M 858 47 h 22 v 96 a 55 55 0 0 1 -55 55 v -22 a 33 33 0 0 0 33 -33 a 55 55 0 0 1 -88 -44 a 55 55 0 0 1 88 -44 z m 0 52 a 1 1 0 0 0 -66 0 a 1 1 0 0 0 66 0 M 889 47 h 22 v 104 h -22 z m -3 -25 a 1 1 0 0 0 28 0 a 1 1 0 0 0 -28 0 z M 1025 119 a 55 55 0 0 1 -51 35 a 55 55 0 0 1 -55 -55 a 55 55 0 0 1 55 -55 a 55 55 0 0 1 51 35 h -25 a 33 33 0 0 0 -59 20 a 33 33 0 0 0 59 20 z" fill="var(--white)"/>
-              </svg>
-                <!-- <h1 class="font-fjalla">{{ page.section-hero.title }}</h1> -->
-                <p class="txt-balance">{{ page.section-hero.description }}</p>
-                <a href="" class="cta">
-                  <div>
-                    <strong>Get It for</strong><br>
-                    <small>TradingView</small>
-                  </div>
-                </a>
-            </div>
-            <div class="flex_child--horizontal fadeInUp">
-                <img src="{{ page.section-hero.image }}"  alt="">
-            </div>
-        </div>
-    </section>
-
-
-
-    <section class="section--summary">
-        <div class="flex--vertical">
-            <div class="flex_child--vertical flex--horizontal summary__lists">
-                {% for list in page.section-summary.list %}
-                <div class="summary__list flex--horizontal fadeIn">
-                    <img src="{{ list.img }}" alt="">
-                    <p class="txt-balance">{{ list.text }}</p>
+<section id="section-hero" class="section--hero">
+    <div class="flex--horizontal">
+        <div class="flex_child--horizontal aligner">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1025 198">
+	            <path d="M 110 151 h -22 v -8 a 55 55 90 0 1 -88 -44 a 55 55 90 0 1 88 -44 a 33 33 90 0 0 -33 -33 v -22 a 55 55 90 0 1 55 55 z m -22 -52 a 1 1 0 0 0 -66 0 a 1 1 0 0 0 66 0 z M 119 151 v -104 h 22 l 44 64 h 1 l 43 -64 h 22 v 104 h -22 v -65 l -43 64 h -1 l -44 -64 v 65 z M 259 99 a 4 4 90 0 1 110 0 a 55 55 90 0 1 -1 10 h -85 a 32 31 0 0 0 57 10 h 25 a 55 55 90 0 1 -50 35 a 55 55 90 0 1 -56 -55 m 86 -12 a 33 32 0 0 0 -62 0 z M 377 47 h 22 v 8 a 46.878 46.878 0 0 1 77 36 v 60 h -22 v -60 a 1 1 0 0 0 -55 0 v 60 h -22 z M 571 22 h 22 v 129 h -22 v -8 a 55 55 90 0 1 -88 -44 a 55 55 90 0 1 88 -44 z m 0 77 a 4 4 90 0 0 -66 0 a 4 4 90 0 0 66 0 M 602 22 h 22 v 77 a 33 33 0 0 0 33 33 v 22 a 55 55 0 0 1 -55 -55 z M 653 99 a 1 1 0 0 0 110 0 a 1 1 0 0 0 -110 0 m 88 0 a 1 1 0 0 1 -66 0 a 1 1 0 0 1 66 0 M 858 47 h 22 v 96 a 55 55 0 0 1 -55 55 v -22 a 33 33 0 0 0 33 -33 a 55 55 0 0 1 -88 -44 a 55 55 0 0 1 88 -44 z m 0 52 a 1 1 0 0 0 -66 0 a 1 1 0 0 0 66 0 M 889 47 h 22 v 104 h -22 z m -3 -25 a 1 1 0 0 0 28 0 a 1 1 0 0 0 -28 0 z M 1025 119 a 55 55 0 0 1 -51 35 a 55 55 0 0 1 -55 -55 a 55 55 0 0 1 55 -55 a 55 55 0 0 1 51 35 h -25 a 33 33 0 0 0 -59 20 a 33 33 0 0 0 59 20 z" fill="var(--white)"/>
+            </svg>
+            <!-- <h1 class="font-fjalla">{{ page.section-hero.title }}</h1> -->
+            <p class="txt-balance">{{ page.section-hero.description }}</p>
+            <a href="" class="cta">
+                <div>
+                <strong>Get It for</strong><br>
+                <small>TradingView</small>
                 </div>
-                {% endfor %}
-            </div>
-            <div class="flex_child--vertical flex--horizontal aligner fadeIn">
-                <p>{{ page.section-summary.text }}</p>
-                <h2 class="font-fjalla aligner_item--bottom">{{ page.section-summary.title }}</h2>
-            </div>
+            </a>
         </div>
-    </section>
+        <div class="flex_child--horizontal fadeInUp">
+            <img src="{{ page.section-hero.image }}"  alt="">
+        </div>
+    </div>
+</section>
+
+<section class="section--summary">
+    <div class="flex--vertical">
+        <div class="flex_child--vertical flex--horizontal summary__lists">
+            {% for list in page.section-summary.list %}
+            <div class="summary__list flex--horizontal fadeIn">
+                <img src="{{ list.img }}" alt="">
+                <p class="txt-balance">{{ list.text }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="flex_child--vertical flex--horizontal aligner fadeIn">
+            <p>{{ page.section-summary.text }}</p>
+            <h2 class="font-fjalla aligner_item--bottom">{{ page.section-summary.title }}</h2>
+        </div>
+    </div>
+</section>
 
 
 <section id="section-snippets" class="section--snippets fadeInUp">
