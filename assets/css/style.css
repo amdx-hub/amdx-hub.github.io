@@ -447,6 +447,7 @@ section {
     gap: 1rem;
     display: flex;
     font-size: 0.83em;
+    text-align: center;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center; }
