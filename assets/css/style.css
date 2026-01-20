@@ -107,11 +107,7 @@ nav {
     text-decoration: none;
     position: relative; }
 
-    nav a:not(:last-child) {
-      margin-right: 2rem; }
-      @media only screen and (max-width: 770px) {
-        nav a:not(:last-child) {
-          margin-right: 0; } }
+
 
     nav a:before {
       transition: 0.5s all ease;
