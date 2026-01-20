@@ -7,8 +7,10 @@
       <a href="{{ item.link }}" class="js-btn" data-hover="{{ item.name }}">{{ item.name }}</a>
     {% endfor %}
   </nav>
+    <div class="divider"></div>
     {% for item in site.data.footer.section-disclaimer.list %}
       <p>{{ item.text }}</p>
     {% endfor %}
+    <div class="divider"></div>
   </div>
 </section>
