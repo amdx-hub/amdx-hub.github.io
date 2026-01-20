@@ -1,12 +1,9 @@
 <section id="section-contact" class="section--contact">
-  <div class="section__title">
-    <h3 class="font-fjalla">{{ site.data.footer.section-contact.title }}</h3>
-    <p>{{ site.data.footer.section-contact.description }}</p>
-    <div class="form-group">
-      <input type="text" class="input" placeholder="Your Email">
-      <button class="input-button">{{ site.data.footer.section-contact['btn-text'] }}</button>
-    </div>
-  </div>
+  <nav class="nav--footer">
+    {% for item in site.data.nav %}
+      <a href="{{ item.link }}" class="js-btn" data-hover="{{ item.name }}">{{ item.name }}</a>
+    {% endfor %}
+  </nav>
 
   <div class="section__container">
     {% for item in site.data.footer.section-disclaimer.list %}
