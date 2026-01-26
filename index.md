@@ -1,5 +1,6 @@
 ---
 layout: default
+loadEcharts: true
 
 section-hero:
   title: Spotlit
