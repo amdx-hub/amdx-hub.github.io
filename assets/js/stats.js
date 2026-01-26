@@ -1,7 +1,6 @@
-<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-
-<script>
 document.addEventListener("DOMContentLoaded", () => {
+  if (typeof echarts === "undefined") return;
+
   document.querySelectorAll(".echart").forEach((el) => {
     const data = JSON.parse(el.dataset.chart);
 
@@ -45,4 +44,3 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("resize", () => chart.resize());
   });
 });
-</script>
