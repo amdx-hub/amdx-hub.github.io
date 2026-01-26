@@ -1,27 +1,6 @@
 ---
 layout: default
 
-width = '100%',
-height = '400px',
-options = {},
-
-// Generate unique chart ID
-const chartId = `echart-${Math.random().toString(36).slice(2, 11)}`;
-
-// Default options
-const defaultOptions = {
-  title: { text: 'ECharts Example' },
-  tooltip: {},
-  xAxis: { data: ['A', 'B', 'C', 'D', 'E'] },
-  yAxis: {},
-  series: [{ type: 'bar', data: [5, 20, 36, 10, 10] }],
-};
-
-const chartOptions =
-  Object.keys(options).length > 0 ? options : defaultOptions;
-
-const serializedOptions = JSON.stringify(chartOptions);
-
 section-hero:
   title: Spotlit
   description: Smart Bitcoin Trading — Intelligent, Simple, Automated
