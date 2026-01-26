@@ -62,30 +62,26 @@ section-features:
 section-stats:
   title: Performance Insights
   description: Long-term backtesting and real chart examples demonstrate how strategies perform across market cycles. The emphasis is placed on consistency, controlled risk, and sustainable performance — not short-term results.
-  stats-list:
-    - name: Nutzer
-      number: "1.240"
-      chart:
-        labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
-        datasets:
-          - type: line
-            label: Users
-            data: [120, 140, 160, 300, 500, 600, 800, 850, 1025, 2000]
-          - type: line
-            label: Users2
-            data: [240, 280, 320]
+stats-list:
+  - name: Performance
+    number: "+210%"
+    chart:
+      labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
+      datasets:
+        - type: line
+          label: Trading
+          yAxisID: equity
+          data: [0, 15, 30, 85, 120, 160, 140, 180, 200, 210]
 
-    - name: Gewinn
-      number: "+25%"
-      chart:
-        labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
-        datasets:
-          - type: bar
-            label: Gewinn
-            data: [120, 140, 160, 300, 500, 600, 800, 850, 1025, 2000]
-          - type: line
-            label: Ziel
-            data: [40, 40, 40, 40]
+        - type: line
+          label: HODL
+          yAxisID: equity
+          data: [0, 10, 25, 60, 90, 130, 70, 110, 150, 180]
+
+        - type: bar
+          label: Drawdown
+          yAxisID: drawdown
+          data: [0, -8, -15, -35, -18, -12, -42, -10, -6, -4]
 
 section-integrations:
   title: Technology Partners
