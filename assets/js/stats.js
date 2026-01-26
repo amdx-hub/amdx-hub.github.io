@@ -1,58 +1,86 @@
 const CHART_COLORS = {
-  borderColor: "rgba(174,155,255,0.67)",
-  backgroundColor: "rgba(174,155,255,0.67)", // helle Balken
-  pointBackgroundColor: "#C0B2FC",
-  pointBorderColor: "#AE9BFF"
+  trading: {
+    borderColor: "rgba(174,155,255,0.9)",
+    pointBackgroundColor: "#C0B2FC",
+    pointBorderColor: "#AE9BFF"
+  },
+  hodl: {
+    borderColor: "rgba(120,180,255,0.9)",
+    pointBackgroundColor: "#7AB4FF",
+    pointBorderColor: "#7AB4FF"
+  },
+  drawdown: {
+    backgroundColor: "rgba(239,68,68,0.45)",
+    borderColor: "rgba(239,68,68,0.8)"
+  }
 };
 
-document.querySelectorAll('canvas.chart').forEach(canvas => {
+document.querySelectorAll("canvas.chart").forEach(canvas => {
   const cfg = JSON.parse(canvas.dataset.chart);
 
-  // prüfen, ob ein Bar-Dataset existiert
-  const hasBar = cfg.datasets.some(ds => ds.type === 'bar');
+  const hasBar = cfg.datasets.some(ds => ds.type === "bar");
 
   const datasets = cfg.datasets.map(ds => {
-    const isBar = ds.type === 'bar';
+    const isBar = ds.type === "bar";
+    const isHodl = ds.label?.toLowerCase().includes("hodl");
 
     return {
       type: ds.type,
       label: ds.label,
       data: ds.data,
+      yAxisID: ds.yAxisID || "equity",
 
-      // Balken
+      // Drawdown (Bar)
       ...(isBar && {
-        backgroundColor: CHART_COLORS.backgroundColor,
-        borderColor: CHART_COLORS.borderColor,
+        backgroundColor: CHART_COLORS.drawdown.backgroundColor,
+        borderColor: CHART_COLORS.drawdown.borderColor,
         borderWidth: 1
       }),
 
-      // Linie
+      // Trading / HODL (Line)
       ...(!isBar && {
-        borderColor: CHART_COLORS.borderColor,
-        pointBackgroundColor: CHART_COLORS.pointBackgroundColor,
-        pointBorderColor: CHART_COLORS.pointBorderColor,
+        borderColor: isHodl
+          ? CHART_COLORS.hodl.borderColor
+          : CHART_COLORS.trading.borderColor,
+
+        pointBackgroundColor: isHodl
+          ? CHART_COLORS.hodl.pointBackgroundColor
+          : CHART_COLORS.trading.pointBackgroundColor,
+
+        pointBorderColor: isHodl
+          ? CHART_COLORS.hodl.pointBorderColor
+          : CHART_COLORS.trading.pointBorderColor,
+
         tension: 0.3,
-        pointRadius: 4,
-        borderWidth: 1,
-        fill: true
+        pointRadius: 3,
+        borderWidth: 2,
+        fill: false,
+        borderDash: isHodl ? [6, 4] : undefined
       })
     };
   });
 
   new Chart(canvas, {
-    type: 'line', // Base-Type für Mixed Charts
+    type: "line",
     data: {
       labels: cfg.labels,
       datasets
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false, // passt sich der Parent-Höhe an
+      maintainAspectRatio: false,
+
+      interaction: {
+        mode: "index",
+        intersect: false
+      },
+
       plugins: {
         legend: {
-          display: false   // ✅ Legende ausblenden
+          display: true
         }
       },
+
       scales: {
         x: {
           offset: hasBar,
@@ -61,10 +89,26 @@ document.querySelectorAll('canvas.chart').forEach(canvas => {
             font: { size: 12 }
           }
         },
-        y: {
-          beginAtZero: true,
+
+        equity: {
+          type: "linear",
+          position: "left",
           ticks: {
+            callback: v => v + "%",
             color: "#444363",
+            font: { size: 12 }
+          },
+          grid: {
+            drawOnChartArea: false
+          }
+        },
+
+        drawdown: {
+          type: "linear",
+          position: "right",
+          ticks: {
+            callback: v => v + "%",
+            color: "#EF4444",
             font: { size: 12 }
           }
         }
