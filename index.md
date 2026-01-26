@@ -66,22 +66,22 @@ stats-list:
   - name: Performance
     number: "+210%"
     chart:
-      labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"]
+      labels: ["2016","2017","2018","2019","2020","2021","2022","2023","2024","2025"]
       datasets:
         - type: line
-          label: Trading
-          yAxisID: equity
-          data: [0, 15, 30, 85, 120, 160, 140, 180, 200, 210]
+          name: Trading
+          yAxis: equity
+          data: [0,15,30,85,120,160,140,180,200,210]
 
         - type: line
-          label: HODL
-          yAxisID: equity
-          data: [0, 10, 25, 60, 90, 130, 70, 110, 150, 180]
+          name: HODL
+          yAxis: equity
+          data: [0,10,25,60,90,130,70,110,150,180]
 
         - type: bar
-          label: Drawdown
-          yAxisID: drawdown
-          data: [0, -8, -15, -35, -18, -12, -42, -10, -6, -4]
+          name: Drawdown
+          yAxis: drawdown
+          data: [0,-8,-15,-35,-18,-12,-42,-10,-6,-4]
 
 section-integrations:
   title: Technology Partners
@@ -197,28 +197,22 @@ section-customers:
   </div>
 </section>
 <section id="section-stats" class="section--stats fadeInUp">
-  <div class="section__title">
-    <h3 class="font-fjalla">{{ page.section-stats.title }}</h3>
-    <p>{{ page.section-stats.description }}</p>
-  </div>
-
-  {% for stats in page.section-stats.stats-list %}
-    <div class="stats__block">
-      <div class="flex--horizontal">
-        <h5 class="stats__name">{{ stats.name }}</h5>
-        <h4 class="font-fjalla stats__result">{{ stats.number }}</h4>
-      </div>
-
-      {% if stats.chart %}
-        <div class="stats">
-          <canvas
-            class="chart"
-            data-chart='{{ stats.chart | jsonify }}'>
-          </canvas>
-        </div>
-      {% endif %}
+{% for stats in page.section-stats.stats-list %}
+  <div class="stats__block">
+    <div class="flex--horizontal">
+      <h5 class="stats__name">{{ stats.name }}</h5>
+      <h4 class="font-fjalla stats__result">{{ stats.number }}</h4>
     </div>
-  {% endfor %}
+
+    {% if stats.chart %}
+      <div
+        class="echart"
+        style="width:100%;height:320px"
+        data-chart='{{ stats.chart | jsonify }}'>
+      </div>
+    {% endif %}
+  </div>
+{% endfor %}
 </section>
 <section id="section-integrations" class="section--integrations">
   <div class="section__title">
