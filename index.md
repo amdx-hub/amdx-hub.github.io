@@ -1,9 +1,9 @@
 ---
 layout: default
 
-  width = '100%',
-  height = '400px',
-  options = {},
+width = '100%',
+height = '400px',
+options = {},
 
 // Generate unique chart ID
 const chartId = `echart-${Math.random().toString(36).slice(2, 11)}`;
