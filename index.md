@@ -1,6 +1,26 @@
 ---
 layout: default
-loadEcharts: true
+
+  width = '100%',
+  height = '400px',
+  options = {},
+
+// Generate unique chart ID
+const chartId = `echart-${Math.random().toString(36).slice(2, 11)}`;
+
+// Default options
+const defaultOptions = {
+  title: { text: 'ECharts Example' },
+  tooltip: {},
+  xAxis: { data: ['A', 'B', 'C', 'D', 'E'] },
+  yAxis: {},
+  series: [{ type: 'bar', data: [5, 20, 36, 10, 10] }],
+};
+
+const chartOptions =
+  Object.keys(options).length > 0 ? options : defaultOptions;
+
+const serializedOptions = JSON.stringify(chartOptions);
 
 section-hero:
   title: Spotlit
@@ -198,22 +218,28 @@ section-customers:
   </div>
 </section>
 <section id="section-stats" class="section--stats fadeInUp">
-{% for stats in page.section-stats.stats-list %}
-  <div class="stats__block">
-    <div class="flex--horizontal">
-      <h5 class="stats__name">{{ stats.name }}</h5>
-      <h4 class="font-fjalla stats__result">{{ stats.number }}</h4>
-    </div>
+  <div
+    id={chartId}
+    style={`width:${width};height:${height};`}
+    aria-hidden="true"
+  />
 
-    {% if stats.chart %}
-      <div
-        class="echart"
-        style="width:100%;height:320px"
-        data-chart='{{ stats.chart | jsonify }}'>
-      </div>
-    {% endif %}
-  </div>
-{% endfor %}
+
+<script define:vars={{ chartOptions: serializedOptions, chartId }}>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const echarts = await import(
+      'https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.esm.min.js'
+    );
+
+    const el = document.getElementById(chartId);
+    if (!el) return;
+
+    const chart = echarts.init(el);
+    chart.setOption(JSON.parse(chartOptions));
+
+    window.addEventListener('resize', () => chart.resize());
+  });
+</script>
 </section>
 <section id="section-integrations" class="section--integrations">
   <div class="section__title">
